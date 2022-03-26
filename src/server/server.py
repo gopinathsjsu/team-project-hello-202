@@ -16,11 +16,25 @@ app = Flask(__name__)  # create an instance of Flask by passing predefined varia
 # DBSession = sessionmaker(bind=engine)
 # session = DBSession()
 
-@app.route('/')
-def landingPage():
-    return "This is the landing Page of the hotel app"
+@app.route('/', methods=['POST'])
+def create_booking():
+    return "Booking has been created!"
 
 
+@app.route('/', methods=['PUT'])
+def update_booking():
+    return "Updated!"
+
+
+@app.route('/', methods=['PUT'])
+def delete_booking():
+    return "Booking deleted!"
+
+
+# for hotels
+@app.route('/', methods=['POST'])
+def add_room():
+    return "room added"
 
 
 if __name__ == "__main__":
