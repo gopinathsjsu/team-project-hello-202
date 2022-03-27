@@ -18,10 +18,11 @@ app = Flask(__name__)  # create an instance of Flask by passing predefined varia
 
 @app.route('/', methods=['POST'])
 def create_booking():
-    return "Booking has been created!"
+    c = Logicclass()
+    return c.add_booking(parameters)
 
 
-@app.route('/', methods=['PUT'])
+@app.route('/trial', methods=['PUT'])
 def update_booking():
     return "Updated!"
 
