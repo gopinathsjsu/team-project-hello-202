@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { useState } from 'react'
 import Login from './auth/Login';
-import Dashboard from './Dashboard';
+import Dashboard from './dashboard/Dashboard';
 
-const LandingPage = ({}) => {
+const LandingPage = ({ }) => {
   const [isJWTFound, setIsJWTFound] = useState(false);
 
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}>
-        {/* <Route path="expenses" element={<Expenses />} />
+      <Routes>
+        <Route path="/" element={<>{isJWTFound ? <Dashboard /> : <Dashboard />}</>}>
+          {/* <Route path="expenses" element={<Expenses />} />
         <Route path="invoices" element={<Invoices />}>
           <Route
             index
@@ -22,15 +22,15 @@ const LandingPage = ({}) => {
           />
           <Route path=":invoiceId" element={<Invoice />} />
         </Route> */}
-        <Route
-          path="*"
-          element={
-            <>{isJWTFound ? <Dashboard /> : <Login />}</>
-          }
-        />
-      </Route>
-    </Routes>
-  </BrowserRouter> 
+          <Route
+            path="*"
+            element={
+              <>{isJWTFound ? <Dashboard /> : <Login />}</>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 };
 
