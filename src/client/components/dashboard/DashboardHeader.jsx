@@ -150,6 +150,33 @@ function DashboardHeader(props) {
     }
     setChildrenCount(childrenCount + 1);
   };
+  const onSubmitClick = () => {
+    fetch('http://localhost:8080/getRooms', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        adultCount, checkInDate, checkOutDate, childrenCount, destination, roomCount
+      })
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json().then((responseData) => {
+            const { rooms } = responseData;
+            // TODO: Set rooms and change page view
+            return responseData;
+          });
+        }
+        console.log('Error occurred:');
+        console.log(res);
+        return { errorMessages: { REQUEST_ERROR: res.statusText } };
+      })
+      .catch((exception) => {
+        console.log('Error occurred:');
+        console.log(exception);
+      });
+  }
 
   const checkInDateTimeInputProps = {
     placeholder: 'Check In'
@@ -173,7 +200,7 @@ function DashboardHeader(props) {
           <Datetime inputProps={checkOutDateTimeInputProps} onChange={setCheckOutDate} />
           <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
         </div>
-        <Button variant="outline-primary" style={inputButtonStyle} type="submit">
+        <Button onClick={onSubmitClick} variant="outline-primary" style={inputButtonStyle} type="submit">
           Submit
         </Button>
       </div>
