@@ -151,20 +151,26 @@ function DashboardHeader(props) {
     setChildrenCount(childrenCount + 1);
   };
 
+  const checkInDateTimeInputProps = {
+    placeholder: 'Check In'
+  };
+  const checkOutDateTimeInputProps = {
+    placeholder: 'Check Out'
+  };
 
   return (
     <div style={rootStyle}>
       <div style={inputContainerStyle}>
         <div style={searchInputContainerStyle}>
-          <input className="form-control" type="text" placeholder={'Where are you traveling?'} aria-label="Destination" onChange={setDestination} style={searchInputStyle} />
+          <input className="form-control" type="text" placeholder='Where are you traveling?' aria-label="Destination" onChange={setDestination} style={searchInputStyle} />
           <SearchIcon style={searchIconStyle} role="button" tabIndex="-1" />
         </div>
         <div style={checkInInputContainerStyle}>
-          <Datetime onChange={setCheckInDate} />
+          <Datetime inputProps={checkInDateTimeInputProps} onChange={setCheckInDate} />
           <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
         </div>
         <div style={checkOutInputContainerStyle}>
-          <Datetime onChange={setCheckOutDate} />
+          <Datetime inputProps={checkOutDateTimeInputProps} onChange={setCheckOutDate} />
           <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
         </div>
         <Button variant="outline-primary" style={inputButtonStyle} type="submit">
