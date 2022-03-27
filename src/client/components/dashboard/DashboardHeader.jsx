@@ -30,7 +30,6 @@ const searchInputContainerStyle = {
 };
 
 const searchInputStyle = {
-  borderRadius: 25,
   marginRight: 20,
   paddingLeft: 20,
   position: 'relative',

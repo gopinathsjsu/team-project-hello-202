@@ -9,7 +9,7 @@ const LandingPage = ({ }) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<>{isJWTFound ? <Dashboard /> : <Dashboard />}</>}>
+        <Route path="/" element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}>
           {/* <Route path="expenses" element={<Expenses />} />
         <Route path="invoices" element={<Invoices />}>
           <Route
