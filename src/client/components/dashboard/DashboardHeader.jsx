@@ -47,6 +47,9 @@ const myTripStyle = {
   flexDirection: 'row',
 };
 
+const myTripTextStyle = {
+};
+
 function DashboardHeader(props) {
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
@@ -55,7 +58,8 @@ function DashboardHeader(props) {
   const [adultCount, setAdultCount] = useState(0);
   const [childrenCount, setChildrenCount] = useState(0);
 
-  const onSignInOrJoinClick = () => { };
+  const onJoinClick = () => { };
+  const onSignInClick = () => { };
   const onMyTripsClick = () => { };
 
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -101,7 +105,7 @@ function DashboardHeader(props) {
       </div>
       <div style={rightSideStyle}>
         <div>
-          <Dropdown onChange={onSignInOrJoinClick}>
+          <Dropdown>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
               <PersonIcon />
               <>Sign In or Join</>
@@ -109,14 +113,14 @@ function DashboardHeader(props) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu}>
-              <Dropdown.Item eventKey="1">Sign In</Dropdown.Item>
-              <Dropdown.Item eventKey="2">Join</Dropdown.Item>
+              <Dropdown.Item eventKey="1" onClick={onSignInClick}>Sign In</Dropdown.Item>
+              <Dropdown.Item eventKey="2" onClick={onJoinClick}>Join</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
         <div style={myTripStyle}>
           <BriefcaseIcon style={briefcaseIconStyle} />
-          <div onClick={onMyTripsClick}>My Trips</div>
+          <div onClick={onMyTripsClick} style={myTripTextStyle}>My Trips</div>
         </div>
       </div>
     </div >
