@@ -2,7 +2,7 @@
 from . import db
 
 
-class User(db.Model):
+class UserExample(db.Model):
     """Data model for user accounts."""
 
     __tablename__ = "flasksqlalchemy-tutorial-users"
@@ -15,3 +15,23 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User {}>".format(self.username)
+
+# User table
+class User(db.Model):
+
+    __tablename__ = "user"
+    uid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64),  index=False, nullable=False)
+    email = db.Column(db.String(80), index=True, unique=True, nullable=False)
+    password = db.Column(db.String(64), index=False, unique=False, nullable=False)
+    rewards = db.Column(db.Float, index=False, unique=False, nullable=False, default=0.0)
+
+
+'''# Hotel table
+class Hotel(db.Model):
+    __tablename__ = "hotel"
+    uid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64),  index=False, nullable=False)
+    email = db.Column(db.String(80), index=True, unique=True, nullable=False)
+    password = db.Column(db.String(64), index=False, unique=False, nullable=False)
+    rewards = db.Column(db.Float, index=False, unique=False, nullable=False, default=0.0)'''
