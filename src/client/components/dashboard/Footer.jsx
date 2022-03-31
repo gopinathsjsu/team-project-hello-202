@@ -8,10 +8,10 @@ const formStyle = {
   height: '50vh'
 };
 
-function DashboardFooter(props) {
+function Footer(props) {
   return (
     <div></div>
   );
 }
 
-export default DashboardFooter;
+export default Footer;

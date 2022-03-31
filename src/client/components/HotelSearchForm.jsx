@@ -54,7 +54,6 @@ const dateTimeStyle = {
 
 const inputButtonStyle = {
   height: 40,
-  margin: 'auto',
   width: 90,
   zIndex: 0
 };
@@ -94,13 +93,20 @@ const calendarIconStyle = {
   width: 15,
 };
 
+const leftSideStyle = {
+  width: '80%'
+};
+
+const rightSideStyle = {
+  margin: 'auto'
+};
+
 const rootStyle = {
   background: 'white',
   borderRadius: 25,
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   margin: '5vh',
-  width: '80%',
   zIndex: 0,
 };
 
@@ -111,7 +117,7 @@ const MAX_ADULT_COUNT = 10;
 const MIN_CHILDREN_COUNT = 0;
 const MAX_CHILDREN_COUNT = 10;
 
-function HotelSearch(props) {
+function HotelSearchForm(props) {
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
@@ -192,55 +198,59 @@ function HotelSearch(props) {
 
   return (
     <div style={rootStyle}>
-      <div style={inputContainerStyle}>
-        <div style={searchInputContainerStyle}>
-          <input className="form-control" type="text" placeholder='Where are you traveling?' aria-label="Destination" onChange={setDestination} style={searchInputStyle} />
-          <SearchIcon style={searchIconStyle} role="button" tabIndex="-1" />
+      <div style={leftSideStyle}>
+        <div style={inputContainerStyle}>
+          <div style={searchInputContainerStyle}>
+            <input className="form-control" type="text" placeholder='Where are you traveling?' aria-label="Destination" onChange={setDestination} style={searchInputStyle} />
+            <SearchIcon style={searchIconStyle} role="button" tabIndex="-1" />
+          </div>
+          <div style={checkInInputContainerStyle}>
+            <Datetime inputProps={checkInDateTimeInputProps} onChange={setCheckInDate} />
+            <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+          </div>
+          <div style={checkOutInputContainerStyle}>
+            <Datetime inputProps={checkOutDateTimeInputProps} onChange={setCheckOutDate} />
+            <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+          </div>
         </div>
-        <div style={checkInInputContainerStyle}>
-          <Datetime inputProps={checkInDateTimeInputProps} onChange={setCheckInDate} />
-          <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+        <div style={dropdownInputContainerStyle}>
+          <div style={roomInputContainerStyle}>
+            <DropdownButton id="dropdown-basic-button" title="Rooms" variant="outline-primary">
+              <div style={roomDropdownEntryStyle}>
+                <>Rooms</>
+                <div style={dropdownEntrySelectorStyle}>
+                  <MinusIcon onClick={onRoomMinusClick} onKeyPress={onRoomMinusClick} style={{ marginTop: 5 }} />
+                  {roomCount}
+                  <PlusIcon onClick={onRoomPlusClick} onKeyPress={onRoomPlusClick} style={{ marginTop: 5 }} />
+                </div>
+              </div>
+              <div style={roomDropdownEntryStyle}>
+                <>Adults</>
+                <div style={dropdownEntrySelectorStyle}>
+                  <MinusIcon onClick={onAdultMinusClick} onKeyPress={onAdultMinusClick} style={{ marginTop: 5 }} />
+                  {adultCount}
+                  <PlusIcon onClick={onAdultPlusClick} onKeyPress={onAdultPlusClick} style={{ marginTop: 5 }} />
+                </div>
+              </div>
+              <div style={roomDropdownEntryStyle}>
+                <>Children</>
+                <div style={dropdownEntrySelectorStyle}>
+                  <MinusIcon onClick={onChildrenMinusClick} onKeyPress={onChildrenMinusClick} style={{ marginTop: 5 }} />
+                  {childrenCount}
+                  <PlusIcon onClick={onChildrenPlusClick} onKeyPress={onChildrenPlusClick} style={{ marginTop: 5 }} />
+                </div>
+              </div>
+            </DropdownButton>
+          </div>
         </div>
-        <div style={checkOutInputContainerStyle}>
-          <Datetime inputProps={checkOutDateTimeInputProps} onChange={setCheckOutDate} />
-          <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
-        </div>
+      </div>
+      <div style={rightSideStyle}>
         <Button onClick={onSubmitClick} variant="outline-primary" style={inputButtonStyle} type="submit">
           Submit
         </Button>
-      </div>
-      <div style={dropdownInputContainerStyle}>
-        <div style={roomInputContainerStyle}>
-          <DropdownButton id="dropdown-basic-button" title="Rooms" variant="outline-primary">
-            <div style={roomDropdownEntryStyle}>
-              <>Rooms</>
-              <div style={dropdownEntrySelectorStyle}>
-                <MinusIcon onClick={onRoomMinusClick} onKeyPress={onRoomMinusClick} style={{ marginTop: 5 }} />
-                {roomCount}
-                <PlusIcon onClick={onRoomPlusClick} onKeyPress={onRoomPlusClick} style={{ marginTop: 5 }} />
-              </div>
-            </div>
-            <div style={roomDropdownEntryStyle}>
-              <>Adults</>
-              <div style={dropdownEntrySelectorStyle}>
-                <MinusIcon onClick={onAdultMinusClick} onKeyPress={onAdultMinusClick} style={{ marginTop: 5 }} />
-                {adultCount}
-                <PlusIcon onClick={onAdultPlusClick} onKeyPress={onAdultPlusClick} style={{ marginTop: 5 }} />
-              </div>
-            </div>
-            <div style={roomDropdownEntryStyle}>
-              <>Children</>
-              <div style={dropdownEntrySelectorStyle}>
-                <MinusIcon onClick={onChildrenMinusClick} onKeyPress={onChildrenMinusClick} style={{ marginTop: 5 }} />
-                {childrenCount}
-                <PlusIcon onClick={onChildrenPlusClick} onKeyPress={onChildrenPlusClick} style={{ marginTop: 5 }} />
-              </div>
-            </div>
-          </DropdownButton>
-        </div>
       </div >
     </div >
   );
 }
 
-export default HotelSearch;
+export default HotelSearchForm;
