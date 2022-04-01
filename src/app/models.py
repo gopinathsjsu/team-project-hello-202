@@ -50,29 +50,29 @@ class Room(db.Model):
 # Reservation table
 class Reservation(db.Model):
     __tablename__ = "reservation"
-    reserve_id = db.Column(db.Integer, primary_key=True)
+    reserve_id = db.Column(db.Integer, primary_key=True, index=True)
 
     # room id foreign key
-    rid = db.Column(db.Integer, db.ForeignKey('room.rid', ondelete='CASCADE'), nullable=False)
+    rid = db.Column(db.Integer, db.ForeignKey('room.rid', ondelete='CASCADE'), index=True, nullable=False)
     rooms = db.relationship('Room', backref=db.backref('reservation'))
 
     # user id foreign key
-    uid = db.Column(db.Integer, db.ForeignKey('user.uid', ondelete='CASCADE'), nullable=False)
+    uid = db.Column(db.Integer, db.ForeignKey('user.uid', ondelete='CASCADE'), index=True, nullable=False)
     users = db.relationship('User', backref=db.backref('reservation'))
 
     # hotel id foreign key
-    hid = db.Column(db.Integer, db.ForeignKey('hotel.hid', ondelete='CASCADE'), nullable=False)
+    hid = db.Column(db.Integer, db.ForeignKey('hotel.hid', ondelete='CASCADE'), index=True, nullable=False)
     hotels = db.relationship('Hotel', backref=db.backref('reservation'))
 
-    breakfast = db.Column(db.Boolean, nullable=False)
-    fitness = db.Column(db.Boolean, nullable=False)
-    swimming = db.Column(db.Boolean, nullable=False)
-    parking = db.Column(db.Boolean, nullable=False)
-    all_meals = db.Column(db.Boolean, nullable=False)
-    start = db.Column(db.Date, nullable=False)
-    end = db.Column(db.Date, nullable=False)
+    breakfast = db.Column(db.Boolean, index=False, nullable=False)
+    fitness = db.Column(db.Boolean, index=False, nullable=False)
+    swimming = db.Column(db.Boolean, index=False, nullable=False)
+    parking = db.Column(db.Boolean, index=False, nullable=False)
+    all_meals = db.Column(db.Boolean, index=False, nullable=False)
+    start = db.Column(db.Date, nullable=False, index=True)
+    end = db.Column(db.Date, nullable=False, index=True)
     price = db.Column(db.float, nullable=False)
-    type = db.Column(db.String(30), nullable=False)
+    type = db.Column(db.String(30), nullable=False, index=True)
     num_people = db.Column(db.Integer, nullable=False)
 
 #### check where to set index = True
