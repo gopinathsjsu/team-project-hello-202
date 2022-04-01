@@ -38,3 +38,27 @@ def user_records():
     print(res)
     return "hello"
     # return render_template("users.jinja2", users=User.query.all(), title="Show Users")
+
+@app.route("/adduser", methods=["POST"])
+def add_user():
+    pass
+
+@app.route("/addhotel", methods=["POST"])
+def add_hotel():
+    pass
+
+@app.route("/addroom", methods=["POST"])
+def add_room():
+    pass
+
+@app.room("/addreservation", methods=["POST"])
+def add_reservation():
+    pass
+
+@app.route("/deletereservation", methods=["POST"])
+def add_user():
+    pass
+
+@app.route("/updatereservation", methods=["POST"])
+def add_user():
+    pass
