@@ -55,10 +55,4 @@ def add_room():
 def add_reservation():
     pass
 
-@app.route("/deletereservation", methods=["POST"])
-def add_user():
-    pass
 
-@app.route("/updatereservation", methods=["POST"])
-def add_user():
-    pass
