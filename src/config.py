@@ -4,6 +4,8 @@ from os import environ, path
 # from dotenv import load_dotenv
 
 basedir = path.abspath(path.dirname(__file__))
+
+
 # load_dotenv(path.join(basedir, ".env"))
 
 
@@ -16,7 +18,7 @@ class Config:
     # FLASK_ENV = environ.get("FLASK_ENV")
 
     # Database
-    SQLALCHEMY_DATABASE_URI = "sqlite:///example.sqlite"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite"
     # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False

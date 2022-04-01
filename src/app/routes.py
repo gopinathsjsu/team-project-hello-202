@@ -13,7 +13,7 @@ def user_records():
     data = request.get_json()
     username = data["user"]
     email = data["email"]
-    print(type(username),email, request.get_json())
+    print(type(username), email, request.get_json())
     if username and email:
         existing_user = User.query.filter(
             User.name == username or User.email == email
