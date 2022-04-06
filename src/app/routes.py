@@ -82,6 +82,6 @@ def add_room():
     pass
 
 
-@app.room("/addreservation", methods=["POST"])
+@app.route("/addreservation", methods=["POST"])
 def add_reservation():
     pass
