@@ -39,20 +39,49 @@ def user_records():
     return "hello"
     # return render_template("users.jinja2", users=User.query.all(), title="Show Users")
 
+
 @app.route("/adduser", methods=["POST"])
 def add_user():
-    pass
+    data = request.get_json()
+    username = data["user"]
+    email = data["email"]
+    password = data["password"]
+    rewards = data["rewards"]
+
+    # check if not empty
+    if username and email and password:
+        existing_user = User.query.filter(
+            User.name == username or User.email == email
+        ).first()  # first is used to return the first result or None if result doesn't contain any row
+        if existing_user:
+            return make_response(f"{username} ({email}) already created!")
+        new_user = User(
+            name=username,
+            email=email,
+            password=password,
+            rewards=rewards
+        )  # Create an instance of the User class
+        db.session.add(new_user)  # Adds new User record to database
+        db.session.commit()  # Commits all changes
+
+    # have to be deleted later
+    res = User.query.all()
+    for r in res:
+        print(r.name)
+    return "data added"
+
+
 
 @app.route("/addhotel", methods=["POST"])
 def add_hotel():
     pass
 
+
 @app.route("/addroom", methods=["POST"])
 def add_room():
     pass
 
+
 @app.room("/addreservation", methods=["POST"])
 def add_reservation():
     pass
-
-
