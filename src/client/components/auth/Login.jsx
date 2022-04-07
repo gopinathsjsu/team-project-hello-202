@@ -1,14 +1,14 @@
-import React from 'react';
-import Form from 'react-bootstrap/Form';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import Form from "react-bootstrap/Form";
+import { Button } from "react-bootstrap";
 
 const formStyle = {
-  margin: 'auto',
-  width: '50vw',
-  height: '50vh'
+  margin: "auto",
+  width: "50vw",
+  height: "50vh",
 };
 
-function Login(props) {
+function Login() {
   return (
     <Form style={formStyle}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
