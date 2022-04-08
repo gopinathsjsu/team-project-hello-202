@@ -74,5 +74,3 @@ class Reservation(db.Model):
     price = db.Column(db.FLOAT, nullable=False)
     type = db.Column(db.String(30), nullable=False, index=True)
     num_people = db.Column(db.Integer, nullable=False)
-
-#### check where to set index = True
