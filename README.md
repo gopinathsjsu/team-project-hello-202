@@ -17,7 +17,7 @@ Every Standup includes discussing the work done, the challenges and whether ther
 
 ## TECHSTACK:
 
-- BACKEND: SQLAlchemy, FlaskSqlAlchemy
+- BACKEND: SQLAlchemy, FlaskSqlAlchemy, EC2, RDS
 
 
 ## TASKS COMPLETED:
