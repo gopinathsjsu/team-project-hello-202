@@ -8,6 +8,9 @@ Team Members:
 <b>Front End</b>: Josef Bustamante and Priyank Bardolia <br>
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
 
+### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board Link</a>
+### <a href="https://docs.google.com/document/d/1a6bN8Y34nxDBmSwEWEm-3qTafa9f_odVDV1tf4mUmxI/edit?usp=sharing">Project Journal</a>
+### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Spring Task Sheet</a>
 
 ## XP Values: Communication
 
