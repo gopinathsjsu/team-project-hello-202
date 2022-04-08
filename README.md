@@ -23,13 +23,13 @@ Every Standup includes discussing the work done, the challenges and whether ther
 ## TASKS COMPLETED:
 
 - Backend
-  1. Explore SQLAlchemy
+  1.Explore SQLAlchemy
   2. Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
   3. Explore ec2 and Amazon Relational Database Service (RDS)
 
 ## TODO:
 
 - Backend
-1. Port the db onto aws services.
-2. CRUD operations.
-3. Load balancing
+  1. Port the db onto aws services.
+  2. CRUD operations.
+  3. Load balancing
