@@ -25,7 +25,7 @@ Every Standup includes discussing the work done, the challenges and whether ther
 - Backend
   1. Explore SQLAlchemy
   2. Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
-  3. Explore ec2 and Amazon Relational Database Service (RDS)
+  3. Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema.
 
 ## TODO:
 
