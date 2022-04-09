@@ -18,7 +18,8 @@ class Config:
     # FLASK_ENV = environ.get("FLASK_ENV")
 
     # Database
-    SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite"
+    # SQLALCHEMY_DATABASE_URI = "postgresql://username:password@hostname:port/databasename"
+    SQLALCHEMY_DATABASE_URI = "postgresql://hello202:hello202@hotel-management.cnsjmvtqfyks.us-west-1.rds.amazonaws.com:5432/hotelmanagement"
     # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
