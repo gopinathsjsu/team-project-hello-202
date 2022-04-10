@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import Sidebar from "../Sidebar";
 
 const rootStyle = {
   display: "flex",
@@ -35,6 +36,7 @@ const hotelSearchStyle = {
 const listIconStyle = {
   height: 25,
   width: 30,
+  cursor: "pointer",
 };
 
 const briefcaseIconStyle = {
@@ -100,10 +102,45 @@ function Dashboard({}) {
 
   const onMyTripsClick = () => {};
 
+  const onDashboardClick = () => {
+    navigate("/dashboard");
+  };
+
+  const onRewardsClick = () => {
+    navigate("/rewards");
+  };
+
+  const onTripsClick = () => {
+    navigate("/trips");
+  };
+
+  const onSigninClick = () => {
+    navigate("/login");
+  };
+
+  const onRegisterClick = () => {
+    navigate("/signup");
+  };
+
+  const onLogoutClick = () => {
+    navigate("/logout");
+  };
+
+  const onAboutClick = () => {
+    navigate("/about");
+  };
+
+  const [sidebar, setSidebar] = useState(false);
+
+  const showSidebar = () => setSidebar(!sidebar);
+
   return (
     <div style={rootStyle}>
+      {sidebar && <Sidebar showSidebar={showSidebar} />}
       <Header
-        left={[<ListIcon style={listIconStyle} />]}
+        left={[
+          <ListIcon style={listIconStyle} eventKey="3" onClick={showSidebar} />,
+        ]}
         right={[
           <div>
             <Dropdown>
