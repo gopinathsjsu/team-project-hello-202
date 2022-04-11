@@ -172,10 +172,10 @@ function Trips(props) {
             <Card.Header>
               <span style={{ fontWeight: "bold" }}> {trip.name}</span>
             </Card.Header>
-            <Card.Body style={{ display: "flex", flexDirection: "row", }}>
+            <Card.Body style={{ display: "flex", flexDirection: "row" }}>
               <Image src="https://images.unsplash.com/photo-1618773928121-c32242e63f39" style={hotelImageStyle} />
-              <div style={{ display: "flex", flexDirection: "column", }}>
-                <div style={{ display: "flex", flexDirection: "row", padding: '0px 0px 0px 10px' }}>
+              <div style={{ display: "flex", flexDirection: "column", width: "100vw" }}>
+                <div style={{ display: "flex", flexDirection: "row", padding: "0px 0px 0px 10px", justifyContent: "space-around" }}>
                   <Card.Text>
                     {trip.address}
                   </Card.Text>
