@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import "react-datetime/css/react-datetime.css";
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 
 const TripsStyle = {
@@ -21,15 +22,18 @@ const backgroundImageStyle = {
   width: '100vw',
 };
 
+const hotelImageStyle = {
+  width: 250
+};
+
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 const TRIPS_TOTAL_COUNT = 36;
 
 function Trips(props) {
   const pages = [];
-  const trips = [];
   const [active, setActive] = useState(1);
-  const [epi, setEpi] = useState([]);
+  const [trips, setTrips] = useState([]);
   const totalEpis = [];
 
   let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
@@ -55,26 +59,36 @@ function Trips(props) {
     })
       .then((res) => {
         res.json().then((data) => {
-          // setEpi(data);
-          setEpi([
+          // setTrips(data);
+          setTrips([
             {
               id: 1,
               name: 'The Ritz-Carlton Residences, Waikiki Beach',
-              air_date: 'December 2, 2013',
-              episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+              check_in_date: 'December 2, 2013',
+              check_out_date: 'December 2, 2013',
+              address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
             },
             {
               id: 2,
               name: 'The Ritz-Carlton Residences, Waikiki Beach',
-              air_date: 'December 2, 2013',
-              episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+              check_in_date: 'December 2, 2013',
+              check_out_date: 'December 2, 2013',
+              address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
             },
             {
               id: 3,
               name: 'The Ritz-Carlton Residences, Waikiki Beach',
-              air_date: 'December 2, 2013',
-              episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+              check_in_date: 'December 2, 2013',
+              check_out_date: 'December 2, 2013',
+              address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
             },
+            {
+              id: 4,
+              name: 'The Ritz-Carlton Residences, Waikiki Beach',
+              check_in_date: 'December 2, 2013',
+              check_out_date: 'December 2, 2013',
+              address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+            }
           ]);
         });
       })
@@ -94,25 +108,35 @@ function Trips(props) {
       })
         .then((res) => {
           res.json().then((data) => {
-            // setEpi(data);
-            setEpi([
+            // setTrips(data);
+            setTrips([
               {
                 id: 1,
                 name: 'The Ritz-Carlton Residences, Waikiki Beach',
-                air_date: 'December 2, 2013',
-                episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+                check_in_date: 'December 2, 2013',
+                check_out_date: 'December 2, 2013',
+                address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
               },
               {
                 id: 2,
                 name: 'The Ritz-Carlton Residences, Waikiki Beach',
-                air_date: 'December 2, 2013',
-                episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+                check_in_date: 'December 2, 2013',
+                check_out_date: 'December 2, 2013',
+                address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
               },
               {
                 id: 3,
                 name: 'The Ritz-Carlton Residences, Waikiki Beach',
-                air_date: 'December 2, 2013',
-                episode: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+                check_in_date: 'December 2, 2013',
+                check_out_date: 'December 2, 2013',
+                address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
+              },
+              {
+                id: 4,
+                name: 'The Ritz-Carlton Residences, Waikiki Beach',
+                check_in_date: 'December 2, 2013',
+                check_out_date: 'December 2, 2013',
+                address: '383 Kalaimoku Street Waikiki Beach, Hawaii 96815',
               },
             ]);
           });
@@ -140,23 +164,37 @@ function Trips(props) {
     <div style={rootStyle}>
       <Image src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a" style={backgroundImageStyle} />
       <div style={{ margin: 'auto' }}>
-        {epi && epi.map(ep => (
+        {trips && trips.map(trip => (
           <Card
-            key={ep.id}
+            key={trip.id}
             style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
           >
-            <Card.Body>
-              <Card.Title>
-                <span style={{ fontWeight: "bold" }}>Episode:</span> {ep.name}
-              </Card.Title>
-              <Card.Text>
-                <span style={{ fontWeight: "bold" }}>Ep. Code:</span>{" "}
-                {ep.episode}
-              </Card.Text>
-              <Card.Text>
-                <span style={{ fontWeight: "bold" }}>Date:</span> {ep.air_date}
-              </Card.Text>
+            <Card.Header>
+              <span style={{ fontWeight: "bold" }}> {trip.name}</span>
+            </Card.Header>
+            <Card.Body style={{ display: "flex", flexDirection: "row", }}>
+              <Image src="https://images.unsplash.com/photo-1618773928121-c32242e63f39" style={hotelImageStyle} />
+              <div style={{ display: "flex", flexDirection: "column", }}>
+                <div style={{ display: "flex", flexDirection: "row", padding: '0px 0px 0px 10px' }}>
+                  <Card.Text>
+                    {trip.address}
+                  </Card.Text>
+                  <Card.Text>
+                    {trip.check_in_date} - {trip.check_out_date}
+                  </Card.Text>
+                </div>
+                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+                  <Button variant="outline-primary" type="submit">
+                    View/Modify
+                  </Button>
+                  <Button variant="outline-primary" type="submit">
+                    Cancel
+                  </Button>
+                </div>
+              </div>
             </Card.Body>
+            <Card.Footer>
+            </Card.Footer>
           </Card>
         ))}
       </div>
