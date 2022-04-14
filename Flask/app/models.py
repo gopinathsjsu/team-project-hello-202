@@ -16,11 +16,11 @@ class User(db.Model):
 class Hotel(db.Model):
     __tablename__ = "hotel"
     hid = db.Column(db.Integer, primary_key=True)
-    hname = db.Column(db.String(64), index=False, nullable=False)
+    hname = db.Column(db.String(64), index=False, nullable=False, unique=True)
     location = db.Column(db.String(80), index=True, unique=True, nullable=False)
-    total_rooms = db.Column(db.Integer, index=False, unique=False, nullable=False)
-    available_rooms = db.Column(db.Integer, index=False, unique=False, nullable=False, default=0.0)
-
+    total_single = db.Column(db.Integer, index=False, unique=False, nullable=False)
+    total_double = db.Column(db.Integer, index=False, unique=False, nullable=False)
+    total_suite = db.Column(db.Integer, index=False, unique=False, nullable=False)
 
 # Room table
 class Room(db.Model):
