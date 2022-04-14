@@ -10,7 +10,7 @@ import Rewards from "./Rewards";
 import Trips from "./Trips";
 import Logout from "./Logout";
 import About from "./About";
-const LandingPage = ({}) => {
+const LandingPage = ({ }) => {
   const [isJWTFound, setIsJWTFound] = useState(false);
 
   return (
@@ -25,11 +25,11 @@ const LandingPage = ({}) => {
         <Route path="rewards" element={<Rewards />} />
         <Route path="logout" element={<Logout />} />
         <Route path="about" element={<About />} />
-        <Route path="trips" element={<Trips />} />
+        <Route path="trips" element={<Dashboard content={<Trips />} />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="sidebar" element={<Sidebar />} />
-        <Route path="search" element={<HotelSearch />}>
+        <Route path="search" element={<Dashboard content={<HotelSearch />} />} >
           <Route
             index
             element={
@@ -45,7 +45,7 @@ const LandingPage = ({}) => {
           element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}
         />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 };
 

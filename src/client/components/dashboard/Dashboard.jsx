@@ -54,7 +54,7 @@ const myTripStyle = {
 
 const myTripTextStyle = {};
 
-function Dashboard({}) {
+function Dashboard({ content }) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -100,7 +100,7 @@ function Dashboard({}) {
     navigate("/login");
   };
 
-  const onMyTripsClick = () => {};
+  const onMyTripsClick = () => { };
 
   const onDashboardClick = () => {
     navigate("/dashboard");
@@ -176,7 +176,7 @@ function Dashboard({}) {
         style={backgroundImageStyle}
       />
       <HotelSearchForm style={hotelSearchStyle} />
-      <>Welcome</>
+      {content != null ? content : <>Welcome</>}
       <Footer />
     </div>
   );

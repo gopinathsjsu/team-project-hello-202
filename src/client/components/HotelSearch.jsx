@@ -110,8 +110,6 @@ function HotelSearch(props) {
 
   return (
     <div style={rootStyle}>
-      <Image src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a" style={backgroundImageStyle} />
-      <HotelSearchForm style={hotelSearchStyle} />
       <ListGroup as="ol" numbered style={{ margin: '0vh auto 5vh auto', width: '90%' }}>
         <ListGroup.Item
           as="li"

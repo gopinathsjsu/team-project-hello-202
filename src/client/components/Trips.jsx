@@ -162,7 +162,6 @@ function Trips(props) {
 
   return (
     <div style={rootStyle}>
-      <Image src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a" style={backgroundImageStyle} />
       <div style={{ margin: 'auto' }}>
         {trips && trips.map(trip => (
           <Card
