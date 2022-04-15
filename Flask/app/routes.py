@@ -212,6 +212,7 @@ def check_availability():
 def reservation():
     if request.method == "POST":
         try:
+            # rid, uid, hname, breakfast ...
             data = request.get_json()
             rid = data['rid']
             uid = data['uid']
@@ -230,34 +231,24 @@ def reservation():
             num_people = data["num_people"]
 
             new_reservation = Reservation(
-                rid = rid,
+                rid=rid,
                 uid=uid,
-                hid = hid,
-                breakfast = breakfast,
+                hid=hid,
+                breakfast=breakfast,
                 fitness=fitness,
                 swimming=swimming,
                 parking=parking,
-                all_meals = all_meals,
-                start = start,
-                end = end,
-                price = price,
-                num_people = num_people
+                all_meals=all_meals,
+                start=start,
+                end=end,
+                price=price,
+                num_people=num_people
             )  # Create an instance of the Hotel class
             db.session.add(new_reservation)  # Adds new hotel the database
             db.session.commit()
             return make_response("Booking Successful", 200)
         except:
-            return make_response("Booking Failed",404)
-
-    # GET request to filter out based on type of room and BETWEEN dates, hotel name
-    if request.method == "GET":
-        try:
-            pass
-        except:
-            pass
-
-
-from flask_sqlalchemy import SQLAlchemy
+            return make_response("Booking Failed", 404)
 
 
 @app.route("/availability", methods=["GET"])
