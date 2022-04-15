@@ -100,7 +100,7 @@ function Dashboard({ content }) {
     navigate("/login");
   };
 
-  const onMyTripsClick = () => { };
+  const onMyTripsClick = () => {};
 
   const onDashboardClick = () => {
     navigate("/dashboard");
