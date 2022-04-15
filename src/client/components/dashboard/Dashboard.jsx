@@ -5,16 +5,12 @@ import {
   List as ListIcon,
   Person as PersonIcon,
 } from "react-bootstrap-icons";
-import { Button, Dropdown, FormControl } from "react-bootstrap";
-import Datetime from "react-datetime";
+import { Dropdown } from "react-bootstrap";
 import Footer from "./Footer";
-import SignUp from "../auth/SignUp";
 import Header from "./Header";
 import Image from "react-bootstrap/Image";
 import HotelSearchForm from "../HotelSearchForm";
-import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "../Sidebar";
 
@@ -54,7 +50,7 @@ const myTripStyle = {
 
 const myTripTextStyle = {};
 
-function Dashboard({ content }) {
+function Dashboard({ content, setRooms }) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -100,35 +96,7 @@ function Dashboard({ content }) {
     navigate("/login");
   };
 
-  const onMyTripsClick = () => {};
-
-  const onDashboardClick = () => {
-    navigate("/dashboard");
-  };
-
-  const onRewardsClick = () => {
-    navigate("/rewards");
-  };
-
-  const onTripsClick = () => {
-    navigate("/trips");
-  };
-
-  const onSigninClick = () => {
-    navigate("/login");
-  };
-
-  const onRegisterClick = () => {
-    navigate("/signup");
-  };
-
-  const onLogoutClick = () => {
-    navigate("/logout");
-  };
-
-  const onAboutClick = () => {
-    navigate("/about");
-  };
+  const onMyTripsClick = () => { };
 
   const [sidebar, setSidebar] = useState(false);
 
@@ -175,7 +143,7 @@ function Dashboard({ content }) {
         src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
         style={backgroundImageStyle}
       />
-      <HotelSearchForm style={hotelSearchStyle} />
+      <HotelSearchForm style={hotelSearchStyle} setRooms={setRooms} />
       {content != null ? content : <>Welcome</>}
       <Footer />
     </div>

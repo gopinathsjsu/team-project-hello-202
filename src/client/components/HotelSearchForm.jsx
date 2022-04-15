@@ -3,6 +3,7 @@ import { Search as SearchIcon, Calendar as CalendarIcon, DashCircle as MinusIcon
 import { Button, DropdownButton } from 'react-bootstrap';
 import Datetime from 'react-datetime';
 import "react-datetime/css/react-datetime.css";
+import { useNavigate } from "react-router-dom";
 
 const inputContainerStyle = {
   display: 'flex',
@@ -112,71 +113,81 @@ const rootStyle = {
 
 const MIN_ROOM_COUNT = 0;
 const MAX_ROOM_COUNT = 10;
-const MIN_ADULT_COUNT = 0;
-const MAX_ADULT_COUNT = 10;
-const MIN_CHILDREN_COUNT = 0;
-const MAX_CHILDREN_COUNT = 10;
+const MIN_PEOPLE_COUNT = 0;
+const MAX_PEOPLE_COUNT = 10;
 
-function HotelSearchForm(props) {
+function HotelSearchForm({ setRooms }) {
+  let navigate = useNavigate();
+
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
-  const [roomCount, setRooms] = useState(0);
-  const [adultCount, setAdultCount] = useState(0);
-  const [childrenCount, setChildrenCount] = useState(0);
+  const [roomCount, setRoomCount] = useState(0);
+  const [roomType, setRoomType] = useState('single');
+  const [peopleCount, setPeopleCount] = useState(0);
+
+  const setLocationDestination = (e) => {
+    setDestination(e.target.value)
+  }
 
   const onRoomMinusClick = () => {
     if (roomCount === MIN_ROOM_COUNT) {
       return;
     }
-    setRooms(roomCount - 1);
+    setRoomCount(roomCount - 1)
   };
   const onRoomPlusClick = () => {
     if (roomCount === MAX_ROOM_COUNT) {
       return;
     }
-    setRooms(roomCount + 1);
+    setRoomCount(roomCount + 1)
   };
-  const onAdultMinusClick = () => {
-    if (adultCount === MIN_CHILDREN_COUNT) {
+  const onPeopleMinusClick = () => {
+    if (peopleCount === MIN_PEOPLE_COUNT) {
       return;
     }
-    setAdultCount(adultCount - 1);
+    setPeopleCount(peopleCount - 1)
+    if (peopleCount <= 1) {
+      setRoomType('single')
+    } else if (peopleCount > 1 && peopleCount <= 4) {
+      setRoomType('double')
+    } else {
+      setRoomType('suite')
+    }
   };
-  const onAdultPlusClick = () => {
-    if (adultCount === MAX_CHILDREN_COUNT) {
+  const onPeoplePlusClick = () => {
+    if (peopleCount === MAX_PEOPLE_COUNT) {
       return;
     }
-    setAdultCount(adultCount + 1);
-  };
-  const onChildrenMinusClick = () => {
-    if (childrenCount === MIN_ADULT_COUNT) {
-      return;
+    setPeopleCount(peopleCount + 1)
+    if (peopleCount <= 1) {
+      setRoomType('single')
+    } else if (peopleCount > 1 && peopleCount <= 4) {
+      setRoomType('double')
+    } else {
+      setRoomType('suite')
     }
-    setChildrenCount(childrenCount - 1);
-  };
-  const onChildrenPlusClick = () => {
-    if (childrenCount === MAX_ADULT_COUNT) {
-      return;
-    }
-    setChildrenCount(childrenCount + 1);
   };
   const onSubmitClick = () => {
-    fetch('http://localhost:8080/getRooms', {
+    fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST',
       body: JSON.stringify({
-        adultCount, checkInDate, checkOutDate, childrenCount, destination, roomCount
+        checkInDate: checkInDate.toDate(),
+        checkOutDate: checkOutDate.toDate(),
+        destination,
+        roomCount,
+        roomType
       })
     })
       .then((res) => {
         if (res.ok) {
           return res.json().then((responseData) => {
-            const { rooms } = responseData;
-            // TODO: Set rooms and change page view
-            return responseData;
+            const { rooms } = responseData
+            setRooms(rooms)
+            navigate("/search");
           });
         }
         console.log('Error occurred:');
@@ -201,7 +212,7 @@ function HotelSearchForm(props) {
       <div style={leftSideStyle}>
         <div style={inputContainerStyle}>
           <div style={searchInputContainerStyle}>
-            <input className="form-control" type="text" placeholder='Where are you traveling?' aria-label="Destination" onChange={setDestination} style={searchInputStyle} />
+            <input className="form-control" type="text" placeholder='Where are you traveling?' aria-label="Destination" onChange={setLocationDestination} style={searchInputStyle} />
             <SearchIcon style={searchIconStyle} role="button" tabIndex="-1" />
           </div>
           <div style={checkInInputContainerStyle}>
@@ -225,19 +236,11 @@ function HotelSearchForm(props) {
                 </div>
               </div>
               <div style={roomDropdownEntryStyle}>
-                <>Adults</>
+                <>People</>
                 <div style={dropdownEntrySelectorStyle}>
-                  <MinusIcon onClick={onAdultMinusClick} onKeyPress={onAdultMinusClick} style={{ marginTop: 5 }} />
-                  {adultCount}
-                  <PlusIcon onClick={onAdultPlusClick} onKeyPress={onAdultPlusClick} style={{ marginTop: 5 }} />
-                </div>
-              </div>
-              <div style={roomDropdownEntryStyle}>
-                <>Children</>
-                <div style={dropdownEntrySelectorStyle}>
-                  <MinusIcon onClick={onChildrenMinusClick} onKeyPress={onChildrenMinusClick} style={{ marginTop: 5 }} />
-                  {childrenCount}
-                  <PlusIcon onClick={onChildrenPlusClick} onKeyPress={onChildrenPlusClick} style={{ marginTop: 5 }} />
+                  <MinusIcon onClick={onPeopleMinusClick} onKeyPress={onPeopleMinusClick} style={{ marginTop: 5 }} />
+                  {peopleCount}
+                  <PlusIcon onClick={onPeoplePlusClick} onKeyPress={onPeoplePlusClick} style={{ marginTop: 5 }} />
                 </div>
               </div>
             </DropdownButton>

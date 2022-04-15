@@ -11,7 +11,8 @@ import Trips from "./Trips";
 import Logout from "./Logout";
 import About from "./About";
 const LandingPage = ({ }) => {
-  const [isJWTFound, setIsJWTFound] = useState(false);
+  const [isJWTFound, setIsJWTFound] = useState(false)
+  const [rooms, setRooms] = useState([])
 
   return (
     <BrowserRouter>
@@ -21,15 +22,15 @@ const LandingPage = ({ }) => {
           element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}
         />
 
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard setRooms={setRooms} />} />
         <Route path="rewards" element={<Rewards />} />
         <Route path="logout" element={<Logout />} />
         <Route path="about" element={<About />} />
-        <Route path="trips" element={<Dashboard content={<Trips />} />} />
+        <Route path="trips" element={<Dashboard content={<Trips />} setRooms={setRooms} />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="sidebar" element={<Sidebar />} />
-        <Route path="search" element={<Dashboard content={<HotelSearch />} />} >
+        <Route path="search" element={<Dashboard content={<HotelSearch rooms={rooms} />} setRooms={setRooms} />} >
           <Route
             index
             element={
