@@ -5,36 +5,55 @@ from flask import current_app as app
 from flask import make_response, redirect, render_template, request, url_for
 from collections import defaultdict
 from .models import User, db, Hotel, Room, Reservation
+from flask_cors import cross_origin
+
+
+@app.route("/user", methods=["POST"])
+@cross_origin()
+def login():
+    try:
+        data = request.get_json()
+        email = data['email']
+        pwd = data['password']
+        if email and pwd:
+            user = User.query.filter(
+                User.email == email, User.password == pwd
+            )
+        return make_response(f"{user.uid}", 200)
+    except:
+        return make_response("Make sure the username and password are correct.", 404)
 
 
 @app.route("/user", methods=["POST", "GET"])
+@cross_origin()
 def user():
     try:
         if request.method == "POST":
             data = request.get_json()
             # uid = data['uid']
-            username = data["user"]
+            name = data["name"]
             email = data["email"]
             password = data["password"]
-            rewards = data["rewards"]
-
+            # rewards = data["rewards"]
             # check if not empty
-            if username and email and password:  # and uid:
+            if name and email and password:  # and uid:
                 existing_user = User.query.filter(
-                    User.name == username or User.email == email
+                    User.email == email
                 ).first()  # first is used to return the first result or None if result doesn't contain any row
                 if existing_user:
-                    return make_response(f"{username} ({email}) already created!")
+                    return make_response(f"{name} ({email}) already created!")
+
                 new_user = User(
                     # uid=uid,
-                    name=username,
+                    name=name,
                     email=email,
-                    password=password,
-                    rewards=rewards
+                    password=password
+                    # rewards=rewards
                 )  # Create an instance of the User class
                 db.session.add(new_user)  # Adds new User record to database
                 db.session.commit()  # Commits all changes
-                return make_response("User added!", 200)
+                user = User.query.filter(User.email == email).first()
+                return make_response(f"{user.uid}", 200)
     except:
         return make_response("Oops! An error occurred", 404)
 
@@ -51,6 +70,7 @@ def user():
 
 
 @app.route("/hotel", methods=["GET", "POST"])
+@cross_origin()
 def hotel():
     if request.method == "POST":
         try:
@@ -77,27 +97,34 @@ def hotel():
                 )  # Create an instance of the Hotel class
                 db.session.add(new_hotel)  # Adds new hotel the database
                 db.session.commit()  # Commits all changes
+
             return make_response(f"Done. Hotel has been added", 200)
         except:
             return make_response("An error occurred while adding hotel!", 404)
     if request.method == "GET":
         try:
-            res = Hotel.query.all()
-            hotel_list = []
-            for r in res:
-                hotel_list.append([r.hid, r.hname])
-            return make_response(f"Done. Hotels are {hotel_list}", 200)
+            hotels = Hotel.query.all()
+            hotel_collection = defaultdict(dict)
+            for hotel in hotels:
+                hotel_collection[hotel.hname] = {
+                    "id": hotel.hid,
+                    "location": hotel.location
+                }
+
+            return make_response(hotel_collection, 200)
         except:
             return make_response("NOT WORKING", 404)
 
 
 @app.route("/room", methods=["GET", "POST"])
+@cross_origin()
 def room():
     if request.method == "POST":
         try:
             data = request.get_json()
-            hid = data["hid"]  # assumed that the admin wil enter this while adding rooms to the db
-            # hotel_name = data["hotel_name"]
+            hotel = Hotel.query.filter(Hotel.hname == data['hname'])
+            hid = hotel.hname  # assumed that the admin wil enter this while adding rooms to the db
+
             type = data["type"]
             baseprice = data["baseprice"]  # has to be specified by the admin
             # checking if the type of that room in the particular hotel is more
@@ -113,7 +140,7 @@ def room():
             if type == "suite":
                 maxm_limit = maxm_limit.total_suite
 
-            if rooms_added_already is None or len(rooms_added_already) >= maxm_limit:
+            if rooms_added_already is not None or len(rooms_added_already) >= maxm_limit:
                 return make_response(f"Maximum limit reached for this room type in hotel {hid}", 405)
             # check if not empty
             if hid and type and baseprice:
@@ -124,7 +151,7 @@ def room():
                 )  # Create an instance of the Hotel class
                 db.session.add(new_room)  # Adds new hotel the database
                 db.session.commit()  # Commits all changes
-            return make_response(f"Done. Room has been added", 200)
+            return make_response(f"Room has been added", 200)
         except:
             return make_response("An error occurred while trying to add room!", 404)
     if request.method == "GET":
@@ -141,23 +168,59 @@ def room():
                 )
             else:
                 rooms = Room.query.filter(
-                    Room.hotel == hotelname or Room.type == roomtype
+                    Room.hid == hotel_name.hid, Room.type == roomtype
                 )
-            room_data = defaultdict(list)
+
+            room_data = defaultdict(dict)
             for room in rooms:
-                room_data[room.hotel].append({"type": room.type, "baseprice": room.baseprice, "rid": room.rid})
+                hotel = Hotel.query.filter(Hotel.hid == room.hid)
+                room_data[hotel.hname] = {"type": room.type, "baseprice": room.baseprice, "rid": room.rid}
             return make_response(f"{room_data}", 200)
         except:
             return make_response("NOT WORKING", 404)
 
 
 @app.route("/reservation", methods=["GET", "POST"])
+@cross_origin()
 def reservation():
     if request.method == "POST":
         try:
             pass
         except:
             pass
+        #     data = request.get_json()
+        #
+        #     # $$$$$$$$$$$$$$$
+        #     rid = data["rid"]
+        #
+        #
+        #     uid = data["uid"]
+        #
+        #     hotelname = data["hname"]
+        #     hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
+        #     hid = hotelname.hid
+        #
+        #     breakfast = data["breakfast"]
+        #     fitness = data["fitness"]
+        #     swimming = data["swimming"]
+        #     parking = data["parking"]
+        #     all_meals = data["all_meals"]
+        #     start = data["start"]
+        #     end = data["end"]
+        #     price = data["price"]
+        #     num_people = data["num_people"]
+        #
+        #     new_room = Reservation(
+        #         rid = rid,
+        #         hid = hid,
+        #         breakfast = breakfast,
+        #     )  # Create an instance of the Hotel class
+        #     db.session.add(new_room)  # Adds new hotel the database
+        #     db.session.commit()
+        #
+        # pass
+        # except:
+        #     pass
 
     # GET request to filter out based on type of room and BETWEEN dates, hotel name
     if request.method == "GET":
@@ -171,6 +234,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 @app.route("/availability", methods=["GET"])
+@cross_origin()
 def availability():
     try:
         args = request.args

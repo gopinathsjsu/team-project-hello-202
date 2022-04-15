@@ -26,7 +26,6 @@ class Hotel(db.Model):
 class Room(db.Model):
     __tablename__ = "room"
     rid = db.Column(db.Integer, primary_key=True)
-
     hid = db.Column(db.Integer, db.ForeignKey('hotel.hid', ondelete='CASCADE'), nullable=False)
     hotel = db.relationship('Hotel', backref=db.backref('rooms'))
 

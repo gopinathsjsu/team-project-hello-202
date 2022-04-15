@@ -23,3 +23,4 @@ class Config:
     # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CORS_HEADERS = 'Content-Type'

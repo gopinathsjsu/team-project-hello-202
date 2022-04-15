@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "karantyagi/test",
+    "Name": "karantyagi/hotelmanagement",
     "Update": "true"
   },
   "Ports": [
