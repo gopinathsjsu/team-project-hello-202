@@ -7,6 +7,9 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Pagination from "react-bootstrap/Pagination";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Popover from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap";
 
 const rootStyle = {
   display: "flex",
@@ -14,6 +17,10 @@ const rootStyle = {
 };
 
 const hotelImageStyle = {
+  width: 250,
+};
+
+const roomImageStyle = {
   width: 250,
 };
 
@@ -77,6 +84,29 @@ function HotelSearch(props) {
   const pages = [];
   const [active, setActive] = useState(1);
   const [trips, setTrips] = useState([]);
+  const [roomtype, setRoomtype] = useState([
+    {
+      id: 1,
+      name: "Single Room",
+      rate: 200.0,
+      imgsrc:
+        "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
+    },
+    {
+      id: 2,
+      name: "Double Room",
+      rate: 300.0,
+      imgsrc:
+        "https://media.istockphoto.com/photos/hotel-room-bed-picture-id506852656?k=20&m=506852656&s=612x612&w=0&h=e0GIcyFj7L_k5rdOuFKLncfRlWXVqBhd9tEtP1697jo=",
+    },
+    {
+      id: 3,
+      name: "King's Suite",
+      rate: 550.0,
+      imgsrc:
+        "https://media.istockphoto.com/photos/antique-four-poster-picture-id115939001?k=20&m=115939001&s=612x612&w=0&h=fBl5sbFQO9KgaUVqxwlfTfrCBaphoNVLj2cIcJxbym4=",
+    },
+  ]);
   const totalEpis = [];
 
   let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
@@ -151,25 +181,32 @@ function HotelSearch(props) {
               id: 1,
               name: "The Ritz-Carlton Residences, Waikiki Beach",
               address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              rate: 300.0,
+              // rate: 300.0,
             },
             {
               id: 2,
               name: "The Ritz-Carlton Residences, Waikiki Beach",
               address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              rate: 300.0,
+              // rate: 300.0,
             },
             {
               id: 3,
               name: "The Ritz-Carlton Residences, Waikiki Beach",
               address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              rate: 300.0,
+              // rate: 300.0,
             },
             {
               id: 4,
               name: "The Ritz-Carlton Residences, Waikiki Beach",
               address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              rate: 300.0,
+              // rate: 300.0,
+            },
+
+            {
+              id: 5,
+              name: "The Ritz-Carlton Residences, Waikiki Beach",
+              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+              // rate: 300.0,
             },
           ]);
         });
@@ -200,25 +237,31 @@ function HotelSearch(props) {
                 id: 1,
                 name: "The Ritz-Carlton Residences, Waikiki Beach",
                 address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                rate: 300.0,
+                // rate: 300.0,
               },
               {
                 id: 2,
                 name: "The Ritz-Carlton Residences, Waikiki Beach",
                 address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                rate: 300.0,
+                // rate: 300.0,
               },
               {
                 id: 3,
                 name: "The Ritz-Carlton Residences, Waikiki Beach",
                 address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                rate: 300.0,
+                // rate: 300.0,
               },
               {
                 id: 4,
                 name: "The Ritz-Carlton Residences, Waikiki Beach",
                 address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                rate: 300.0,
+                // rate: 300.0,
+              },
+              {
+                id: 5,
+                name: "The Ritz-Carlton Residences, Waikiki Beach",
+                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+                // rate: 300.0,
               },
             ]);
           });
@@ -230,90 +273,185 @@ function HotelSearch(props) {
     }
   }, [active]);
 
-  return (
-    <div style={rootStyle}>
-      <div style={{ margin: "auto" }}>
-        {trips &&
-          trips.map((trip) => (
-            <Card
-              key={trip.id}
-              style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
-            >
-              <Card.Header>
-                <span style={{ fontWeight: "bold" }}> {trip.name}</span>
-              </Card.Header>
-              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                  style={hotelImageStyle}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100vw",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      padding: "0px 0px 0px 10px",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <Card.Text>{trip.address}</Card.Text>
-                    <Card.Text> ${trip.rate} </Card.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <Button variant="outline-primary" type="submit">
-                      View Rates
-                    </Button>
-                    <Button variant="outline-primary" type="submit">
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-              <Card.Footer></Card.Footer>
-            </Card>
-          ))}
-      </div>
-      <Pagination style={{ margin: "auto" }}>
-        <Pagination.First
-          onClick={() => {
-            pagination(1);
-          }}
-        />
-        <Pagination.Prev
-          onClick={() => {
-            if (active > 1) {
-              pagination(active - 1);
-            }
-          }}
-        />
-        {pages}
-        <Pagination.Next
-          onClick={() => {
-            if (active < 5) {
-              pagination(active + 1);
-            }
-          }}
-        />
-        <Pagination.Last
-          onClick={() => {
-            pagination(5);
-          }}
-        />
-      </Pagination>
-    </div>
-  );
-}
+  {
+    for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
+      pages.push(
+        <Pagination.Item
+          key={number}
+          active={number === active}
+          onClick={() => pagination(number)}
+        >
+          {number}
+        </Pagination.Item>
+      );
+    }
+    const [ismodalshown, setismodelshown] = useState(false);
 
+    const modal = (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={ismodalshown}
+        onHide={() => setismodelshown(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Room Selection
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ margin: "auto" }}>
+            {roomtype &&
+              roomtype.map((types) => (
+                <Card
+                  key={types.id}
+                  style={{ width: "50vw", margin: "2rem", textAlign: "center" }}
+                >
+                  <Card.Header>
+                    <span style={{ fontWeight: "bold" }}> {types.name}</span>
+                  </Card.Header>
+                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                    <Image src={types.imgsrc} style={roomImageStyle} />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100vw",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          padding: "0px 0px 0px 10px",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Card.Text> ${types.rate} </Card.Text>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          onClick={() => setismodelshown(true)}
+                        >
+                          View Rates
+                        </Button>
+
+                        <Button variant="outline-primary" type="submit">
+                          Book
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                  <Card.Footer></Card.Footer>
+                </Card>
+              ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setismodelshown(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+
+    return (
+      <div style={rootStyle}>
+        {modal}
+        <div style={{ margin: "auto" }}>
+          {trips &&
+            trips.map((trip) => (
+              <Card
+                key={trip.id}
+                style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
+              >
+                <Card.Header>
+                  <span style={{ fontWeight: "bold" }}> {trip.name}</span>
+                </Card.Header>
+                <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                    style={hotelImageStyle}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100vw",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        padding: "0px 0px 0px 10px",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Card.Text>{trip.address}</Card.Text>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <Button
+                        variant="outline-primary"
+                        type="submit"
+                        onClick={() => setismodelshown(true)}
+                      >
+                        Room Selection
+                      </Button>
+                      <Button variant="outline-primary" type="submit">
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </Card.Body>
+                <Card.Footer></Card.Footer>
+              </Card>
+            ))}
+        </div>
+
+        <Pagination style={{ margin: "auto" }}>
+          <Pagination.First
+            onClick={() => {
+              pagination(1);
+            }}
+          />
+          <Pagination.Prev
+            onClick={() => {
+              if (active > 1) {
+                pagination(active - 1);
+              }
+            }}
+          />
+          {pages}
+          <Pagination.Next
+            onClick={() => {
+              if (active < 5) {
+                pagination(active + 1);
+              }
+            }}
+          />
+          <Pagination.Last
+            onClick={() => {
+              pagination(5);
+            }}
+          />
+        </Pagination>
+      </div>
+    );
+  }
+}
 export default HotelSearch;

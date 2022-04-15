@@ -12,7 +12,7 @@ function Sidebar({ showSidebar }) {
   return (
     <>
       <Nav
-        style={{ position: "absolute", zIndex: 2, height: 330, width: 200 }}
+        style={{ position: "absolute", zIndex: 2, height: 290, width: 200 }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
         // activeKey="/home
         onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
@@ -56,12 +56,6 @@ function Sidebar({ showSidebar }) {
         <Nav.Item>
           <Nav.Link eventKey="link-5" href="/logout">
             Logout
-          </Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link eventKey="link-6" href="/about">
-            About us
           </Nav.Link>
         </Nav.Item>
       </Nav>
