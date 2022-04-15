@@ -22,6 +22,7 @@ class Hotel(db.Model):
     total_double = db.Column(db.Integer, index=False, unique=False, nullable=False)
     total_suite = db.Column(db.Integer, index=False, unique=False, nullable=False)
 
+
 # Room table
 class Room(db.Model):
     __tablename__ = "room"

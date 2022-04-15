@@ -8,7 +8,7 @@ from .models import User, db, Hotel, Room, Reservation
 from flask_cors import cross_origin
 
 
-@app.route("/user", methods=["POST"])
+@app.route("/login", methods=["POST"])
 @cross_origin()
 def login():
     try:
@@ -180,47 +180,74 @@ def room():
             return make_response("NOT WORKING", 404)
 
 
+@app.route("/availability", methods=["GET"])
+@cross_origin()
+def check_availability():
+    try:
+        data = request.get_json()
+        type = data['type']
+        hname = data['hname']
+        booking_start = data['start']
+        booking_end = data['end']
+        hotel = Hotel.query.filter(Hotel.hname == hname)
+
+        reservations = Reservation.query.filter(
+            Reservation.hid == hotel.hid, Reservation.
+        )
+
+        # if type == "single":
+        #     maxm_room_limit = hotel.total_single
+        # if type == "double":
+        #     maxm_room_limit = hotel.total_double
+        # if type == "suite":
+        #     maxm_room_limit = hotel.total_suite
+
+
+    except:
+        pass
+
+
 @app.route("/reservation", methods=["GET", "POST"])
 @cross_origin()
 def reservation():
     if request.method == "POST":
         try:
-            pass
+            data = request.get_json()
+            rid = data['rid']
+            uid = data['uid']
+            hotelname = data["hname"]
+            hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
+            hid = hotelname.hid
+
+            breakfast = data["breakfast"]
+            fitness = data["fitness"]
+            swimming = data["swimming"]
+            parking = data["parking"]
+            all_meals = data["all_meals"]
+            start = data["start"]
+            end = data["end"]
+            price = data["price"]
+            num_people = data["num_people"]
+
+            new_reservation = Reservation(
+                rid = rid,
+                uid=uid,
+                hid = hid,
+                breakfast = breakfast,
+                fitness=fitness,
+                swimming=swimming,
+                parking=parking,
+                all_meals = all_meals,
+                start = start,
+                end = end,
+                price = price,
+                num_people = num_people
+            )  # Create an instance of the Hotel class
+            db.session.add(new_reservation)  # Adds new hotel the database
+            db.session.commit()
+            return make_response("Booking Successful", 200)
         except:
-            pass
-        #     data = request.get_json()
-        #
-        #     # $$$$$$$$$$$$$$$
-        #     rid = data["rid"]
-        #
-        #
-        #     uid = data["uid"]
-        #
-        #     hotelname = data["hname"]
-        #     hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
-        #     hid = hotelname.hid
-        #
-        #     breakfast = data["breakfast"]
-        #     fitness = data["fitness"]
-        #     swimming = data["swimming"]
-        #     parking = data["parking"]
-        #     all_meals = data["all_meals"]
-        #     start = data["start"]
-        #     end = data["end"]
-        #     price = data["price"]
-        #     num_people = data["num_people"]
-        #
-        #     new_room = Reservation(
-        #         rid = rid,
-        #         hid = hid,
-        #         breakfast = breakfast,
-        #     )  # Create an instance of the Hotel class
-        #     db.session.add(new_room)  # Adds new hotel the database
-        #     db.session.commit()
-        #
-        # pass
-        # except:
-        #     pass
+            return make_response("Booking Failed",404)
 
     # GET request to filter out based on type of room and BETWEEN dates, hotel name
     if request.method == "GET":
