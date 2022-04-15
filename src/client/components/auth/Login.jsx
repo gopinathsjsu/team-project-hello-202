@@ -3,18 +3,19 @@ import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const formStyle = {
+const rootStyle = {
   margin: "auto",
   width: "50vw",
   height: "50vh",
 };
 
 function Login() {
-  const [password, setPassword] = useState();
-  let navigate = useNavigate();
+  const [password, setPassword] = useState()
+  const [email, setEmail] = useState()
+  let navigate = useNavigate()
 
   const setPasswordInput = (e) => {
-    setPassword(e.target.value);
+    setPassword(e.target.value)
   }
   const setEmailInput = (e) => {
     setEmail(e.target.value)
@@ -22,7 +23,7 @@ function Login() {
 
 
   const authenticateUser = () => {
-    fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/user", {
+    fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/login", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -43,26 +44,28 @@ function Login() {
       })
   }
   return (
-    <Form style={formStyle}>
-      <Form.Group className="mb-3" controlId="email">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" onChange={setEmailInput} />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
+    <div style={rootStyle}>
+      <Form>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" onChange={setEmailInput} />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
 
-      <Form.Group className="mb-3" controlId="password" >
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" onChange={setPasswordInput} />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
+        <Form.Group className="mb-3" controlId="password" >
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" onChange={setPasswordInput} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Check type="checkbox" label="Check me out" />
+        </Form.Group>
+      </Form>
       <Button variant="primary" type="submit" onClick={authenticateUser}>
         Submit
       </Button>
-    </Form>
+    </div>
   );
 }
 

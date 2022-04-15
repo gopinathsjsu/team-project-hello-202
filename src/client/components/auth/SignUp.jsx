@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const formStyle = {
+const rootStyle = {
   margin: "auto",
   width: "50vw",
   height: "50vh",
@@ -40,7 +40,6 @@ function SignUp() {
     })
       .then((res) => {
         res.json().then((data) => {
-          console.log('success');
           navigate('/login');
         })
           .catch((exception) => {
@@ -50,8 +49,8 @@ function SignUp() {
       })
   }
   return (
-    <>
-      <Form style={formStyle}>
+    <div style={rootStyle}>
+      <Form>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>Name</Form.Label>
           <Form.Control type="name" placeholder="Enter name" onChange={setNameInput} />
@@ -78,7 +77,7 @@ function SignUp() {
       <Button variant="primary" type="submit" onClick={signUpUser} style={{ margin: 'auto' }}>
         Submit
       </Button>
-    </>
+    </div>
   );
 }
 
