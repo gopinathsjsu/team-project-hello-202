@@ -48,7 +48,9 @@ const myTripStyle = {
   flexDirection: "row",
 };
 
-const myTripTextStyle = {};
+const myTripTextStyle = {
+  cursor: "pointer",
+};
 
 function Dashboard({ content, setRooms }) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
