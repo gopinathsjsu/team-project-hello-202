@@ -96,30 +96,8 @@ function Dashboard({ content, setRooms }) {
     navigate("/login");
   };
 
-  const onMyTripsClick = () => {};
-
-  const onDashboardClick = () => {
-    navigate("/dashboard");
-  };
-
-  const onRewardsClick = () => {
-    navigate("/rewards");
-  };
-
-  const onTripsClick = () => {
+  const onMyTripsClick = () => {
     navigate("/trips");
-  };
-
-  const onSigninClick = () => {
-    navigate("/login");
-  };
-
-  const onRegisterClick = () => {
-    navigate("/signup");
-  };
-
-  const onLogoutClick = () => {
-    navigate("/logout");
   };
 
   const [sidebar, setSidebar] = useState(false);
