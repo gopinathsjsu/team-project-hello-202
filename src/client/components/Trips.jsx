@@ -57,7 +57,7 @@ const MAX_ROOM_COUNT = 10;
 const MIN_PEOPLE_COUNT = 0;
 const MAX_PEOPLE_COUNT = 10;
 
-const queryTrips = (trips, indOfFirstEpi, indOfLastEpi, setTrips) => fetch(
+const queryTrips = (trips, indOfFirstEpi, indOfLastEpi) => fetch(
   "https://rickandmortyapi.com/api/episode/" +
   trips.slice(indOfFirstEpi, indOfLastEpi),
   {
@@ -69,7 +69,142 @@ const queryTrips = (trips, indOfFirstEpi, indOfLastEpi, setTrips) => fetch(
 )
   .then((res) => {
     res.json().then((data) => {
-      // setTrips(data);
+      return data
+    });
+  })
+  .catch((exception) => {
+    console.log("Error occurred:")
+    console.log(exception)
+  })
+
+const updateTripQuery = (requestBody) => fetch(
+  "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/updateTrip",
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(requestBody),
+  }
+)
+  .then((res) => {
+    res.json().then((data) => {
+      return data
+    });
+  })
+  .catch((exception) => {
+    console.log("Error occurred:")
+    console.log(exception)
+  });
+
+function Trips(props) {
+  const pages = [];
+  const [active, setActive] = useState(1);
+  const [trips, setTrips] = useState([]);
+  const totalTrips = []
+
+  let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
+  let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
+
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+  const onRoomMinusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.room_count === MIN_ROOM_COUNT) {
+      return
+    }
+    const updatedTrip = updateTripQuery(trip)
+    trips[updatedTrip.id] = updatedTrip
+    setTrips(trips)
+  };
+  const onRoomPlusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.room_count === MAX_ROOM_COUNT) {
+      return
+    }
+    const updatedTrip = updateTripQuery(trip)
+    trips[updatedTrip.id] = updatedTrip
+    setTrips(trips)
+  };
+  const onPeopleMinusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.people_count === MIN_PEOPLE_COUNT) {
+      return
+    }
+    const updatedTrip = updateTripQuery(trip)
+    trips[updatedTrip.id] = updatedTrip
+    setTrips(trips)
+  };
+  const onPeoplePlusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.people_count === MAX_PEOPLE_COUNT) {
+      return
+    }
+    const updatedTrip = updateTripQuery(trip)
+    trips[updatedTrip.id] = updatedTrip
+    setTrips(trips)
+  };
+
+  for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
+    totalTrips.push(number);
+  }
+
+  for (let number = 1; number <= Object.values(trips).length; number++) {
+    totalTrips.push(number);
+  }
+
+  const pagination = (number) => {
+    indOfLastEpi = number * NUM_CARDS_PER_PAGE;
+    indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
+    setActive(number);
+    queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi);
+    setTrips({
+      1: {
+        id: 1,
+        name: "The Ritz-Carlton Residences, Waikiki Beach",
+        check_in_date: "December 2, 2013",
+        check_out_date: "December 2, 2013",
+        address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+        room_count: 12,
+        people_count: 13,
+        room_type: 'suite'
+      },
+      2: {
+        id: 2,
+        name: "The Ritz-Carlton Residences, Waikiki Beach",
+        check_in_date: "December 2, 2013",
+        check_out_date: "December 2, 2013",
+        address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+        room_count: 12,
+        people_count: 13,
+        room_type: 'suite'
+      },
+      3: {
+        id: 3,
+        name: "The Ritz-Carlton Residences, Waikiki Beach",
+        check_in_date: "December 2, 2013",
+        check_out_date: "December 2, 2013",
+        address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+        room_count: 12,
+        people_count: 13,
+        room_type: 'suite'
+      },
+      4: {
+        id: 4,
+        name: "The Ritz-Carlton Residences, Waikiki Beach",
+        check_in_date: "December 2, 2013",
+        check_out_date: "December 2, 2013",
+        address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+        room_count: 12,
+        people_count: 13,
+        room_type: 'suite'
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (active === 1) {
+      queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi, setTrips);
       setTrips({
         1: {
           id: 1,
@@ -112,91 +247,6 @@ const queryTrips = (trips, indOfFirstEpi, indOfLastEpi, setTrips) => fetch(
           room_type: 'suite'
         },
       });
-    });
-  })
-  .catch((exception) => {
-    console.log("Error occurred:");
-    console.log(exception);
-  })
-
-const updateTripQuery = (setTrips, requestBody) => fetch(
-  "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/updateTrip",
-  {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(requestBody),
-  }
-)
-  .then((res) => {
-    res.json().then((data) => {
-      // setTrips(data);
-    });
-  })
-  .catch((exception) => {
-    console.log("Error occurred:");
-    console.log(exception);
-  });
-
-function Trips(props) {
-  const pages = [];
-  const [active, setActive] = useState(1);
-  const [trips, setTrips] = useState([]);
-  const totalTrips = []
-
-  let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
-  let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
-
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
-  const onRoomMinusClick = (tripID) => {
-    const trip = trips[tripID]
-    if (trip.room_count === MIN_ROOM_COUNT) {
-      return;
-    }
-    updateTripQuery(setTrips, trip);
-  };
-  const onRoomPlusClick = (tripID) => {
-    const trip = trips[tripID]
-    if (trip.room_count === MAX_ROOM_COUNT) {
-      return;
-    }
-    updateTripQuery(setTrips, trip);
-  };
-  const onPeopleMinusClick = (tripID) => {
-    const trip = trips[tripID]
-    if (trip.people_count === MIN_PEOPLE_COUNT) {
-      return;
-    }
-    updateTripQuery(setTrips, trip);
-  };
-  const onPeoplePlusClick = (tripID) => {
-    const trip = trips[tripID]
-    if (trip.people_count === MAX_PEOPLE_COUNT) {
-      return;
-    }
-    updateTripQuery(setTrips, trip);
-  };
-
-  for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
-    totalTrips.push(number);
-  }
-
-  for (let number = 1; number <= Object.values(trips).length; number++) {
-    totalTrips.push(number);
-  }
-
-  const pagination = (number) => {
-    indOfLastEpi = number * NUM_CARDS_PER_PAGE;
-    indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
-    setActive(number);
-    queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi, setTrips);
-  };
-
-  useEffect(() => {
-    if (active === 1) {
-      queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi, setTrips);
     }
   }, [active]);
 
@@ -289,7 +339,7 @@ function Trips(props) {
                         <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
                       </div>
                     </div>
-                    <Button variant="outline-primary" type="submit">
+                    <Button variant="outline-primary" type="submit" onClick={() => onCancelClick(trip.id)} >
                       Cancel
                     </Button>
                   </div>
