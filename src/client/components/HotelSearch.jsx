@@ -8,12 +8,20 @@ import Pagination from "react-bootstrap/Pagination";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import {
+  DashCircle as MinusIcon,
+  PlusCircle as PlusIcon,
+} from "react-bootstrap-icons";
 import Popover from "react-bootstrap";
 import OverlayTrigger from "react-bootstrap";
 
 const rootStyle = {
   display: "flex",
   flexDirection: "column",
+};
+
+const roomInputContainerStyle = {
+  position: "relative",
 };
 
 const hotelImageStyle = {
@@ -24,13 +32,6 @@ const roomImageStyle = {
   width: 250,
 };
 
-const MIN_ROOM_COUNT = 0;
-const MAX_ROOM_COUNT = 10;
-const MIN_ADULT_COUNT = 0;
-const MAX_ADULT_COUNT = 10;
-const MIN_CHILDREN_COUNT = 0;
-const MAX_CHILDREN_COUNT = 10;
-
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 const TRIPS_TOTAL_COUNT = 36;
@@ -39,46 +40,55 @@ function HotelSearch(props) {
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
-  const [roomCount, setRooms] = useState(0);
-  const [adultCount, setAdultCount] = useState(0);
-  const [childrenCount, setChildrenCount] = useState(0);
+  const [singleroomCount, setSingleRooms] = useState(0);
+  const [doubleroomCount, setDoubleRooms] = useState(0);
+  const [suiteroomCount, setSuiteRooms] = useState(0);
+  const [peopleCount, setPeopleCount] = useState(0);
 
-  const onRoomMinusClick = () => {
-    if (roomCount === MIN_ROOM_COUNT) {
-      return;
+  const onRoomMinusClick = (typeofroom) => {
+    if (typeofroom === "Single Room") {
+      setSingleRooms(singleroomCount - 1);
+    } else if (typeofroom === "Double Room") {
+      setDoubleRooms(DoubleroomCount - 1);
+    } else {
+      setSuiteRooms(suiteroomCount - 1);
     }
-    setRooms(roomCount - 1);
   };
-  const onRoomPlusClick = () => {
-    if (roomCount === MAX_ROOM_COUNT) {
-      return;
+  const onRoomPlusClick = (typeofroom) => {
+    if (typeofroom === "Single Room") {
+      setSingleRooms(singleroomCount + 1);
+    } else if (typeofroom === "Double Room") {
+      setDoubleRooms(doubleroomCount + 1);
+    } else {
+      setSuiteRooms(suiteroomCount + 1);
     }
-    setRooms(roomCount + 1);
-  };
-  const onAdultMinusClick = () => {
-    if (adultCount === MIN_CHILDREN_COUNT) {
-      return;
-    }
-    setAdultCount(adultCount - 1);
   };
 
-  const onAdultPlusClick = () => {
-    if (adultCount === MAX_CHILDREN_COUNT) {
+  const onPeopleMinusClick = () => {
+    if (peopleCount === MIN_PEOPLE_COUNT) {
       return;
     }
-    setAdultCount(adultCount + 1);
+    setPeopleCount(peopleCount - 1);
+    if (peopleCount <= 1) {
+      setRoomType("Single Room");
+    } else if (peopleCount > 1 && peopleCount <= 4) {
+      setRoomType("Double Room");
+    } else {
+      setRoomType("King's Suite");
+    }
   };
-  const onChildrenMinusClick = () => {
-    if (childrenCount === MIN_ADULT_COUNT) {
+  const onPeoplePlusClick = () => {
+    if (peopleCount === MAX_PEOPLE_COUNT) {
       return;
     }
-    setChildrenCount(childrenCount - 1);
-  };
-  const onChildrenPlusClick = () => {
-    if (childrenCount === MAX_ADULT_COUNT) {
-      return;
+    setPeopleCount(peopleCount + 1);
+    if (peopleCount <= 1) {
+      setRoomType("single");
+    } else if (peopleCount > 1 && peopleCount <= 4) {
+      setRoomType("double");
+    } else {
+      setRoomType("suite");
     }
-    setChildrenCount(childrenCount + 1);
   };
 
   const pages = [];
@@ -329,8 +339,61 @@ function HotelSearch(props) {
                           justifyContent: "space-around",
                         }}
                       >
+                        <Card.Text
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <div>
+                            <div style={roomInputContainerStyle}>
+                              <div>
+                                <>Rooms</>
+                                <div>
+                                  <MinusIcon
+                                    onClick={() => onRoomMinusClick(types.name)}
+                                    onKeyPress={onRoomMinusClick}
+                                    style={{ marginTop: 5 }}
+                                  />
+                                  {types.name === "Single Room" && (
+                                    <>{singleroomCount}</>
+                                  )}
+                                  {types.name === "Double Room" && (
+                                    <>{doubleroomCount}</>
+                                  )}
+                                  {types.name === "King's Suite" && (
+                                    <>{suiteroomCount}</>
+                                  )}
+                                  <PlusIcon
+                                    onClick={() => onRoomPlusClick(types.name)}
+                                    onKeyPress={onRoomPlusClick}
+                                    style={{ marginTop: 5 }}
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <>People</>
+                                <div>
+                                  <MinusIcon
+                                    onClick={onPeopleMinusClick}
+                                    onKeyPress={onPeopleMinusClick}
+                                    style={{ marginTop: 5 }}
+                                  />
+                                  {peopleCount}
+                                  <PlusIcon
+                                    onClick={onPeoplePlusClick}
+                                    onKeyPress={onPeoplePlusClick}
+                                    style={{ marginTop: 5 }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Card.Text>
+
                         <Card.Text> ${types.rate} </Card.Text>
                       </div>
+
                       <div
                         style={{
                           display: "flex",
