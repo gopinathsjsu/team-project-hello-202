@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 
+import { Search as SearchIcon, Calendar as CalendarIcon, DashCircle as MinusIcon, PlusCircle as PlusIcon } from 'react-bootstrap-icons';
 import "react-datetime/css/react-datetime.css";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Pagination from "react-bootstrap/Pagination";
+import Datetime from 'react-datetime';
 
 const rootStyle = {
   display: "flex",
@@ -15,133 +17,186 @@ const hotelImageStyle = {
   width: 250,
 };
 
+const dropdownEntrySelectorStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  width: 50
+};
+
+const calendarIconStyle = {
+  bottom: 12,
+  right: 4,
+  height: 15,
+  position: 'absolute',
+  width: 15,
+};
+
+const roomDropdownEntryStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  margin: 'auto 10px auto 10px',
+  justifyContent: 'space-between'
+};
+
+const checkInInputContainerStyle = {
+  marginRight: 20,
+  position: 'relative',
+};
+
+const checkOutInputContainerStyle = {
+  marginRight: 20,
+  position: 'relative',
+};
+
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 const TRIPS_TOTAL_COUNT = 36;
+const MIN_ROOM_COUNT = 0;
+const MAX_ROOM_COUNT = 10;
+const MIN_PEOPLE_COUNT = 0;
+const MAX_PEOPLE_COUNT = 10;
+
+const queryTrips = (trips, indOfFirstEpi, indOfLastEpi, setTrips) => fetch(
+  "https://rickandmortyapi.com/api/episode/" +
+  trips.slice(indOfFirstEpi, indOfLastEpi),
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  }
+)
+  .then((res) => {
+    res.json().then((data) => {
+      // setTrips(data);
+      setTrips({
+        1: {
+          id: 1,
+          name: "The Ritz-Carlton Residences, Waikiki Beach",
+          check_in_date: "December 2, 2013",
+          check_out_date: "December 2, 2013",
+          address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+          room_count: 12,
+          people_count: 13,
+          room_type: 'suite'
+        },
+        2: {
+          id: 2,
+          name: "The Ritz-Carlton Residences, Waikiki Beach",
+          check_in_date: "December 2, 2013",
+          check_out_date: "December 2, 2013",
+          address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+          room_count: 12,
+          people_count: 13,
+          room_type: 'suite'
+        },
+        3: {
+          id: 3,
+          name: "The Ritz-Carlton Residences, Waikiki Beach",
+          check_in_date: "December 2, 2013",
+          check_out_date: "December 2, 2013",
+          address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+          room_count: 12,
+          people_count: 13,
+          room_type: 'suite'
+        },
+        4: {
+          id: 4,
+          name: "The Ritz-Carlton Residences, Waikiki Beach",
+          check_in_date: "December 2, 2013",
+          check_out_date: "December 2, 2013",
+          address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
+          room_count: 12,
+          people_count: 13,
+          room_type: 'suite'
+        },
+      });
+    });
+  })
+  .catch((exception) => {
+    console.log("Error occurred:");
+    console.log(exception);
+  })
+
+const updateTripQuery = (setTrips, requestBody) => fetch(
+  "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/updateTrip",
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(requestBody),
+  }
+)
+  .then((res) => {
+    res.json().then((data) => {
+      // setTrips(data);
+    });
+  })
+  .catch((exception) => {
+    console.log("Error occurred:");
+    console.log(exception);
+  });
 
 function Trips(props) {
   const pages = [];
   const [active, setActive] = useState(1);
   const [trips, setTrips] = useState([]);
-  const totalEpis = [];
+  const totalTrips = []
 
   let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
   let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
 
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+  const onRoomMinusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.room_count === MIN_ROOM_COUNT) {
+      return;
+    }
+    updateTripQuery(setTrips, trip);
+  };
+  const onRoomPlusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.room_count === MAX_ROOM_COUNT) {
+      return;
+    }
+    updateTripQuery(setTrips, trip);
+  };
+  const onPeopleMinusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.people_count === MIN_PEOPLE_COUNT) {
+      return;
+    }
+    updateTripQuery(setTrips, trip);
+  };
+  const onPeoplePlusClick = (tripID) => {
+    const trip = trips[tripID]
+    if (trip.people_count === MAX_PEOPLE_COUNT) {
+      return;
+    }
+    updateTripQuery(setTrips, trip);
+  };
+
   for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
-    totalEpis.push(number);
+    totalTrips.push(number);
   }
 
-  for (let number = 1; number <= trips.length; number++) {
-    totalEpis.push(number);
+  for (let number = 1; number <= Object.values(trips).length; number++) {
+    totalTrips.push(number);
   }
 
   const pagination = (number) => {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    fetch(
-      "https://rickandmortyapi.com/api/episode/" +
-        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      }
-    )
-      .then((res) => {
-        res.json().then((data) => {
-          // setTrips(data);
-          setTrips([
-            {
-              id: 1,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              check_in_date: "December 2, 2013",
-              check_out_date: "December 2, 2013",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-            },
-            {
-              id: 2,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              check_in_date: "December 2, 2013",
-              check_out_date: "December 2, 2013",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-            },
-            {
-              id: 3,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              check_in_date: "December 2, 2013",
-              check_out_date: "December 2, 2013",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-            },
-            {
-              id: 4,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              check_in_date: "December 2, 2013",
-              check_out_date: "December 2, 2013",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-            },
-          ]);
-        });
-      })
-      .catch((exception) => {
-        console.log("Error occurred:");
-        console.log(exception);
-      });
+    queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi, setTrips);
   };
 
   useEffect(() => {
     if (active === 1) {
-      fetch(
-        "https://rickandmortyapi.com/api/episode/" +
-          totalEpis.slice(indOfFirstEpi, indOfLastEpi),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        }
-      )
-        .then((res) => {
-          res.json().then((data) => {
-            // setTrips(data);
-            setTrips([
-              {
-                id: 1,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                check_in_date: "December 2, 2013",
-                check_out_date: "December 2, 2013",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              },
-              {
-                id: 2,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                check_in_date: "December 2, 2013",
-                check_out_date: "December 2, 2013",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              },
-              {
-                id: 3,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                check_in_date: "December 2, 2013",
-                check_out_date: "December 2, 2013",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              },
-              {
-                id: 4,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                check_in_date: "December 2, 2013",
-                check_out_date: "December 2, 2013",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              },
-            ]);
-          });
-        })
-        .catch((exception) => {
-          console.log("Error occurred:");
-          console.log(exception);
-        });
+      queryTrips(totalTrips, indOfFirstEpi, indOfLastEpi, setTrips);
     }
   }, [active]);
 
@@ -157,11 +212,18 @@ function Trips(props) {
     );
   }
 
+  const checkInDateTimeInputProps = {
+    placeholder: 'Check In'
+  };
+  const checkOutDateTimeInputProps = {
+    placeholder: 'Check Out'
+  };
+
   return (
     <div style={rootStyle}>
       <div style={{ margin: "auto" }}>
         {trips &&
-          trips.map((trip) => (
+          Object.values(trips).map((trip) => (
             <Card
               key={trip.id}
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
@@ -201,9 +263,32 @@ function Trips(props) {
                       justifyContent: "space-evenly",
                     }}
                   >
-                    <Button variant="outline-primary" type="submit">
-                      View/Modify
-                    </Button>
+                    <div>
+                      <div style={roomDropdownEntryStyle}>
+                        <>Rooms</>
+                        <div style={dropdownEntrySelectorStyle}>
+                          <MinusIcon onClick={() => onRoomMinusClick(trip.id)} onKeyPress={() => onRoomMinusClick(trip.id)} style={{ marginTop: 5 }} />
+                          {trip.room_count}
+                          <PlusIcon onClick={() => onRoomPlusClick(trip.id)} onKeyPress={() => onRoomPlusClick(trip.id)} style={{ marginTop: 5 }} />
+                        </div>
+                      </div>
+                      <div style={roomDropdownEntryStyle}>
+                        <>People</>
+                        <div style={dropdownEntrySelectorStyle}>
+                          <MinusIcon onClick={() => onPeopleMinusClick(trip.id)} onKeyPress={() => onPeopleMinusClick(trip.id)} style={{ marginTop: 5 }} />
+                          {trip.people_count}
+                          <PlusIcon onClick={() => onPeoplePlusClick(trip.id)} onKeyPress={() => onPeoplePlusClick(trip.id)} style={{ marginTop: 5 }} />
+                        </div>
+                      </div>
+                      <div style={checkInInputContainerStyle}>
+                        <Datetime inputProps={checkInDateTimeInputProps} onChange={setCheckInDate} />
+                        <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+                      </div>
+                      <div style={checkOutInputContainerStyle}>
+                        <Datetime inputProps={checkOutDateTimeInputProps} onChange={setCheckOutDate} />
+                        <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+                      </div>
+                    </div>
                     <Button variant="outline-primary" type="submit">
                       Cancel
                     </Button>
