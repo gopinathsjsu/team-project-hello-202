@@ -12,8 +12,8 @@ import {
   DashCircle as MinusIcon,
   PlusCircle as PlusIcon,
 } from "react-bootstrap-icons";
-import Popover from "react-bootstrap";
-import OverlayTrigger from "react-bootstrap";
+import Popover from "react-bootstrap/Popover";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 const rootStyle = {
   display: "flex",
@@ -44,13 +44,55 @@ function HotelSearch(props) {
   const [doubleroomCount, setDoubleRooms] = useState(0);
   const [suiteroomCount, setSuiteRooms] = useState(0);
   const [peopleCount, setPeopleCount] = useState(0);
+  const [singleroompeopleCount, setSinglePeople] = useState(0);
+  const [doubleroompeopleCount, setDoublePeople] = useState(0);
+  const [suiteroompeopleCount, setSuitePeople] = useState(0);
+  const [active, setActive] = useState(1);
+  const [trips, setTrips] = useState([]);
+  const [typeOfRooms, setTypeOfRooms] = useState({
+    1: {
+      id: 1,
+      name: "Single Room",
+      rate: 200.0,
+      imgsrc:
+        "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
+    },
+    2: {
+      id: 2,
+      name: "Double Room",
+      rate: 300.0,
+      imgsrc:
+        "https://media.istockphoto.com/photos/hotel-room-bed-picture-id506852656?k=20&m=506852656&s=612x612&w=0&h=e0GIcyFj7L_k5rdOuFKLncfRlWXVqBhd9tEtP1697jo=",
+    },
+    3: {
+      id: 3,
+      name: "King's Suite",
+      rate: 550.0,
+      imgsrc:
+        "https://media.istockphoto.com/photos/antique-four-poster-picture-id115939001?k=20&m=115939001&s=612x612&w=0&h=fBl5sbFQO9KgaUVqxwlfTfrCBaphoNVLj2cIcJxbym4=",
+    },
+  });
+  const pages = [];
+  const totalEpis = [];
+
+  let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
+  let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
 
   const onRoomMinusClick = (typeofroom) => {
     if (typeofroom === "Single Room") {
+      if (singleroomCount < 1) {
+        return;
+      }
       setSingleRooms(singleroomCount - 1);
     } else if (typeofroom === "Double Room") {
-      setDoubleRooms(DoubleroomCount - 1);
+      if (doubleroomCount < 1) {
+        return;
+      }
+      setDoubleRooms(doubleroomCount - 1);
     } else {
+      if (suiteroomCount < 1) {
+        return;
+      }
       setSuiteRooms(suiteroomCount - 1);
     }
   };
@@ -64,63 +106,33 @@ function HotelSearch(props) {
     }
   };
 
-  const onPeopleMinusClick = () => {
-    if (peopleCount === MIN_PEOPLE_COUNT) {
-      return;
-    }
-    setPeopleCount(peopleCount - 1);
-    if (peopleCount <= 1) {
-      setRoomType("Single Room");
-    } else if (peopleCount > 1 && peopleCount <= 4) {
-      setRoomType("Double Room");
+  const onPeopleMinusClick = (typeofroom) => {
+    if (typeofroom === "Single Room") {
+      if (singleroompeopleCount < 1) {
+        return;
+      }
+      setSinglePeople(singleroompeopleCount - 1);
+    } else if (typeofroom === "Double Room") {
+      if (doubleroompeopleCount < 1) {
+        return;
+      }
+      setDoublePeople(doubleroompeopleCount - 1);
     } else {
-      setRoomType("King's Suite");
+      if (suiteroompeopleCount < 1) {
+        return;
+      }
+      setSuitePeople(suiteroompeopleCount - 1);
     }
   };
-  const onPeoplePlusClick = () => {
-    if (peopleCount === MAX_PEOPLE_COUNT) {
-      return;
-    }
-    setPeopleCount(peopleCount + 1);
-    if (peopleCount <= 1) {
-      setRoomType("single");
-    } else if (peopleCount > 1 && peopleCount <= 4) {
-      setRoomType("double");
+  const onPeoplePlusClick = (typeofroom) => {
+    if (typeofroom === "Single Room") {
+      setSinglePeople(singleroompeopleCount + 1);
+    } else if (typeofroom === "Double Room") {
+      setDoublePeople(doubleroompeopleCount + 1);
     } else {
-      setRoomType("suite");
+      setSuitePeople(suiteroompeopleCount + 1);
     }
   };
-
-  const pages = [];
-  const [active, setActive] = useState(1);
-  const [trips, setTrips] = useState([]);
-  const [roomtype, setRoomtype] = useState([
-    {
-      id: 1,
-      name: "Single Room",
-      rate: 200.0,
-      imgsrc:
-        "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    },
-    {
-      id: 2,
-      name: "Double Room",
-      rate: 300.0,
-      imgsrc:
-        "https://media.istockphoto.com/photos/hotel-room-bed-picture-id506852656?k=20&m=506852656&s=612x612&w=0&h=e0GIcyFj7L_k5rdOuFKLncfRlWXVqBhd9tEtP1697jo=",
-    },
-    {
-      id: 3,
-      name: "King's Suite",
-      rate: 550.0,
-      imgsrc:
-        "https://media.istockphoto.com/photos/antique-four-poster-picture-id115939001?k=20&m=115939001&s=612x612&w=0&h=fBl5sbFQO9KgaUVqxwlfTfrCBaphoNVLj2cIcJxbym4=",
-    },
-  ]);
-  const totalEpis = [];
-
-  let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
-  let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
 
   for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
     totalEpis.push(number);
@@ -313,8 +325,8 @@ function HotelSearch(props) {
         </Modal.Header>
         <Modal.Body>
           <div style={{ margin: "auto" }}>
-            {roomtype &&
-              roomtype.map((types) => (
+            {Object.values(typeOfRooms) &&
+              Object.values(typeOfRooms).map((types) => (
                 <Card
                   key={types.id}
                   style={{ width: "50vw", margin: "2rem", textAlign: "center" }}
@@ -375,13 +387,25 @@ function HotelSearch(props) {
                                 <>People</>
                                 <div>
                                   <MinusIcon
-                                    onClick={onPeopleMinusClick}
+                                    onClick={() =>
+                                      onPeopleMinusClick(types.name)
+                                    }
                                     onKeyPress={onPeopleMinusClick}
                                     style={{ marginTop: 5 }}
                                   />
-                                  {peopleCount}
+                                  {types.name === "Single Room" && (
+                                    <>{singleroompeopleCount}</>
+                                  )}
+                                  {types.name === "Double Room" && (
+                                    <>{doubleroompeopleCount}</>
+                                  )}
+                                  {types.name === "King's Suite" && (
+                                    <>{suiteroompeopleCount}</>
+                                  )}
                                   <PlusIcon
-                                    onClick={onPeoplePlusClick}
+                                    onClick={() =>
+                                      onPeoplePlusClick(types.name)
+                                    }
                                     onKeyPress={onPeoplePlusClick}
                                     style={{ marginTop: 5 }}
                                   />
@@ -390,8 +414,6 @@ function HotelSearch(props) {
                             </div>
                           </div>
                         </Card.Text>
-
-                        <Card.Text> ${types.rate} </Card.Text>
                       </div>
 
                       <div
@@ -401,13 +423,31 @@ function HotelSearch(props) {
                           justifyContent: "space-evenly",
                         }}
                       >
-                        <Button
-                          variant="outline-primary"
-                          type="submit"
-                          onClick={() => setismodelshown(true)}
+                        <OverlayTrigger
+                          trigger="click"
+                          placement="bottom"
+                          overlay={
+                            <Popover id="popover-basic">
+                              <Popover.Header as="h3">
+                                <div>Display Rate</div>
+                              </Popover.Header>
+                              <Popover.Body>
+                                Your total for <strong>{types.name}</strong>{" "}
+                                will be
+                                <strong> ${types.rate}</strong>. Hope you enjoy
+                                your stay at our hotel!
+                              </Popover.Body>
+                            </Popover>
+                          }
                         >
-                          View Rates
-                        </Button>
+                          <Button
+                            variant="success"
+                            // type="submit"
+                            // onClick={() => setismodelshown(true)}
+                          >
+                            View Rates
+                          </Button>
+                        </OverlayTrigger>
 
                         <Button variant="outline-primary" type="submit">
                           Book
