@@ -16,9 +16,11 @@ def login():
         email = data['email']
         pwd = data['password']
         if email and pwd:
-            user = User.query.filter(
-                User.email == email, User.password == pwd
-            )
+            pass
+        user = User.query.filter(
+            User.email == email, User.password == pwd
+        ).first()
+
         return make_response(f"{user.uid}", 200)
     except:
         return make_response("Make sure the username and password are correct.", 404)
@@ -180,31 +182,46 @@ def room():
             return make_response("NOT WORKING", 404)
 
 
-@app.route("/availability", methods=["GET"])
+@app.route("/availability", methods=["POST"])
 @cross_origin()
 def check_availability():
     try:
         data = request.get_json()
-        type = data['type']
-        hname = data['hname']
-        booking_start = data['start']
-        booking_end = data['end']
-        hotel = Hotel.query.filter(Hotel.hname == hname)
+        roomType = data['roomType']
+        location = data["destination"]
+        booking_start = data['checkInDate']
+        booking_end = data['checkOutDate']
 
-        reservations = Reservation.query.filter(
-            Reservation.hid == hotel.hid, Reservation.
-        )
+        hotel = Hotel.query.filter(Hotel.location == f"{location}").all()
+        ids = []
+        for h in hotel:
+            ids.append(h.hid)
 
-        # if type == "single":
-        #     maxm_room_limit = hotel.total_single
-        # if type == "double":
-        #     maxm_room_limit = hotel.total_double
-        # if type == "suite":
-        #     maxm_room_limit = hotel.total_suite
+        reservation_dates_between = Reservation.query.filter(
+            Reservation.start.between(f'{booking_start}', f'{booking_end}') |
+            Reservation.end.between(f'{booking_start}', f'{booking_end}')
+        ).all()
+        exclude_ids = []
+        for r in reservation_dates_between:
+            exclude_ids.append(r.hid)
+        # print("just before query")
+        res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
+            (Reservation.rid == None) | ((Room.type == f"{roomType}") &
+                                         Room.hid.in_(ids) & Room.hid.not_in(exclude_ids))
+        ).all()
+        # print("just after query")
+        return_dict = defaultdict(dict)
+        # print(res[0].hid)
 
+        for r in res:
+            hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
+            return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
+                                  "address": hotel.location,
+                                  "rate": r.baseprice}
 
+        return make_response(return_dict, 200)
     except:
-        pass
+        return make_response("Failed request!", 404)
 
 
 @app.route("/reservation", methods=["GET", "POST"])
@@ -220,58 +237,45 @@ def reservation():
             hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
             hid = hotelname.hid
 
-            breakfast = data["breakfast"]
-            fitness = data["fitness"]
-            swimming = data["swimming"]
-            parking = data["parking"]
-            all_meals = data["all_meals"]
+            # breakfast = data["breakfast"]
+            # fitness = data["fitness"]
+            # swimming = data["swimming"]
+            # parking = data["parking"]
+            # all_meals = data["all_meals"]
             start = data["start"]
             end = data["end"]
             price = data["price"]
             num_people = data["num_people"]
-
+            print(start, end)
             new_reservation = Reservation(
-                rid=rid,
-                uid=uid,
-                hid=hid,
-                breakfast=breakfast,
-                fitness=fitness,
-                swimming=swimming,
-                parking=parking,
-                all_meals=all_meals,
+                rid=int(rid),
+                uid=int(uid),
+                hid=int(hid),
+                # breakfast=bool(breakfast),
+                # fitness=bool(fitness),
+                # swimming=bool(swimming),
+                # parking=bool(parking),
+                # all_meals=bool(all_meals),
                 start=start,
                 end=end,
-                price=price,
-                num_people=num_people
+                price=float(price),
+                num_people=int(num_people)
             )  # Create an instance of the Hotel class
+            print("data added")
             db.session.add(new_reservation)  # Adds new hotel the database
             db.session.commit()
             return make_response("Booking Successful", 200)
         except:
             return make_response("Booking Failed", 404)
 
+    if request.method == "GET":
+        try:
+            reservations = Reservation.query.filter().all()
+            all_reservations = {}
+            for r in reservations:
+                all_reservations["start"] = r.start
+                all_reservations["end"] = r.end
 
-@app.route("/availability", methods=["GET"])
-@cross_origin()
-def availability():
-    try:
-        args = request.args
-        args.to_dict()
-        rtype = args['type']
-        rtype = f"total_{rtype}"
-        hname = args["hname"]
-        sdate = args["start"]
-        edate = args["end"]
-        # Reservation.query.filter(Reservation.hotel==hname and )
-
-        Room.query.filter(Room.rid != Reservation.query.filter(Reservation.rtype))
-
-
-    except:
-        return make_response("Not Working!", 404)
-
-# select
-# rid, rtype
-# from room where
-# room.rid in (select
-#              rid from reservation where startdate and end date between the < dates > and hotelname is < hotelname >)
+            return make_response(f"{all_reservations}", 200)
+        except:
+            return make_response("Not working", 404)
