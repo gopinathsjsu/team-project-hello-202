@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import "react-datetime/css/react-datetime.css";
 import Image from "react-bootstrap/Image";
 import HotelSearchForm from "./HotelSearchForm";
@@ -72,6 +71,38 @@ function HotelSearch(props) {
         "https://media.istockphoto.com/photos/antique-four-poster-picture-id115939001?k=20&m=115939001&s=612x612&w=0&h=fBl5sbFQO9KgaUVqxwlfTfrCBaphoNVLj2cIcJxbym4=",
     },
   });
+
+  const [amenities, setAmenities] = useState([
+    {
+      id: 1,
+      name: "breakfast",
+      rate: 15.0,
+    },
+
+    {
+      id: 2,
+      name: "fitness",
+      rate: 10.0,
+    },
+
+    {
+      id: 3,
+      name: "pool",
+      rate: 10.0,
+    },
+
+    {
+      id: 4,
+      name: "parking",
+      rate: 12.0,
+    },
+
+    {
+      id: 5,
+      name: "allmeals",
+      rate: 30.0,
+    },
+  ]);
   const pages = [];
   const totalEpis = [];
 
@@ -429,7 +460,9 @@ function HotelSearch(props) {
                           overlay={
                             <Popover id="popover-basic">
                               <Popover.Header as="h3">
-                                <div>Display Rate</div>
+                                <div>
+                                  <strong>${types.rate}</strong>
+                                </div>
                               </Popover.Header>
                               <Popover.Body>
                                 Your total for <strong>{types.name}</strong>{" "}
@@ -441,6 +474,10 @@ function HotelSearch(props) {
                           }
                         >
                           <Button
+                            style={{
+                              marginTop: 30,
+                              height: 60,
+                            }}
                             variant="success"
                             // type="submit"
                             // onClick={() => setismodelshown(true)}
@@ -449,9 +486,46 @@ function HotelSearch(props) {
                           </Button>
                         </OverlayTrigger>
 
-                        <Button variant="outline-primary" type="submit">
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          style={{
+                            marginTop: 30,
+                            height: 60,
+                          }}
+                        >
                           Book
                         </Button>
+
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            // alignContent: "center",
+                            alignItems: "middle",
+                          }}
+                        >
+                          {amenities &&
+                            amenities.map((amenitype) => (
+                              <div
+                                class="custom-control custom-checkbox custom-control-inline"
+                                key={amenitype.id}
+                              >
+                                <input
+                                  type="checkbox"
+                                  class="custom-control-input"
+                                  id="defaultInline1"
+                                ></input>
+                                <label
+                                  class="custom-control-label"
+                                  for="defaultInline1"
+                                >
+                                  <div>{amenitype.name}</div>
+                                </label>
+                              </div>
+                            ))}
+                        </div>
                       </div>
                     </div>
                   </Card.Body>
