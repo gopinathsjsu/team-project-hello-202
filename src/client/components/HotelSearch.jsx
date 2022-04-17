@@ -218,7 +218,7 @@ function HotelSearch(props) {
     setActive(number);
     fetch(
       "https://rickandmortyapi.com/api/episode/" +
-        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
+      totalEpis.slice(indOfFirstEpi, indOfLastEpi),
       {
         headers: {
           "Content-Type": "application/json",
@@ -274,7 +274,7 @@ function HotelSearch(props) {
     if (active === 1) {
       fetch(
         "https://rickandmortyapi.com/api/episode/" +
-          totalEpis.slice(indOfFirstEpi, indOfLastEpi),
+        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
         {
           headers: {
             "Content-Type": "application/json",
@@ -360,7 +360,7 @@ function HotelSearch(props) {
               Object.values(typeOfRooms).map((types) => (
                 <Card
                   key={types.id}
-                  style={{ width: "50vw", margin: "2rem", textAlign: "center" }}
+                  style={{ margin: "2rem", textAlign: "center" }}
                 >
                   <Card.Header>
                     <span style={{ fontWeight: "bold" }}> {types.name}</span>
@@ -451,6 +451,7 @@ function HotelSearch(props) {
                         style={{
                           display: "flex",
                           flexDirection: "row",
+                          flexWrap: 'wrap',
                           justifyContent: "space-evenly",
                         }}
                       >
@@ -479,8 +480,8 @@ function HotelSearch(props) {
                               height: 60,
                             }}
                             variant="success"
-                            // type="submit"
-                            // onClick={() => setismodelshown(true)}
+                          // type="submit"
+                          // onClick={() => setismodelshown(true)}
                           >
                             View Rates
                           </Button>
@@ -499,11 +500,9 @@ function HotelSearch(props) {
 
                         <div
                           style={{
+                            alignItems: "start",
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "center",
-                            // alignContent: "center",
-                            alignItems: "middle",
                           }}
                         >
                           {amenities &&
