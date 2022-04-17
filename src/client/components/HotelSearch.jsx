@@ -35,6 +35,42 @@ const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 const TRIPS_TOTAL_COUNT = 36;
 
+const bookRoomQuery = (
+  userID,
+  hotelID,
+  numOfRooms,
+  numOfPeople,
+  rate,
+  checkInDate,
+  checkOutDate
+) => {
+  fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      userID,
+      hotelID,
+      numOfRooms,
+      numOfPeople,
+      rate,
+      checkInDate,
+      checkOutDate
+    }),
+
+  })
+    .then((res) => {
+      res.json().then((data) => {
+        navigate('/login');
+      })
+        .catch((exception) => {
+          console.log("Error occurred:");
+          console.log(exception);
+        });
+    })
+}
+
 function HotelSearch(props) {
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
@@ -47,7 +83,9 @@ function HotelSearch(props) {
   const [doubleroompeopleCount, setDoublePeople] = useState(0);
   const [suiteroompeopleCount, setSuitePeople] = useState(0);
   const [active, setActive] = useState(1);
-  const [trips, setTrips] = useState([]);
+  const [availableHotels, setAvailableHotels] = useState([]);
+  const [ismodalshown, setismodelshown] = useState(false);
+
   const [typeOfRooms, setTypeOfRooms] = useState({
     1: {
       id: 1,
@@ -169,42 +207,9 @@ function HotelSearch(props) {
     totalEpis.push(number);
   }
 
-  for (let number = 1; number <= trips.length; number++) {
+  for (let number = 1; number <= availableHotels.length; number++) {
     totalEpis.push(number);
   }
-
-  const onSubmitClick = () => {
-    fetch("http://localhost:8080/getRooms", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        adultCount,
-        checkInDate,
-        checkOutDate,
-        childrenCount,
-        destination,
-        roomCount,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json().then((responseData) => {
-            const { rooms } = responseData;
-            // TODO: Set rooms and change page view
-            return responseData;
-          });
-        }
-        console.log("Error occurred:");
-        console.log(res);
-        return { errorMessages: { REQUEST_ERROR: res.statusText } };
-      })
-      .catch((exception) => {
-        console.log("Error occurred:");
-        console.log(exception);
-      });
-  };
 
   const checkInDateTimeInputProps = {
     placeholder: "Check In",
@@ -228,8 +233,8 @@ function HotelSearch(props) {
     )
       .then((res) => {
         res.json().then((data) => {
-          // setTrips(data);
-          setTrips([
+          // setAvailableHotels(data);
+          setAvailableHotels([
             {
               id: 1,
               name: "The Ritz-Carlton Residences, Waikiki Beach",
@@ -284,8 +289,8 @@ function HotelSearch(props) {
       )
         .then((res) => {
           res.json().then((data) => {
-            // setTrips(data);
-            setTrips([
+            // setAvailableHotels(data);
+            setAvailableHotels([
               {
                 id: 1,
                 name: "The Ritz-Carlton Residences, Waikiki Beach",
@@ -326,21 +331,21 @@ function HotelSearch(props) {
     }
   }, [active]);
 
-  {
-    for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
-      pages.push(
-        <Pagination.Item
-          key={number}
-          active={number === active}
-          onClick={() => pagination(number)}
-        >
-          {number}
-        </Pagination.Item>
-      );
-    }
-    const [ismodalshown, setismodelshown] = useState(false);
 
-    const modal = (
+  for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
+    pages.push(
+      <Pagination.Item
+        key={number}
+        active={number === active}
+        onClick={() => pagination(number)}
+      >
+        {number}
+      </Pagination.Item>
+    );
+  }
+
+  const modal = (userID, hotelID, numOfRooms, numOfPeople, rate, checkInDate, checkOutDate) => {
+    return (
       <Modal
         {...props}
         size="lg"
@@ -480,8 +485,6 @@ function HotelSearch(props) {
                               height: 60,
                             }}
                             variant="success"
-                          // type="submit"
-                          // onClick={() => setismodelshown(true)}
                           >
                             View Rates
                           </Button>
@@ -494,6 +497,15 @@ function HotelSearch(props) {
                             marginTop: 30,
                             height: 60,
                           }}
+                          onClick={() => bookRoomQuery({
+                            userID,
+                            hotelID,
+                            numOfRooms,
+                            numOfPeople,
+                            rate,
+                            checkInDate,
+                            checkOutDate
+                          })}
                         >
                           Book
                         </Button>
@@ -538,96 +550,114 @@ function HotelSearch(props) {
         </Modal.Footer>
       </Modal>
     );
+  }
 
-    return (
-      <div style={rootStyle}>
-        {modal}
-        <div style={{ margin: "auto" }}>
-          {trips &&
-            trips.map((trip) => (
-              <Card
-                key={trip.id}
-                style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
-              >
-                <Card.Header>
-                  <span style={{ fontWeight: "bold" }}> {trip.name}</span>
-                </Card.Header>
-                <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                  <Image
-                    src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                    style={hotelImageStyle}
-                  />
+  const userID = 1
+  const hotelID = 1
+  const numOfRooms = {
+    singleroomCount,
+    doubleroomCount,
+    suiteroomCount
+  }
+  const numOfPeople = {
+    singleroompeopleCount,
+    doubleroompeopleCount,
+    suiteroompeopleCount
+  }
+  const rate = {
+    'single': typeOfRooms[1].rate,
+    'double': typeOfRooms[2].rate,
+    'suite': typeOfRooms[3].rate,
+  }
+
+  return (
+    <div style={rootStyle}>
+      {modal(userID, hotelID, numOfRooms, numOfPeople, rate, checkInDate, checkOutDate)}
+      <div style={{ margin: "auto" }}>
+        {availableHotels &&
+          availableHotels.map((trip) => (
+            <Card
+              key={trip.id}
+              style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
+            >
+              <Card.Header>
+                <span style={{ fontWeight: "bold" }}> {trip.name}</span>
+              </Card.Header>
+              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                <Image
+                  src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                  style={hotelImageStyle}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100vw",
+                  }}
+                >
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                      width: "100vw",
+                      flexDirection: "row",
+                      padding: "0px 0px 0px 10px",
+                      justifyContent: "space-around",
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        padding: "0px 0px 0px 10px",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      <Card.Text>{trip.address}</Card.Text>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-evenly",
-                      }}
-                    >
-                      <Button
-                        variant="outline-primary"
-                        type="submit"
-                        onClick={() => setismodelshown(true)}
-                      >
-                        Room Selection
-                      </Button>
-                      <Button variant="outline-primary" type="submit">
-                        Cancel
-                      </Button>
-                    </div>
+                    <Card.Text>{trip.address}</Card.Text>
                   </div>
-                </Card.Body>
-                <Card.Footer></Card.Footer>
-              </Card>
-            ))}
-        </div>
-
-        <Pagination style={{ margin: "auto" }}>
-          <Pagination.First
-            onClick={() => {
-              pagination(1);
-            }}
-          />
-          <Pagination.Prev
-            onClick={() => {
-              if (active > 1) {
-                pagination(active - 1);
-              }
-            }}
-          />
-          {pages}
-          <Pagination.Next
-            onClick={() => {
-              if (active < 5) {
-                pagination(active + 1);
-              }
-            }}
-          />
-          <Pagination.Last
-            onClick={() => {
-              pagination(5);
-            }}
-          />
-        </Pagination>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    <Button
+                      variant="outline-primary"
+                      type="submit"
+                      onClick={() => setismodelshown(true)}
+                    >
+                      Room Selection
+                    </Button>
+                    <Button variant="outline-primary" type="submit">
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+              <Card.Footer></Card.Footer>
+            </Card>
+          ))}
       </div>
-    );
-  }
+
+      <Pagination style={{ margin: "auto" }}>
+        <Pagination.First
+          onClick={() => {
+            pagination(1);
+          }}
+        />
+        <Pagination.Prev
+          onClick={() => {
+            if (active > 1) {
+              pagination(active - 1);
+            }
+          }}
+        />
+        {pages}
+        <Pagination.Next
+          onClick={() => {
+            if (active < 5) {
+              pagination(active + 1);
+            }
+          }}
+        />
+        <Pagination.Last
+          onClick={() => {
+            pagination(5);
+          }}
+        />
+      </Pagination>
+    </div>
+  );
 }
 export default HotelSearch;
