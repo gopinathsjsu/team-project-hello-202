@@ -181,6 +181,16 @@ def room():
         except:
             return make_response("NOT WORKING", 404)
 
+def dynamic_pricing(price, checkInDate):
+    # decrease price
+    if int(checkInDate.split("-")[1]) in [2, 3, 4, 5, 9, 10]:
+        return price - 0.10 * price
+    # increase price
+    elif int(checkInDate.split("-")[1]) in [6, 7, 12]:
+        return price + 0.20 * price
+    else:
+        return price
+
 
 @app.route("/availability", methods=["POST"])
 @cross_origin()
@@ -191,7 +201,7 @@ def check_availability():
         location = data["destination"]
         booking_start = data['checkInDate']
         booking_end = data['checkOutDate']
-
+        num_rooms = int(data['roomCount'])
         hotel = Hotel.query.filter(Hotel.location == f"{location}").all()
         ids = []
         for h in hotel:
@@ -204,24 +214,32 @@ def check_availability():
         exclude_ids = []
         for r in reservation_dates_between:
             exclude_ids.append(r.hid)
-        # print("just before query")
+        print("just before query")
         res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
             (Reservation.rid == None) | ((Room.type == f"{roomType}") &
                                          Room.hid.in_(ids) & Room.hid.not_in(exclude_ids))
         ).all()
-        # print("just after query")
-        return_dict = defaultdict(dict)
-        # print(res[0].hid)
+        print("111", num_rooms)
+        if len(res) < num_rooms:
+            return make_response(f"Only {len(res)} rooms available.", 200)  # check what response is required.
 
+
+        return_dict = defaultdict(dict)
+
+        print("here")
         for r in res:
             hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
+
             return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
                                   "address": hotel.location,
-                                  "rate": r.baseprice}
+                                  "rate": dynamic_pricing(r.baseprice, booking_start)}
 
         return make_response(return_dict, 200)
     except:
         return make_response("Failed request!", 404)
+
+
+
 
 
 @app.route("/reservation", methods=["GET", "POST"])
@@ -233,9 +251,9 @@ def reservation():
             data = request.get_json()
             rid = data['rid']
             uid = data['uid']
-            hotelname = data["hname"]
-            hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
-            hid = hotelname.hid
+            # hotelname = data["hname"]
+            # hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
+            hid = data['hid']
 
             # breakfast = data["breakfast"]
             # fitness = data["fitness"]
