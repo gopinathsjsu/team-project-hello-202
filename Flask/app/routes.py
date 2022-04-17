@@ -181,6 +181,7 @@ def room():
         except:
             return make_response("NOT WORKING", 404)
 
+
 def dynamic_pricing(price, checkInDate):
     # decrease price
     if int(checkInDate.split("-")[1]) in [2, 3, 4, 5, 9, 10]:
@@ -190,6 +191,36 @@ def dynamic_pricing(price, checkInDate):
         return price + 0.20 * price
     else:
         return price
+
+
+def availability_helper(roomType, location, booking_start, booking_end, num_rooms):
+    hotel = Hotel.query.filter(Hotel.location == f"{location}").all()
+    ids = []
+    for h in hotel:
+        ids.append(h.hid)
+
+    reservation_dates_between = Reservation.query.filter(
+        Reservation.start.between(f'{booking_start}', f'{booking_end}') |
+        Reservation.end.between(f'{booking_start}', f'{booking_end}')
+    ).all()
+    exclude_ids = []
+    for r in reservation_dates_between:
+        exclude_ids.append(r.hid)
+    # print("just before query")
+    res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
+        ((Reservation.rid == None)  | (Room.type == f"{roomType}")) &
+                                     Room.hid.in_(ids) & Room.hid.not_in(exclude_ids)
+    ).all()
+    return_dict = defaultdict(dict)
+    if len(res) < num_rooms:
+        return len(res)  # check what response is required.
+    for r in res:
+        hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
+
+        return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
+                              "address": hotel.location,
+                              "rate": dynamic_pricing(r.baseprice, booking_start)}
+    return return_dict
 
 
 @app.route("/availability", methods=["POST"])
@@ -202,44 +233,15 @@ def check_availability():
         booking_start = data['checkInDate']
         booking_end = data['checkOutDate']
         num_rooms = int(data['roomCount'])
-        hotel = Hotel.query.filter(Hotel.location == f"{location}").all()
-        ids = []
-        for h in hotel:
-            ids.append(h.hid)
-
-        reservation_dates_between = Reservation.query.filter(
-            Reservation.start.between(f'{booking_start}', f'{booking_end}') |
-            Reservation.end.between(f'{booking_start}', f'{booking_end}')
-        ).all()
-        exclude_ids = []
-        for r in reservation_dates_between:
-            exclude_ids.append(r.hid)
-        print("just before query")
-        res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
-            (Reservation.rid == None) | ((Room.type == f"{roomType}") &
-                                         Room.hid.in_(ids) & Room.hid.not_in(exclude_ids))
-        ).all()
-        print("111", num_rooms)
-        if len(res) < num_rooms:
-            return make_response(f"Only {len(res)} rooms available.", 200)  # check what response is required.
-
-
-        return_dict = defaultdict(dict)
-
-        print("here")
-        for r in res:
-            hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
-
-            return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
-                                  "address": hotel.location,
-                                  "rate": dynamic_pricing(r.baseprice, booking_start)}
-
-        return make_response(return_dict, 200)
+        if roomType and location and booking_end and booking_start and num_rooms:
+            res = availability_helper(roomType, location, booking_start, booking_end, num_rooms)
+            if type(res) == defaultdict:
+                return make_response(res, 200)
+            else:
+                return make_response(f"Only {res} rooms available", 200)
+        return make_response("Details not correct!", 404)
     except:
         return make_response("Failed request!", 404)
-
-
-
 
 
 @app.route("/reservation", methods=["GET", "POST"])
@@ -247,39 +249,42 @@ def check_availability():
 def reservation():
     if request.method == "POST":
         try:
-            # rid, uid, hname, breakfast ...
             data = request.get_json()
             rid = data['rid']
             uid = data['uid']
-            # hotelname = data["hname"]
-            # hotelname = Hotel.query.filter(Hotel.hname == hotelname).first()
             hid = data['hid']
-
-            # breakfast = data["breakfast"]
-            # fitness = data["fitness"]
-            # swimming = data["swimming"]
-            # parking = data["parking"]
-            # all_meals = data["all_meals"]
-            start = data["start"]
-            end = data["end"]
+            booking_start = data["start"]
+            booking_end = data["end"]
             price = data["price"]
-            num_people = data["num_people"]
-            print(start, end)
+            num_people = data["numOfPeople"]
+            num_rooms = data["numOfRooms"]
+            roomType = data["type"]
+            rate = data["rate"]
+
+
+            # single_count = data["singleroompeopleCount"]
+            # double_count = data["doubleroompeopleCount"]
+            # suite_count = data["suiteroompeopleCount"]
+            # single_room_count = data["singleroomCount"]
+            # double_room_count = data["doubleroomCount"]
+            # suite_room_count = data["suiteroomCount"]
+            # single_rate = data["single"]
+            # double_rate = data["double"]
+            # suite_rate = data["suite"]
+
+            if roomType and booking_end and booking_start and num_rooms:
+                res = availability_helper(roomType, booking_start, booking_end, num_rooms)
+
+
             new_reservation = Reservation(
                 rid=int(rid),
                 uid=int(uid),
                 hid=int(hid),
-                # breakfast=bool(breakfast),
-                # fitness=bool(fitness),
-                # swimming=bool(swimming),
-                # parking=bool(parking),
-                # all_meals=bool(all_meals),
-                start=start,
-                end=end,
+                start=booking_start,
+                end=booking_end,
                 price=float(price),
                 num_people=int(num_people)
             )  # Create an instance of the Hotel class
-            print("data added")
             db.session.add(new_reservation)  # Adds new hotel the database
             db.session.commit()
             return make_response("Booking Successful", 200)
