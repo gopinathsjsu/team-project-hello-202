@@ -116,15 +116,8 @@ const MAX_ROOM_COUNT = 10;
 const MIN_PEOPLE_COUNT = 0;
 const MAX_PEOPLE_COUNT = 10;
 
-function HotelSearchForm({ setRooms }) {
+function HotelSearchForm({ roomType, setRoomType, destination, checkInDate, checkOutDate, roomCount, peopleCount, setAvailableHotels, setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount }) {
   let navigate = useNavigate();
-
-  const [destination, setDestination] = useState();
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
-  const [roomCount, setRoomCount] = useState(0);
-  const [roomType, setRoomType] = useState('single');
-  const [peopleCount, setPeopleCount] = useState(0);
 
   const setLocationDestination = (e) => {
     setDestination(e.target.value)
@@ -185,8 +178,7 @@ function HotelSearchForm({ setRooms }) {
       .then((res) => {
         if (res.ok) {
           return res.json().then((responseData) => {
-            const { rooms } = responseData
-            setRooms(rooms)
+            setAvailableHotels(responseData)
             navigate("/search");
           });
         }

@@ -52,7 +52,10 @@ const myTripTextStyle = {
   cursor: "pointer",
 };
 
-function Dashboard({ content, setRooms }) {
+function Dashboard({ roomType, setRoomType, isSearchFormShown, content,
+  setAvailableHotels, setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount,
+  destination, checkInDate, checkOutDate, roomCount, peopleCount
+}) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -147,7 +150,7 @@ function Dashboard({ content, setRooms }) {
         src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
         style={backgroundImageStyle}
       />
-      <HotelSearchForm style={hotelSearchStyle} setRooms={setRooms} />
+      {(isSearchFormShown === true) ? <HotelSearchForm style={hotelSearchStyle} roomType={roomType} setRoomType={setRoomType} setAvailableHotels={setAvailableHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} /> : <></>}
       {content != null ? content : <>Welcome</>}
       <Footer />
     </div>

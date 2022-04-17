@@ -42,7 +42,10 @@ const bookRoomQuery = (
   numOfPeople,
   rate,
   checkInDate,
-  checkOutDate
+  checkOutDate,
+  destination,
+  roomCount,
+  peopleCount,
 ) => {
   fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation", {
     headers: {
@@ -52,17 +55,20 @@ const bookRoomQuery = (
     body: JSON.stringify({
       userID,
       hotelID,
-      numOfRooms,
-      numOfPeople,
-      rate,
+      roomCount,
+      peopleCount,
+      ...rate,
       checkInDate,
-      checkOutDate
+      checkOutDate,
+      ...numOfRooms,
+      ...numOfPeople,
+      destination
     }),
 
   })
     .then((res) => {
       res.json().then((data) => {
-        navigate('/login');
+        navigate('/search');
       })
         .catch((exception) => {
           console.log("Error occurred:");
@@ -72,19 +78,20 @@ const bookRoomQuery = (
 }
 
 function HotelSearch(props) {
-  const [destination, setDestination] = useState();
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
-  const [singleroomCount, setSingleRooms] = useState(0);
-  const [doubleroomCount, setDoubleRooms] = useState(0);
-  const [suiteroomCount, setSuiteRooms] = useState(0);
-  const [peopleCount, setPeopleCount] = useState(0);
-  const [singleroompeopleCount, setSinglePeople] = useState(0);
-  const [doubleroompeopleCount, setDoublePeople] = useState(0);
-  const [suiteroompeopleCount, setSuitePeople] = useState(0);
-  const [active, setActive] = useState(1);
-  const [availableHotels, setAvailableHotels] = useState([]);
-  const [ismodalshown, setismodelshown] = useState(false);
+  const {
+    destination, checkInDate, checkOutDate, roomCount, peopleCount,
+    setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount
+  } = props
+
+  const [singleroomCount, setSingleRooms] = useState(0)
+  const [doubleroomCount, setDoubleRooms] = useState(0)
+  const [suiteroomCount, setSuiteRooms] = useState(0)
+  const [singleroompeopleCount, setSinglePeople] = useState(0)
+  const [doubleroompeopleCount, setDoublePeople] = useState(0)
+  const [suiteroompeopleCount, setSuitePeople] = useState(0)
+  const [active, setActive] = useState(1)
+  const [availableHotels, setAvailableHotels] = useState(props.availableHotels)
+  const [ismodalshown, setismodelshown] = useState(false)
 
   const [typeOfRooms, setTypeOfRooms] = useState({
     1: {
@@ -207,7 +214,7 @@ function HotelSearch(props) {
     totalEpis.push(number);
   }
 
-  for (let number = 1; number <= availableHotels.length; number++) {
+  for (let number = 1; number <= Object.values(availableHotels).length; number++) {
     totalEpis.push(number);
   }
 
@@ -379,7 +386,7 @@ function HotelSearch(props) {
                         width: "100vw",
                       }}
                     >
-                      <div
+                      {/* <div
                         style={{
                           display: "flex",
                           flexDirection: "row",
@@ -450,7 +457,7 @@ function HotelSearch(props) {
                             </div>
                           </div>
                         </Card.Text>
-                      </div>
+                      </div> */}
 
                       <div
                         style={{
@@ -497,15 +504,18 @@ function HotelSearch(props) {
                             marginTop: 30,
                             height: 60,
                           }}
-                          onClick={() => bookRoomQuery({
+                          onClick={() => bookRoomQuery(
                             userID,
                             hotelID,
                             numOfRooms,
                             numOfPeople,
                             rate,
                             checkInDate,
-                            checkOutDate
-                          })}
+                            checkOutDate,
+                            destination,
+                            roomCount,
+                            peopleCount,
+                          )}
                         >
                           Book
                         </Button>
@@ -574,8 +584,8 @@ function HotelSearch(props) {
     <div style={rootStyle}>
       {modal(userID, hotelID, numOfRooms, numOfPeople, rate, checkInDate, checkOutDate)}
       <div style={{ margin: "auto" }}>
-        {availableHotels &&
-          availableHotels.map((trip) => (
+        {Object.values(availableHotels) &&
+          Object.values(availableHotels).map((trip) => (
             <Card
               key={trip.id}
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
