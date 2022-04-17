@@ -9,7 +9,7 @@ const rootStyle = {
   height: "50vh",
 };
 
-function Login() {
+function Login({ setJWT }) {
   const [password, setPassword] = useState()
   const [email, setEmail] = useState()
   let navigate = useNavigate()
@@ -36,6 +36,7 @@ function Login() {
       .then((res) => {
         res.json().then((data) => {
           navigate('/dashboard')
+          setJWT(data)
         })
           .catch((exception) => {
             console.log("Error occurred:")

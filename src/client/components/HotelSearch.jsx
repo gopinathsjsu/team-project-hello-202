@@ -38,14 +38,13 @@ const TRIPS_TOTAL_COUNT = 36;
 const bookRoomQuery = (
   userID,
   hotelID,
-  numOfRooms,
-  numOfPeople,
   rate,
   checkInDate,
   checkOutDate,
   destination,
   roomCount,
   peopleCount,
+  roomType
 ) => {
   fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation", {
     headers: {
@@ -55,14 +54,13 @@ const bookRoomQuery = (
     body: JSON.stringify({
       userID,
       hotelID,
-      roomCount,
-      peopleCount,
-      ...rate,
+      numRooms: roomCount,
+      numPeople: peopleCount,
+      price: rate,
       checkInDate,
       checkOutDate,
-      ...numOfRooms,
-      ...numOfPeople,
-      destination
+      destination,
+      roomType
     }),
 
   })
@@ -79,16 +77,9 @@ const bookRoomQuery = (
 
 function HotelSearch(props) {
   const {
-    destination, checkInDate, checkOutDate, roomCount, peopleCount,
-    setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount
+    destination, checkInDate, checkOutDate, roomCount, peopleCount
   } = props
 
-  const [singleroomCount, setSingleRooms] = useState(0)
-  const [doubleroomCount, setDoubleRooms] = useState(0)
-  const [suiteroomCount, setSuiteRooms] = useState(0)
-  const [singleroompeopleCount, setSinglePeople] = useState(0)
-  const [doubleroompeopleCount, setDoublePeople] = useState(0)
-  const [suiteroompeopleCount, setSuitePeople] = useState(0)
   const [active, setActive] = useState(1)
   const [availableHotels, setAvailableHotels] = useState(props.availableHotels)
   const [ismodalshown, setismodelshown] = useState(false)
@@ -153,62 +144,6 @@ function HotelSearch(props) {
 
   let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
   let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
-
-  const onRoomMinusClick = (typeofroom) => {
-    if (typeofroom === "Single Room") {
-      if (singleroomCount < 1) {
-        return;
-      }
-      setSingleRooms(singleroomCount - 1);
-    } else if (typeofroom === "Double Room") {
-      if (doubleroomCount < 1) {
-        return;
-      }
-      setDoubleRooms(doubleroomCount - 1);
-    } else {
-      if (suiteroomCount < 1) {
-        return;
-      }
-      setSuiteRooms(suiteroomCount - 1);
-    }
-  };
-  const onRoomPlusClick = (typeofroom) => {
-    if (typeofroom === "Single Room") {
-      setSingleRooms(singleroomCount + 1);
-    } else if (typeofroom === "Double Room") {
-      setDoubleRooms(doubleroomCount + 1);
-    } else {
-      setSuiteRooms(suiteroomCount + 1);
-    }
-  };
-
-  const onPeopleMinusClick = (typeofroom) => {
-    if (typeofroom === "Single Room") {
-      if (singleroompeopleCount < 1) {
-        return;
-      }
-      setSinglePeople(singleroompeopleCount - 1);
-    } else if (typeofroom === "Double Room") {
-      if (doubleroompeopleCount < 1) {
-        return;
-      }
-      setDoublePeople(doubleroompeopleCount - 1);
-    } else {
-      if (suiteroompeopleCount < 1) {
-        return;
-      }
-      setSuitePeople(suiteroompeopleCount - 1);
-    }
-  };
-  const onPeoplePlusClick = (typeofroom) => {
-    if (typeofroom === "Single Room") {
-      setSinglePeople(singleroompeopleCount + 1);
-    } else if (typeofroom === "Double Room") {
-      setDoublePeople(doubleroompeopleCount + 1);
-    } else {
-      setSuitePeople(suiteroompeopleCount + 1);
-    }
-  };
 
   for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
     totalEpis.push(number);
@@ -351,7 +286,7 @@ function HotelSearch(props) {
     );
   }
 
-  const modal = (userID, hotelID, numOfRooms, numOfPeople, rate, checkInDate, checkOutDate) => {
+  const modal = (userID, hotelID, roomCount, peopleCount, checkInDate, checkOutDate) => {
     return (
       <Modal
         {...props}
@@ -386,79 +321,6 @@ function HotelSearch(props) {
                         width: "100vw",
                       }}
                     >
-                      {/* <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          padding: "0px 0px 0px 10px",
-                          justifyContent: "space-around",
-                        }}
-                      >
-                        <Card.Text
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <div>
-                            <div style={roomInputContainerStyle}>
-                              <div>
-                                <>Rooms</>
-                                <div>
-                                  <MinusIcon
-                                    onClick={() => onRoomMinusClick(types.name)}
-                                    onKeyPress={onRoomMinusClick}
-                                    style={{ marginTop: 5 }}
-                                  />
-                                  {types.name === "Single Room" && (
-                                    <>{singleroomCount}</>
-                                  )}
-                                  {types.name === "Double Room" && (
-                                    <>{doubleroomCount}</>
-                                  )}
-                                  {types.name === "King's Suite" && (
-                                    <>{suiteroomCount}</>
-                                  )}
-                                  <PlusIcon
-                                    onClick={() => onRoomPlusClick(types.name)}
-                                    onKeyPress={onRoomPlusClick}
-                                    style={{ marginTop: 5 }}
-                                  />
-                                </div>
-                              </div>
-                              <div>
-                                <>People</>
-                                <div>
-                                  <MinusIcon
-                                    onClick={() =>
-                                      onPeopleMinusClick(types.name)
-                                    }
-                                    onKeyPress={onPeopleMinusClick}
-                                    style={{ marginTop: 5 }}
-                                  />
-                                  {types.name === "Single Room" && (
-                                    <>{singleroompeopleCount}</>
-                                  )}
-                                  {types.name === "Double Room" && (
-                                    <>{doubleroompeopleCount}</>
-                                  )}
-                                  {types.name === "King's Suite" && (
-                                    <>{suiteroompeopleCount}</>
-                                  )}
-                                  <PlusIcon
-                                    onClick={() =>
-                                      onPeoplePlusClick(types.name)
-                                    }
-                                    onKeyPress={onPeoplePlusClick}
-                                    style={{ marginTop: 5 }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Card.Text>
-                      </div> */}
-
                       <div
                         style={{
                           display: "flex",
@@ -496,7 +358,6 @@ function HotelSearch(props) {
                             View Rates
                           </Button>
                         </OverlayTrigger>
-
                         <Button
                           variant="outline-primary"
                           type="submit"
@@ -507,19 +368,17 @@ function HotelSearch(props) {
                           onClick={() => bookRoomQuery(
                             userID,
                             hotelID,
-                            numOfRooms,
-                            numOfPeople,
-                            rate,
+                            types.rate,
                             checkInDate,
                             checkOutDate,
                             destination,
                             roomCount,
                             peopleCount,
+                            types.name
                           )}
                         >
                           Book
                         </Button>
-
                         <div
                           style={{
                             alignItems: "start",
@@ -552,37 +411,22 @@ function HotelSearch(props) {
                   </Card.Body>
                   <Card.Footer></Card.Footer>
                 </Card>
-              ))}
+              ))
+            }
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setismodelshown(false)}>Close</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     );
   }
 
   const userID = 1
   const hotelID = 1
-  const numOfRooms = {
-    singleroomCount,
-    doubleroomCount,
-    suiteroomCount
-  }
-  const numOfPeople = {
-    singleroompeopleCount,
-    doubleroompeopleCount,
-    suiteroompeopleCount
-  }
-  const rate = {
-    'single': typeOfRooms[1].rate,
-    'double': typeOfRooms[2].rate,
-    'suite': typeOfRooms[3].rate,
-  }
-
   return (
     <div style={rootStyle}>
-      {modal(userID, hotelID, numOfRooms, numOfPeople, rate, checkInDate, checkOutDate)}
+      {modal(userID, hotelID, roomCount, peopleCount, checkInDate, checkOutDate)}
       <div style={{ margin: "auto" }}>
         {Object.values(availableHotels) &&
           Object.values(availableHotels).map((trip) => (

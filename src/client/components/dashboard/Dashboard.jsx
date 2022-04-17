@@ -52,7 +52,7 @@ const myTripTextStyle = {
   cursor: "pointer",
 };
 
-function Dashboard({ roomType, setRoomType, isSearchFormShown, content,
+function Dashboard({ jwt, roomType, setRoomType, isSearchFormShown, content,
   setAvailableHotels, setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount,
   destination, checkInDate, checkOutDate, roomCount, peopleCount
 }) {
@@ -124,14 +124,14 @@ function Dashboard({ roomType, setRoomType, isSearchFormShown, content,
                 id="dropdown-custom-components"
               >
                 <PersonIcon />
-                <>Sign In or Join</>
+                {jwt != null ? <>Join</> : <>Sign In or Join</>}
                 <CaretDownIcon />
               </Dropdown.Toggle>
 
               <Dropdown.Menu as={CustomMenu}>
-                <Dropdown.Item eventKey="1" onClick={onLoginClick}>
+                {jwt != null ? <></> : <Dropdown.Item eventKey="1" onClick={onLoginClick}>
                   Sign In
-                </Dropdown.Item>
+                </Dropdown.Item>}
                 <Dropdown.Item eventKey="2" onClick={onSignUpClick}>
                   Join
                 </Dropdown.Item>

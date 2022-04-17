@@ -11,7 +11,7 @@ import Trips from "./Trips";
 import Logout from "./Logout";
 
 const LandingPage = ({ }) => {
-  const [isJWTFound, setIsJWTFound] = useState(false);
+  const [jwt, setJWT] = useState(null);
   const [hotels, setHotels] = useState([]);
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
@@ -25,17 +25,17 @@ const LandingPage = ({ }) => {
       <Routes>
         <Route
           path="/"
-          element={<>{isJWTFound ? <Dashboard roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} /> : <Login />}</>}
+          element={<>{jwt ? <Dashboard jwt={jwt} roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} /> : <Login />}</>}
         />
 
-        <Route path="dashboard" element={<Dashboard roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} />} />
+        <Route path="dashboard" element={<Dashboard jwt={jwt} roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} />} />
         <Route path="rewards" element={<Rewards />} />
         <Route path="logout" element={<Logout />} />
-        <Route path="trips" element={<Dashboard content={<Trips />} isSearchFormShown={false} />} />
-        <Route path="login" element={<Login />} />
+        <Route path="trips" element={<Dashboard jwt={jwt} content={<Trips />} isSearchFormShown={false} />} />
+        <Route path="login" element={<Login setJWT={setJWT} />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="sidebar" element={<Sidebar />} />
-        <Route path="search" element={<Dashboard roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} content={<HotelSearch availableHotels={hotels} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} />} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} />}>
+        <Route path="search" element={<Dashboard jwt={jwt} roomType={roomType} setRoomType={setRoomType} isSearchFormShown={true} content={<HotelSearch availableHotels={hotels} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} />} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} setAvailableHotels={setHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} />}>
           <Route
             index
             element={
@@ -48,7 +48,7 @@ const LandingPage = ({ }) => {
         </Route>
         <Route
           path="*"
-          element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}
+          element={<>{jwt ? <Dashboard jwt={jwt} /> : <Login />}</>}
         />
       </Routes>
     </BrowserRouter>
