@@ -12,7 +12,7 @@ function Sidebar({ showSidebar }) {
   return (
     <>
       <Nav
-        style={{ position: "absolute", zIndex: 2, height: 290, width: 200 }}
+        style={{ position: "absolute", zIndex: 2, height: 320, width: 200 }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
         // activeKey="/home
         onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
@@ -26,35 +26,41 @@ function Sidebar({ showSidebar }) {
         <div className="sidebar-sticky"></div>
 
         <Nav.Item>
-          <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+          <Nav.Link href="/admin">Admin</Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-1" href="/trips">
+          <Nav.Link href="/dashboard" eventKey="link-1">
+            Dashboard
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item>
+          <Nav.Link eventKey="link-2" href="/trips">
             My Trips
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-2" href="/rewards">
+          <Nav.Link eventKey="link-3" href="/rewards">
             Rewards
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-3" href="/login">
+          <Nav.Link eventKey="link-4" href="/login">
             Sign-In
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-4" href="/signup">
+          <Nav.Link eventKey="link-5" href="/signup">
             Register
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-5" href="/logout">
+          <Nav.Link eventKey="link-6" href="/logout">
             Logout
           </Nav.Link>
         </Nav.Item>
