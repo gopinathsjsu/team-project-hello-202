@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "react-datetime/css/react-datetime.css";
 import Image from "react-bootstrap/Image";
-import HotelSearchForm from "./HotelSearchForm";
-import ListGroup from "react-bootstrap/ListGroup";
 import Pagination from "react-bootstrap/Pagination";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {
-  DashCircle as MinusIcon,
-  PlusCircle as PlusIcon,
-} from "react-bootstrap-icons";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { useNavigate } from "react-router-dom";
 
 const rootStyle = {
   display: "flex",
@@ -44,7 +39,8 @@ const bookRoomQuery = (
   destination,
   roomCount,
   peopleCount,
-  roomType
+  roomType,
+  navigate
 ) => {
   fetch(
     "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
@@ -65,21 +61,20 @@ const bookRoomQuery = (
         roomType,
       }),
     }
-  ).then((res) => {
-    res
-      .json()
-      .then((data) => {
-        navigate("/search");
-      })
-      .catch((exception) => {
-        console.log("Error occurred:");
-        console.log(exception);
-      });
-  });
+  )
+    .then((data) => {
+      console.log(data);
+      navigate("/trips");
+    })
+    .catch((exception) => {
+      console.log("Error occurred:");
+      console.log(exception);
+    });
+  ;
 };
 
 function HotelSearch(props) {
-  const { destination, checkInDate, checkOutDate, roomCount, peopleCount } =
+  const { destination, checkInDate, checkOutDate, roomCount, peopleCount, roomType } =
     props;
 
   const [active, setActive] = useState(1);
@@ -142,22 +137,9 @@ function HotelSearch(props) {
     },
   ]);
   const pages = [];
-  const totalEpis = [];
 
   let indOfLastEpi = active * NUM_CARDS_PER_PAGE;
   let indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
-
-  for (let number = 1; number <= TRIPS_TOTAL_COUNT; number++) {
-    totalEpis.push(number);
-  }
-
-  for (
-    let number = 1;
-    number <= Object.values(availableHotels).length;
-    number++
-  ) {
-    totalEpis.push(number);
-  }
 
   const checkInDateTimeInputProps = {
     placeholder: "Check In",
@@ -169,111 +151,66 @@ function HotelSearch(props) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    fetch(
-      "https://rickandmortyapi.com/api/episode/" +
-        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      }
-    )
+    fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        checkInDate: checkInDate.toDate(),
+        checkOutDate: checkOutDate.toDate(),
+        destination,
+        roomCount,
+        roomType,
+        indOfFirstEpi,
+        indOfLastEpi
+      })
+    })
       .then((res) => {
-        res.json().then((data) => {
-          // setAvailableHotels(data);
-          setAvailableHotels([
-            {
-              id: 1,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              // rate: 300.0,
-            },
-            {
-              id: 2,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              // rate: 300.0,
-            },
-            {
-              id: 3,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              // rate: 300.0,
-            },
-            {
-              id: 4,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              // rate: 300.0,
-            },
-
-            {
-              id: 5,
-              name: "The Ritz-Carlton Residences, Waikiki Beach",
-              address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-              // rate: 300.0,
-            },
-          ]);
-        });
+        if (res.ok) {
+          return res.json().then((responseData) => {
+            setAvailableHotels(responseData)
+          });
+        }
+        console.log('Error occurred:');
+        console.log(res);
+        return { errorMessages: { REQUEST_ERROR: res.statusText } };
       })
       .catch((exception) => {
-        console.log("Error occurred:");
+        console.log('Error occurred:');
         console.log(exception);
       });
   };
 
   useEffect(() => {
     if (active === 1) {
-      fetch(
-        "https://rickandmortyapi.com/api/episode/" +
-          totalEpis.slice(indOfFirstEpi, indOfLastEpi),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        }
-      )
+      fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          checkInDate: checkInDate == null ? null : checkInDate.toDate(),
+          checkOutDate: checkInDate == null ? null : checkOutDate.toDate(),
+          destination,
+          roomCount,
+          roomType,
+          indOfFirstEpi,
+          indOfLastEpi
+        })
+      })
         .then((res) => {
-          res.json().then((data) => {
-            // setAvailableHotels(data);
-            setAvailableHotels([
-              {
-                id: 1,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                // rate: 300.0,
-              },
-              {
-                id: 2,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                // rate: 300.0,
-              },
-              {
-                id: 3,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                // rate: 300.0,
-              },
-              {
-                id: 4,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                // rate: 300.0,
-              },
-              {
-                id: 5,
-                name: "The Ritz-Carlton Residences, Waikiki Beach",
-                address: "383 Kalaimoku Street Waikiki Beach, Hawaii 96815",
-                // rate: 300.0,
-              },
-            ]);
-          });
+          if (res.ok) {
+            return res.json().then((responseData) => {
+              setAvailableHotels(responseData)
+            });
+          }
+          console.log('Error occurred:');
+          console.log(res);
+          return { errorMessages: { REQUEST_ERROR: res.statusText } };
         })
         .catch((exception) => {
-          console.log("Error occurred:");
+          console.log('Error occurred:');
           console.log(exception);
         });
     }
@@ -291,6 +228,7 @@ function HotelSearch(props) {
     );
   }
 
+  const navigate = useNavigate()
   const modal = (
     userID,
     hotelID,
@@ -387,7 +325,8 @@ function HotelSearch(props) {
                               destination,
                               roomCount,
                               peopleCount,
-                              types.name
+                              types.name,
+                              navigate
                             )
                           }
                         >

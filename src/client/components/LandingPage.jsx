@@ -12,7 +12,7 @@ import Logout from "./Logout";
 import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
 
-const LandingPage = ({}) => {
+const LandingPage = ({ }) => {
   const [jwt, setJWT] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [hotels, setHotels] = useState([]);
@@ -82,7 +82,7 @@ const LandingPage = ({}) => {
           path="logout"
           element={<Logout setIsAdmin={setIsAdmin} setJWT={setJWT} />}
         />
-        <Route path="trips" element={<Dashboard content={<Trips />} />} />
+        <Route path="trips" element={<Dashboard content={<Trips userID={jwt} />} />} />
         <Route
           path="login"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
@@ -107,6 +107,7 @@ const LandingPage = ({}) => {
                   checkOutDate={checkOutDate}
                   roomCount={roomCount}
                   peopleCount={peopleCount}
+                  roomType={roomType}
                   setDestination={setDestination}
                   setCheckInDate={setCheckInDate}
                   setCheckOutDate={setCheckOutDate}
