@@ -346,7 +346,10 @@ def reservation():
         try:
             data = request.get_json()
             uid = data['userID']
-            res = Reservation.query.filter(Reservation.uid == uid).all()
+            if uid == "all":
+                res = Reservation.query.all()
+            else:
+                res = Reservation.query.filter(Reservation.uid == uid).all()
             res_dict = defaultdict(dict)
             counter = 1
             for r in res:
@@ -371,8 +374,7 @@ def reservation():
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
-            reservation = Reservation.query.filter(Reservation.reserve_id == reservation_id)
-            db.session.delete(reservation)
+            Reservation.query.filter(Reservation.reserve_id == reservation_id).delete()
             db.session.commit()
             return make_response("Deleted Successfully!", 200)
         except:
@@ -390,18 +392,26 @@ def reservation():
             num_people = data["numPeople"]
             num_rooms = data["numRooms"]
 
-            reservation = Reservation.query.filter(Reservation.reserve_id == reservation_id)
+            Reservation.query.filter(Reservation.reserve_id == reservation_id).update(
+                {"hid": hid,
+                 "start": booking_start,
+                 "end": booking_end,
+                 "price": price,
+                 "num_people": num_people,
+                 "num_rooms": num_rooms,
+                 "rid": rid}
+            )
 
             # update the values
-            reservation.hid = hid
-            reservation.start = booking_start
-            reservation.end = booking_end
-            reservation.price = price
-            reservation.num_people = num_people
-            reservation.num_rooms = num_rooms
-            reservation.rid = rid
+            # reservation.hid = hid
+            # reservation.start = booking_start
+            # reservation.end = booking_end
+            # reservation.price = price
+            # reservation.num_people = num_people
+            # reservation.num_rooms = num_rooms
+            # reservation.rid = rid
 
-            # commit the changes
+            # commit the change
             db.session.commit()
 
             return make_response("Updated!", 200)
