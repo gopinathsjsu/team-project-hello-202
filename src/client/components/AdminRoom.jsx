@@ -29,15 +29,15 @@ function AdminRoom() {
 
   const createRoom = () => {
     fetch(
-      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/admin",
+      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/room",
       {
         headers: {
           "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify({
-          hotelname,
-          roomtype,
+          hname: hotelname,
+          type: roomtype,
           baseprice,
         }),
       }

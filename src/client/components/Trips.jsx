@@ -52,7 +52,7 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryTrips = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/trips', {
+const queryReservations = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/getReservations', {
   headers: {
     'Content-Type': 'application/json'
   },
@@ -76,13 +76,37 @@ const queryTrips = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.
     console.log(exception);
   });
 
+const cancelTripQuery = (reservationID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation', {
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  method: 'DELETE',
+  body: JSON.stringify({
+    reservationID
+  })
+})
+  .then((res) => {
+    if (res.ok) {
+      return res.json().then((responseData) => {
+        return responseData
+      });
+    }
+    console.log('Error occurred:');
+    console.log(res);
+    return { errorMessages: { REQUEST_ERROR: res.statusText } };
+  })
+  .catch((exception) => {
+    console.log('Error occurred:');
+    console.log(exception);
+  });
+
 const updateTripQuery = (requestBody) => fetch(
-  "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/updateTrip",
+  "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
   {
     headers: {
       "Content-Type": "application/json",
     },
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(requestBody),
   }
 )
@@ -135,7 +159,7 @@ function Trips({ userID }) {
 
   useEffect(() => {
     if (active === 1) {
-      queryTrips(userID);
+      queryReservations(userID);
     }
   }, [active]);
 
