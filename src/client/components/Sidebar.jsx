@@ -8,14 +8,21 @@ const listIconStyle = {
   padding: "10px 0px 10px 5px",
 };
 
-function Sidebar({ showSidebar }) {
+function Sidebar({ showSidebar, setJWT, setIsAdmin }) {
+
+  const onLinkSelect = (selectedKey) => {
+    if (selectedKey === 'logout') {
+      setIsAdmin(false)
+      setJWT(null)
+    }
+  }
+
   return (
     <>
       <Nav
         style={{ position: "absolute", zIndex: 2, height: 320, width: 200 }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
-        // activeKey="/home
-        onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
+        onSelect={onLinkSelect}
       >
         <ListIcon
           className="listiconstyle"
@@ -30,37 +37,37 @@ function Sidebar({ showSidebar }) {
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link href="/dashboard" eventKey="link-1">
+          <Nav.Link href="/dashboard" eventKey="dashboard">
             Dashboard
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-2" href="/trips">
+          <Nav.Link eventKey="trips" href="/trips">
             My Trips
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-3" href="/rewards">
+          <Nav.Link eventKey="rewards" href="/rewards">
             Rewards
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-4" href="/login">
+          <Nav.Link eventKey="signin" href="/login">
             Sign-In
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-5" href="/signup">
+          <Nav.Link eventKey="register" href="/signup">
             Register
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="link-6" href="/logout">
+          <Nav.Link eventKey="logout" href="/logout">
             Logout
           </Nav.Link>
         </Nav.Item>

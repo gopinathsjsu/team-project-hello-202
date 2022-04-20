@@ -8,7 +8,6 @@ import HotelDetail from "./HotelDetail";
 import Sidebar from "./Sidebar";
 import Rewards from "./Rewards";
 import Trips from "./Trips";
-import Logout from "./Logout";
 import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
 
@@ -80,7 +79,7 @@ const LandingPage = ({ }) => {
         <Route path="rewards" element={<Rewards />} />
         <Route
           path="logout"
-          element={<Logout setIsAdmin={setIsAdmin} setJWT={setJWT} />}
+          element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
         />
         <Route path="trips" element={<Dashboard content={<Trips userID={jwt} />} />} />
         <Route
@@ -90,7 +89,7 @@ const LandingPage = ({ }) => {
         <Route path="signup" element={<SignUp />} />
         <Route path="admin" element={<Admin />} />
         <Route path="adminroom" element={<AdminRoom />} />
-        <Route path="sidebar" element={<Sidebar />} />
+        <Route path="sidebar" element={<Sidebar setJWT={setJWT} setIsAdmin={setIsAdmin} />} />
         <Route
           path="search"
           element={
