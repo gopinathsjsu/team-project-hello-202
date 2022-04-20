@@ -52,14 +52,11 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryReservations = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/getReservations', {
+const queryReservations = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=' + userID, {
   headers: {
     'Content-Type': 'application/json'
   },
-  method: 'POST',
-  body: JSON.stringify({
-    userID
-  })
+  method: 'GET'
 })
   .then((res) => {
     if (res.ok) {

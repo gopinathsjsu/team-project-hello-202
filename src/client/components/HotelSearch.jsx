@@ -402,9 +402,6 @@ function HotelSearch(props) {
                     >
                       Room Selection
                     </Button>
-                    <Button variant="outline-primary" type="submit">
-                      Cancel
-                    </Button>
                   </div>
                 </div>
               </Card.Body>
