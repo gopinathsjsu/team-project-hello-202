@@ -287,8 +287,7 @@ def reservation():
 
     if request.method == "GET":
         try:
-            data = request.get_json()
-            uid = data['userID']
+            uid = request.args.get('userID')
             if uid == "all":
                 res = Reservation.query.all()
             else:
