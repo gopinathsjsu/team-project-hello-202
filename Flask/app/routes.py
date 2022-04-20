@@ -6,6 +6,7 @@ from flask import make_response, redirect, render_template, request, url_for
 from collections import defaultdict
 from .models import User, db, Hotel, Room, Reservation
 from flask_cors import cross_origin
+import json
 
 
 @app.route("/login", methods=["POST"])
@@ -20,8 +21,13 @@ def login():
         user = User.query.filter(
             User.email == email, User.password == pwd
         ).first()
-
-        return make_response(f"{user.uid}", 200)
+        if user.email == "admin@gmail.com":
+            resp = {"isAdmin": True, "userID": user.uid}
+            json_resp = json.dumps(resp, separators=(',', ':'))
+            return make_response(json_resp, 200)
+        resp = {"isAdmin": False, "userID": user.uid}
+        json_resp = json.dumps(resp, separators=(',', ':'))
+        return make_response(json_resp, 200)
     except:
         return make_response("Make sure the username and password are correct.", 404)
 
@@ -126,7 +132,7 @@ def room():
         try:
             data = request.get_json()
             hotel = Hotel.query.filter(Hotel.hname == data['hname'])
-            hid = hotel.hname  # assumed that the admin wil enter this while adding rooms to the db
+            hid = hotel.hname
 
             type = data["type"]
             baseprice = data["baseprice"]  # has to be specified by the admin
@@ -247,31 +253,38 @@ def check_availability():
             ids = []
             for h in hotel:
                 ids.append(h.hid)
-
             reservation_dates_between = Reservation.query.filter(
                 Reservation.start.between(f'{booking_start}', f'{booking_end}') |
                 Reservation.end.between(f'{booking_start}', f'{booking_end}')
             ).all()
+            print(0)
             exclude_ids = []
             for r in reservation_dates_between:
                 exclude_ids.append(r.rid)
+
             res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
                 ((Reservation.rid == None) | (Room.type == f"{roomType}")) &
                 Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
-            ).all()
+            ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
+            # that fits the criteria
 
             count_rooms_in_hotel = defaultdict(int)  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
             return_dict = defaultdict(dict)  # ADD HOTELS WHICH HAVE THRESHOLD ROOM VALUE
-            if len(res) < num_rooms:
-                return make_response(f"Only {len(res)} rooms available", 200)  # check what response is required
+            if len(res) < num_rooms:  # if not enough rooms available
+                return make_response(f"Only {len(res)} rooms available", 404)  # check what response is required
             else:
+                counter = 1
                 for r in res:
                     count_rooms_in_hotel[r.hid] += 1
-                    if count_rooms_in_hotel[r.hid] >= num_rooms:
+                    if count_rooms_in_hotel[r.hid] >= num_rooms:  # if enough rooms available in a hotel
                         hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
-                        return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
+                        return_dict[r.hid] = {"idx": counter, "id": r.hid, "name": hotel.hname,
                                               "address": hotel.location,
                                               "rate": dynamic_pricing(r.baseprice, booking_start)}
+                        counter += 1
+                # if not enough rooms available
+                if len(return_dict) == 0:
+                    return make_response(f"Not enough rooms available", 404)
 
                 return make_response(return_dict, 200)
 
@@ -280,7 +293,7 @@ def check_availability():
         return make_response("Failed request!", 404)
 
 
-def get_rom_ids(roomType, start, end, hotelID):
+def get_room_ids(roomType, start, end, hotelID):
     # get all the rooms for a hotelID where reservation within target dates
     reservation_dates_between = Reservation.query.filter(
         (Reservation.start.between(f'{start}', f'{end}') |
@@ -296,7 +309,7 @@ def get_rom_ids(roomType, start, end, hotelID):
     return rids
 
 
-@app.route("/reservation", methods=["GET", "POST"])
+@app.route("/reservation", methods=["GET", "POST", "DELETE", "PUT"])
 @cross_origin()
 def reservation():
     if request.method == "POST":
@@ -310,14 +323,8 @@ def reservation():
             num_people = data["numPeople"]
             num_rooms = data["numRooms"]
             roomType = data["roomType"]
-            room_ids = get_rom_ids(roomType, booking_start, booking_end, hid)
-            hotel = db.session.query(Hotel).filter(Hotel.hid == hid).first()
-            if roomType == "single":
-                hotel.total_single -= num_rooms
-            elif roomType == "double":
-                hotel.total_double -= num_rooms
-            else:
-                hotel.total_suite -= num_rooms
+            room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
+
             for room_id in room_ids[:num_rooms]:
                 new_reservation = Reservation(
                     rid=int(room_id),
@@ -337,10 +344,67 @@ def reservation():
 
     if request.method == "GET":
         try:
-            reservations = Reservation.query.filter().all()
-            all_reservations = {}
-            print(reservations)
+            data = request.get_json()
+            uid = data['userID']
+            res = Reservation.query.filter(Reservation.uid == uid).all()
+            res_dict = defaultdict(dict)
+            counter = 1
+            for r in res:
+                res_dict[counter] = {
+                    "idx": counter,
+                    "reservation_id": r.reserve_id,
+                    "rid": r.rid,
+                    "hid": r.hid,
+                    "start": r.start,
+                    "end": r.end,
+                    "price": r.price,
+                    "num_rooms": r.num_rooms,
+                    "num_people": r.num_people
+                }
+                counter += 1
 
-            return make_response("Working", 200)
+            return make_response(res_dict, 200)
         except:
-            return make_response("Not working", 404)
+            return make_response("Oops, an error occurred!", 404)
+
+    if request.method == "DELETE":
+        try:
+            data = request.get_json()
+            reservation_id = data["reservationID"]
+            reservation = Reservation.query.filter(Reservation.reserve_id == reservation_id)
+            db.session.delete(reservation)
+            db.session.commit()
+            return make_response("Deleted Successfully!", 200)
+        except:
+            return make_response("Oops, an error occurred!", 404)
+
+    if request.method == "PUT":
+        try:
+            data = request.get_json()
+            reservation_id = data["reservationID"]
+            rid = data["roomID"]
+            hid = data['hotelID']
+            booking_start = data["checkInDate"]
+            booking_end = data["checkOutDate"]
+            price = data["price"]
+            num_people = data["numPeople"]
+            num_rooms = data["numRooms"]
+
+            reservation = Reservation.query.filter(Reservation.reserve_id == reservation_id)
+
+            # update the values
+            reservation.hid = hid
+            reservation.start = booking_start
+            reservation.end = booking_end
+            reservation.price = price
+            reservation.num_people = num_people
+            reservation.num_rooms = num_rooms
+            reservation.rid = rid
+
+            # commit the changes
+            db.session.commit()
+
+            return make_response("Updated!", 200)
+
+        except:
+            return make_response("Oops, an error occurred!", 404)
