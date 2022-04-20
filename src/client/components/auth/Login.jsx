@@ -9,7 +9,7 @@ const rootStyle = {
   height: "50vh",
 };
 
-function Login({ setJWT }) {
+function Login({ setJWT, setIsAdmin }) {
   const [password, setPassword] = useState()
   const [email, setEmail] = useState()
   let navigate = useNavigate()
@@ -33,16 +33,16 @@ function Login({ setJWT }) {
         email,
       }),
     })
-      .then((res) => {
-        res.json().then((data) => {
-          navigate('/dashboard')
-          setJWT(data)
-        })
-          .catch((exception) => {
-            console.log("Error occurred:")
-            console.log(exception)
-          });
+      .then((res) => res.json())
+      .then((data) => {
+        setJWT(data.userID)
+        setIsAdmin(data.isAdmin)
+        navigate('/dashboard')
       })
+      .catch((exception) => {
+        console.log("Error occurred:")
+        console.log(exception)
+      });
   }
   return (
     <div style={rootStyle}>
