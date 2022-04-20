@@ -46,43 +46,45 @@ const bookRoomQuery = (
   peopleCount,
   roomType
 ) => {
-  fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({
-      userID,
-      hotelID,
-      numRooms: roomCount,
-      numPeople: peopleCount,
-      price: rate,
-      checkInDate,
-      checkOutDate,
-      destination,
-      roomType
-    }),
-
-  })
-    .then((res) => {
-      res.json().then((data) => {
-        navigate('/search');
+  fetch(
+    "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        userID,
+        hotelID,
+        numRooms: roomCount,
+        numPeople: peopleCount,
+        price: rate,
+        checkInDate,
+        checkOutDate,
+        destination,
+        roomType,
+      }),
+    }
+  ).then((res) => {
+    res
+      .json()
+      .then((data) => {
+        navigate("/search");
       })
-        .catch((exception) => {
-          console.log("Error occurred:");
-          console.log(exception);
-        });
-    })
-}
+      .catch((exception) => {
+        console.log("Error occurred:");
+        console.log(exception);
+      });
+  });
+};
 
 function HotelSearch(props) {
-  const {
-    destination, checkInDate, checkOutDate, roomCount, peopleCount
-  } = props
+  const { destination, checkInDate, checkOutDate, roomCount, peopleCount } =
+    props;
 
-  const [active, setActive] = useState(1)
-  const [availableHotels, setAvailableHotels] = useState(props.availableHotels)
-  const [ismodalshown, setismodelshown] = useState(false)
+  const [active, setActive] = useState(1);
+  const [availableHotels, setAvailableHotels] = useState(props.availableHotels);
+  const [ismodalshown, setismodelshown] = useState(false);
 
   const [typeOfRooms, setTypeOfRooms] = useState({
     1: {
@@ -149,7 +151,11 @@ function HotelSearch(props) {
     totalEpis.push(number);
   }
 
-  for (let number = 1; number <= Object.values(availableHotels).length; number++) {
+  for (
+    let number = 1;
+    number <= Object.values(availableHotels).length;
+    number++
+  ) {
     totalEpis.push(number);
   }
 
@@ -165,7 +171,7 @@ function HotelSearch(props) {
     setActive(number);
     fetch(
       "https://rickandmortyapi.com/api/episode/" +
-      totalEpis.slice(indOfFirstEpi, indOfLastEpi),
+        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
       {
         headers: {
           "Content-Type": "application/json",
@@ -221,7 +227,7 @@ function HotelSearch(props) {
     if (active === 1) {
       fetch(
         "https://rickandmortyapi.com/api/episode/" +
-        totalEpis.slice(indOfFirstEpi, indOfLastEpi),
+          totalEpis.slice(indOfFirstEpi, indOfLastEpi),
         {
           headers: {
             "Content-Type": "application/json",
@@ -273,7 +279,6 @@ function HotelSearch(props) {
     }
   }, [active]);
 
-
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(
       <Pagination.Item
@@ -286,7 +291,14 @@ function HotelSearch(props) {
     );
   }
 
-  const modal = (userID, hotelID, roomCount, peopleCount, checkInDate, checkOutDate) => {
+  const modal = (
+    userID,
+    hotelID,
+    roomCount,
+    peopleCount,
+    checkInDate,
+    checkOutDate
+  ) => {
     return (
       <Modal
         {...props}
@@ -325,7 +337,7 @@ function HotelSearch(props) {
                         style={{
                           display: "flex",
                           flexDirection: "row",
-                          flexWrap: 'wrap',
+                          flexWrap: "wrap",
                           justifyContent: "space-evenly",
                         }}
                       >
@@ -365,17 +377,19 @@ function HotelSearch(props) {
                             marginTop: 30,
                             height: 60,
                           }}
-                          onClick={() => bookRoomQuery(
-                            userID,
-                            hotelID,
-                            types.rate,
-                            checkInDate,
-                            checkOutDate,
-                            destination,
-                            roomCount,
-                            peopleCount,
-                            types.name
-                          )}
+                          onClick={() =>
+                            bookRoomQuery(
+                              userID,
+                              hotelID,
+                              types.rate,
+                              checkInDate,
+                              checkOutDate,
+                              destination,
+                              roomCount,
+                              peopleCount,
+                              types.name
+                            )
+                          }
                         >
                           Book
                         </Button>
@@ -411,22 +425,28 @@ function HotelSearch(props) {
                   </Card.Body>
                   <Card.Footer></Card.Footer>
                 </Card>
-              ))
-            }
+              ))}
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setismodelshown(false)}>Close</Button>
         </Modal.Footer>
-      </Modal >
+      </Modal>
     );
-  }
+  };
 
-  const userID = 1
-  const hotelID = 1
+  const userID = 1;
+  const hotelID = 1;
   return (
     <div style={rootStyle}>
-      {modal(userID, hotelID, roomCount, peopleCount, checkInDate, checkOutDate)}
+      {modal(
+        userID,
+        hotelID,
+        roomCount,
+        peopleCount,
+        checkInDate,
+        checkOutDate
+      )}
       <div style={{ margin: "auto" }}>
         {Object.values(availableHotels) &&
           Object.values(availableHotels).map((trip) => (

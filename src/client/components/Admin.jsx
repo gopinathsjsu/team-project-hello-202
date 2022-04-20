@@ -38,6 +38,34 @@ function admin() {
     setSuite(e.target.value);
   };
 
+  const createHotel = () => {
+    fetch(
+      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/adminroom",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          hotelname,
+          location,
+          total_single,
+          total_double,
+          total_suite,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("successful");
+        navigate("/dashboard");
+      })
+      .catch((exception) => {
+        console.log("Error occurred:");
+        console.log(exception);
+      });
+  };
+
   return (
     <div style={rootStyle}>
       <Form>
@@ -87,7 +115,7 @@ function admin() {
         </Form.Group>
       </Form>
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" onClick={createHotel}>
         Submit
       </Button>
     </div>

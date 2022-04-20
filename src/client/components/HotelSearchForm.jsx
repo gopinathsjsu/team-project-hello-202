@@ -138,13 +138,6 @@ function HotelSearchForm({
 }) {
   let navigate = useNavigate();
 
-  // const [destination, setDestination] = useState();
-  // const [checkInDate, setCheckInDate] = useState();
-  // const [checkOutDate, setCheckOutDate] = useState();
-  // const [roomCount, setRoomCount] = useState(0);
-  // const [roomType, setRoomType] = useState("single");
-  // const [peopleCount, setPeopleCount] = useState(0);
-
   const setLocationDestination = (e) => {
     setDestination(e.target.value);
   };
