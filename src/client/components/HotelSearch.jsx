@@ -28,7 +28,6 @@ const roomImageStyle = {
 
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
-const TRIPS_TOTAL_COUNT = 36;
 
 const bookRoomQuery = (
   userID,
@@ -64,7 +63,7 @@ const bookRoomQuery = (
   )
     .then((data) => {
       console.log(data);
-      navigate("/trips");
+      navigate("/availableHotels");
     })
     .catch((exception) => {
       console.log("Error occurred:");
@@ -74,12 +73,13 @@ const bookRoomQuery = (
 };
 
 function HotelSearch(props) {
-  const { destination, checkInDate, checkOutDate, roomCount, peopleCount, roomType } =
+  const { destination, checkInDate, checkOutDate, roomCount, peopleCount, roomType, userID } =
     props;
 
   const [active, setActive] = useState(1);
   const [availableHotels, setAvailableHotels] = useState(props.availableHotels);
   const [ismodalshown, setismodelshown] = useState(false);
+  const [hotelIDPicked, setHotelIDPicked] = useState(null);
 
   const [typeOfRooms, setTypeOfRooms] = useState({
     1: {
@@ -344,13 +344,11 @@ function HotelSearch(props) {
     );
   };
 
-  const userID = 1;
-  const hotelID = 1;
   return (
     <div style={rootStyle}>
       {modal(
         userID,
-        hotelID,
+        hotelIDPicked,
         roomCount,
         peopleCount,
         checkInDate,
@@ -358,13 +356,13 @@ function HotelSearch(props) {
       )}
       <div style={{ margin: "auto" }}>
         {Object.values(availableHotels) &&
-          Object.values(availableHotels).map((trip) => (
+          Object.values(availableHotels).map((availableHotel) => (
             <Card
-              key={trip.id}
+              key={availableHotel.id}
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
             >
               <Card.Header>
-                <span style={{ fontWeight: "bold" }}> {trip.name}</span>
+                <span style={{ fontWeight: "bold" }}> {availableHotel.name}</span>
               </Card.Header>
               <Card.Body style={{ display: "flex", flexDirection: "row" }}>
                 <Image
@@ -386,7 +384,7 @@ function HotelSearch(props) {
                       justifyContent: "space-around",
                     }}
                   >
-                    <Card.Text>{trip.address}</Card.Text>
+                    <Card.Text>{availableHotel.address}</Card.Text>
                   </div>
                   <div
                     style={{
@@ -398,7 +396,7 @@ function HotelSearch(props) {
                     <Button
                       variant="outline-primary"
                       type="submit"
-                      onClick={() => setismodelshown(true)}
+                      onClick={() => { setHotelIDPicked(availableHotel.id); setismodelshown(true); }}
                     >
                       Room Selection
                     </Button>

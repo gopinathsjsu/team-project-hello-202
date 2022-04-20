@@ -156,7 +156,22 @@ function Trips({ userID }) {
 
   useEffect(() => {
     if (active === 1 && userID != null) {
-      queryReservations(userID);
+      const updatedTrips = queryReservations(userID)
+      const parsedTrips = updatedTrips.map(updatedTrips => {
+        const { start, end, hid, idx, num_people, num_rooms, price, reservation_id, rid } = updatedTrips
+        return {
+          checkInDate: start,
+          checkOutDate: end,
+          hotelID: hid,
+          numOfPeople: num_people,
+          numOfRooms: num_rooms,
+          id: reservation_id,
+          idx: idx,
+          price,
+          roomID: rid
+        };
+      })
+      setTrips(parsedTrips)
     }
   }, [active, userID]);
 
@@ -211,9 +226,9 @@ function Trips({ userID }) {
                       justifyContent: "space-around",
                     }}
                   >
-                    <Card.Text>{trip.address}</Card.Text>
+                    <Card.Text>{trip.location}</Card.Text>
                     <Card.Text>
-                      {trip.check_in_date} - {trip.check_out_date}
+                      {trip.checkInDate} - {trip.checkOutDate}
                     </Card.Text>
                   </div>
                   <div

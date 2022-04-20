@@ -112,6 +112,7 @@ const LandingPage = ({ }) => {
                   setCheckOutDate={setCheckOutDate}
                   setRoomCount={setRoomCount}
                   setPeopleCount={setPeopleCount}
+                  userID={jwt}
                 />
               }
               destination={destination}
