@@ -10,54 +10,64 @@ const rootStyle = {
 };
 
 function Login({ setJWT, setIsAdmin }) {
-  const [password, setPassword] = useState()
-  const [email, setEmail] = useState()
-  let navigate = useNavigate()
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  let navigate = useNavigate();
 
   const setPasswordInput = (e) => {
-    setPassword(e.target.value)
-  }
+    setPassword(e.target.value);
+  };
   const setEmailInput = (e) => {
-    setEmail(e.target.value)
-  }
-
+    setEmail(e.target.value);
+  };
 
   const authenticateUser = () => {
-    fetch("http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/login", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({
-        password,
-        email,
-      }),
-    })
+    fetch(
+      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/login",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          password,
+          email,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
-        setJWT(data.userID)
-        setIsAdmin(data.isAdmin)
-        navigate('/dashboard')
+        setJWT(data.userID);
+        setIsAdmin(data.isAdmin);
+        navigate("/dashboard");
       })
       .catch((exception) => {
-        console.log("Error occurred:")
-        console.log(exception)
+        console.log("Error occurred:");
+        console.log(exception);
       });
-  }
+  };
   return (
     <div style={rootStyle}>
       <Form>
         <Form.Group className="mb-3" controlId="email">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" onChange={setEmailInput} />
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            onChange={setEmailInput}
+          />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="password" >
+        <Form.Group className="mb-3" controlId="password">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" onChange={setPasswordInput} />
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={setPasswordInput}
+          />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />

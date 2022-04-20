@@ -52,9 +52,23 @@ const myTripTextStyle = {
   cursor: "pointer",
 };
 
-function Dashboard({ jwt, roomType, setRoomType, isSearchFormShown, content,
-  setAvailableHotels, setDestination, setCheckInDate, setCheckOutDate, setRoomCount, setPeopleCount,
-  destination, checkInDate, checkOutDate, roomCount, peopleCount
+function Dashboard({
+  jwt,
+  roomType,
+  setRoomType,
+  isSearchFormShown,
+  content,
+  setAvailableHotels,
+  setDestination,
+  setCheckInDate,
+  setCheckOutDate,
+  setRoomCount,
+  setPeopleCount,
+  destination,
+  checkInDate,
+  checkOutDate,
+  roomCount,
+  peopleCount,
 }) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
@@ -129,9 +143,13 @@ function Dashboard({ jwt, roomType, setRoomType, isSearchFormShown, content,
               </Dropdown.Toggle>
 
               <Dropdown.Menu as={CustomMenu}>
-                {jwt != null ? <></> : <Dropdown.Item eventKey="1" onClick={onLoginClick}>
-                  Sign In
-                </Dropdown.Item>}
+                {jwt != null ? (
+                  <></>
+                ) : (
+                  <Dropdown.Item eventKey="1" onClick={onLoginClick}>
+                    Sign In
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item eventKey="2" onClick={onSignUpClick}>
                   Join
                 </Dropdown.Item>
@@ -150,7 +168,26 @@ function Dashboard({ jwt, roomType, setRoomType, isSearchFormShown, content,
         src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
         style={backgroundImageStyle}
       />
-      {(isSearchFormShown === true) ? <HotelSearchForm style={hotelSearchStyle} roomType={roomType} setRoomType={setRoomType} setAvailableHotels={setAvailableHotels} setDestination={setDestination} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} setRoomCount={setRoomCount} setPeopleCount={setPeopleCount} destination={destination} checkInDate={checkInDate} checkOutDate={checkOutDate} roomCount={roomCount} peopleCount={peopleCount} /> : <></>}
+      {isSearchFormShown === true ? (
+        <HotelSearchForm
+          style={hotelSearchStyle}
+          roomType={roomType}
+          setRoomType={setRoomType}
+          setAvailableHotels={setAvailableHotels}
+          setDestination={setDestination}
+          setCheckInDate={setCheckInDate}
+          setCheckOutDate={setCheckOutDate}
+          setRoomCount={setRoomCount}
+          setPeopleCount={setPeopleCount}
+          destination={destination}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          roomCount={roomCount}
+          peopleCount={peopleCount}
+        />
+      ) : (
+        <></>
+      )}
       {content != null ? content : <>Welcome</>}
       <Footer />
     </div>

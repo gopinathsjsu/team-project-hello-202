@@ -9,18 +9,17 @@ const listIconStyle = {
 };
 
 function Sidebar({ showSidebar, setJWT, setIsAdmin }) {
-
   const onLinkSelect = (selectedKey) => {
-    if (selectedKey === 'logout') {
-      setIsAdmin(false)
-      setJWT(null)
+    if (selectedKey === "logout") {
+      setIsAdmin(false);
+      setJWT(null);
     }
-  }
+  };
 
   return (
     <>
       <Nav
-        style={{ position: "absolute", zIndex: 2, height: 320, width: 200 }}
+        style={{ position: "absolute", zIndex: 2, height: 365, width: 200 }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
         onSelect={onLinkSelect}
       >
@@ -33,7 +32,7 @@ function Sidebar({ showSidebar, setJWT, setIsAdmin }) {
         <div className="sidebar-sticky"></div>
 
         <Nav.Item>
-          <Nav.Link href="/admin">Admin</Nav.Link>
+          <Nav.Link href="/admin">Create Hotel</Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
