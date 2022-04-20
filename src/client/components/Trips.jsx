@@ -155,10 +155,10 @@ function Trips({ userID }) {
   };
 
   useEffect(() => {
-    if (active === 1) {
+    if (active === 1 && userID != null) {
       queryReservations(userID);
     }
-  }, [active]);
+  }, [active, userID]);
 
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(
