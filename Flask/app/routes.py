@@ -1,8 +1,6 @@
 """Application routes."""
-from datetime import datetime as dt
-
 from flask import current_app as app
-from flask import make_response, redirect, render_template, request, url_for
+from flask import make_response, request
 from collections import defaultdict
 from .models import User, db, Hotel, Room, Reservation
 from flask_cors import cross_origin
@@ -83,11 +81,11 @@ def hotel():
     if request.method == "POST":
         try:
             data = request.get_json()
-            hotel_name = data["hotel-name"]
+            hotel_name = data["hname"]
             location = data["location"]
-            total_single = data["total_single"]
-            total_double = data["total_double"]
-            total_suite = data["total_suite"]
+            total_single = int(data["total_single"])
+            total_double = int(data["total_double"])
+            total_suite = int(data["total_suite"])
 
             # check if not empty
             if hotel_name and location and total_single and total_double and total_suite:
@@ -165,32 +163,10 @@ def room():
             return make_response("An error occurred while trying to add room!", 404)
     if request.method == "GET":
         res = Room.query.all()
+        return_dict = {}
         for r in res:
-            print(r.type)
+            return_dict[r.rid] = {"hid": r.hid, "type": r.type, "price": r.baseprice}
         return make_response("Done", 200)
-        # try:
-        #     # data will be sent in the url string
-        #     args = request.args
-        #     args.to_dict()
-        #     hotelname = args.get("hotel_name")
-        #     roomtype = args.get("room_type")
-        #     hotel_name = Hotel.query.filter(Hotel.hname == hotelname).first()
-        #     if roomtype == "all":
-        #         rooms = Room.query.filter(
-        #             Room.hid == hotel_name.hid
-        #         )
-        #     else:
-        #         rooms = Room.query.filter(
-        #             Room.hid == hotel_name.hid, Room.type == roomtype
-        #         )
-        #
-        #     room_data = defaultdict(dict)
-        #     for room in rooms:
-        #         hotel = Hotel.query.filter(Hotel.hid == room.hid)
-        #         room_data[hotel.hname] = {"type": room.type, "baseprice": room.baseprice, "rid": room.rid}
-        #     return make_response(f"{room_data}", 200)
-        # except:
-        #     return make_response("NOT WORKING", 404)
 
 
 def dynamic_pricing(price, checkInDate):
@@ -202,38 +178,6 @@ def dynamic_pricing(price, checkInDate):
         return price + 0.20 * price
     else:
         return price
-
-
-#
-# @cross_origin()
-# def availability_helper(roomType, location, booking_start, booking_end, num_rooms):
-#     hotel = Hotel.query.filter(Hotel.location == f"{location}").all()
-#     ids = []
-#     for h in hotel:
-#         ids.append(h.hid)
-#
-#     reservation_dates_between = Reservation.query.filter(
-#         Reservation.start.between(f'{booking_start}', f'{booking_end}') |
-#         Reservation.end.between(f'{booking_start}', f'{booking_end}')
-#     ).all()
-#     exclude_ids = []
-#     for r in reservation_dates_between:
-#         exclude_ids.append(r.hid)
-#     # print("just before query")
-#     res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
-#         ((Reservation.rid == None) | (Room.type == f"{roomType}")) &
-#         Room.hid.in_(ids) & Room.hid.not_in(exclude_ids)
-#     ).all()
-#     return_dict = defaultdict(dict)
-#     if len(res) < num_rooms:
-#         return len(res)  # check what response is required.
-#     for r in res:
-#         hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
-#
-#         return_dict[r.hid] = {"id": r.hid, "name": hotel.hname,
-#                               "address": hotel.location,
-#                               "rate": dynamic_pricing(r.baseprice, booking_start)}
-#     return return_dict
 
 
 @app.route("/availability", methods=["POST"])
@@ -257,7 +201,6 @@ def check_availability():
                 Reservation.start.between(f'{booking_start}', f'{booking_end}') |
                 Reservation.end.between(f'{booking_start}', f'{booking_end}')
             ).all()
-            print(0)
             exclude_ids = []
             for r in reservation_dates_between:
                 exclude_ids.append(r.rid)
@@ -401,15 +344,6 @@ def reservation():
                  "num_rooms": num_rooms,
                  "rid": rid}
             )
-
-            # update the values
-            # reservation.hid = hid
-            # reservation.start = booking_start
-            # reservation.end = booking_end
-            # reservation.price = price
-            # reservation.num_people = num_people
-            # reservation.num_rooms = num_rooms
-            # reservation.rid = rid
 
             # commit the change
             db.session.commit()
