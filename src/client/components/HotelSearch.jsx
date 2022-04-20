@@ -151,39 +151,11 @@ function HotelSearch(props) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        checkInDate: checkInDate.toDate(),
-        checkOutDate: checkOutDate.toDate(),
-        destination,
-        roomCount,
-        roomType,
-        indOfFirstEpi,
-        indOfLastEpi
-      })
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json().then((responseData) => {
-            setAvailableHotels(responseData)
-          });
-        }
-        console.log('Error occurred:');
-        console.log(res);
-        return { errorMessages: { REQUEST_ERROR: res.statusText } };
-      })
-      .catch((exception) => {
-        console.log('Error occurred:');
-        console.log(exception);
-      });
+    setAvailableHotels(props.availableHotels.slice(indOfFirstEpi, indOfLastEpi))
   };
 
   useEffect(() => {
-    if (active === 1) {
+    if (active === 1 && props.availableHotels.length === 0) {
       fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
         headers: {
           'Content-Type': 'application/json'
@@ -194,9 +166,7 @@ function HotelSearch(props) {
           checkOutDate: checkInDate == null ? null : checkOutDate.toDate(),
           destination,
           roomCount,
-          roomType,
-          indOfFirstEpi,
-          indOfLastEpi
+          roomType
         })
       })
         .then((res) => {
@@ -214,7 +184,7 @@ function HotelSearch(props) {
           console.log(exception);
         });
     }
-  }, [active]);
+  }, [active, props.availableHotels]);
 
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(

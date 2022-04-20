@@ -141,7 +141,7 @@ const LandingPage = ({ }) => {
         </Route>
         <Route
           path="*"
-          element={<>{jwt ? <Dashboard jwt={jwt} /> : <Login />}</>}
+          element={<>{jwt ? <Dashboard jwt={jwt} /> : <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}</>}
         />
       </Routes>
     </BrowserRouter>

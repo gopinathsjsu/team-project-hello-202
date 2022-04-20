@@ -52,15 +52,13 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryTrips = (userID, indOfFirstEpi, indOfLastEpi) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/trips', {
+const queryTrips = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/trips', {
   headers: {
     'Content-Type': 'application/json'
   },
   method: 'POST',
   body: JSON.stringify({
-    userID,
-    indOfFirstEpi,
-    indOfLastEpi
+    userID
   })
 })
   .then((res) => {
@@ -132,12 +130,12 @@ function Trips({ userID }) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    queryTrips(userID, indOfFirstEpi, indOfLastEpi);
+    setAvailableHotels(trips.slice(indOfFirstEpi, indOfLastEpi))
   };
 
   useEffect(() => {
     if (active === 1) {
-      queryTrips(userID, indOfFirstEpi, indOfLastEpi);
+      queryTrips(userID);
     }
   }, [active]);
 
