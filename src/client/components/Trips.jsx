@@ -52,7 +52,7 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryReservations = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=' + userID, {
+const queryReservations = (userID, setTrips) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=' + userID, {
   headers: {
     'Content-Type': 'application/json'
   },
@@ -61,6 +61,7 @@ const queryReservations = (userID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-
   .then((res) => {
     if (res.ok) {
       return res.json().then((responseData) => {
+        setTrips(responseData)
         return responseData
       });
     }
@@ -156,9 +157,9 @@ function Trips({ userID }) {
 
   useEffect(() => {
     if (active === 1 && userID != null) {
-      const updatedTrips = queryReservations(userID)
-      const parsedTrips = updatedTrips.map(updatedTrips => {
-        const { start, end, hid, idx, num_people, num_rooms, price, reservation_id, rid } = updatedTrips
+      const updatedTrips = queryReservations(userID, setTrips)
+      const parsedTrips = Object.values(updatedTrips).map(updatedTrip => {
+        const { start, end, hid, idx, num_people, num_rooms, price, reservation_id, rid } = updatedTrip
         return {
           checkInDate: start,
           checkOutDate: end,
@@ -171,7 +172,6 @@ function Trips({ userID }) {
           roomID: rid
         };
       })
-      setTrips(parsedTrips)
     }
   }, [active, userID]);
 
@@ -193,7 +193,6 @@ function Trips({ userID }) {
   const checkOutDateTimeInputProps = {
     placeholder: 'Check Out'
   };
-
   return (
     <div style={rootStyle}>
       <div style={{ margin: "auto" }}>

@@ -39,7 +39,8 @@ const bookRoomQuery = (
   roomCount,
   peopleCount,
   roomType,
-  navigate
+  navigate,
+  setismodelshown
 ) => {
   fetch(
     "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
@@ -62,8 +63,8 @@ const bookRoomQuery = (
     }
   )
     .then((data) => {
-      console.log(data);
-      navigate("/availableHotels");
+      navigate("/search");
+      setismodelshown(false);
     })
     .catch((exception) => {
       console.log("Error occurred:");
@@ -171,7 +172,7 @@ function HotelSearch(props) {
       })
         .then((res) => {
           if (res.ok) {
-            return res.json().then((responseData) => {
+            res.json().then((responseData) => {
               setAvailableHotels(responseData)
             });
           }
@@ -296,7 +297,8 @@ function HotelSearch(props) {
                               roomCount,
                               peopleCount,
                               types.name,
-                              navigate
+                              navigate,
+                              setismodelshown
                             )
                           }
                         >
