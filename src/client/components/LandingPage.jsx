@@ -12,7 +12,7 @@ import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
 
 const LandingPage = ({ }) => {
-  const [jwt, setJWT] = useState(null);
+  const [jwt, setJWT] = useState(JSON.parse(localStorage.getItem("jwt")));
   const [isAdmin, setIsAdmin] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [destination, setDestination] = useState();
@@ -81,7 +81,7 @@ const LandingPage = ({ }) => {
           path="logout"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
         />
-        <Route path="trips" element={<Dashboard content={<Trips userID={jwt} />} />} />
+        <Route path="trips" element={<Dashboard jwt={jwt} content={<Trips jwt={jwt} />} />} />
         <Route
           path="login"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}

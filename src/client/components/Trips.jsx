@@ -52,7 +52,7 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryReservations = (userID, setTrips) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=' + userID, {
+const queryReservations = async (jwt, setTrips) => await fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=' + jwt, {
   headers: {
     'Content-Type': 'application/json'
   },
@@ -60,8 +60,12 @@ const queryReservations = (userID, setTrips) => fetch('http://Hmanage-env.eba-ib
 })
   .then((res) => {
     if (res.ok) {
-      return res.json().then((responseData) => {
-        setTrips(responseData)
+      const parsedTrips = {}
+      res.json().then((responseData) => {
+        for (const [key, value] of Object.entries(responseData)) {
+          parsedTrips[value.reservation_id] = value
+        }
+        setTrips(parsedTrips)
         return responseData
       });
     }
@@ -118,7 +122,7 @@ const updateTripQuery = (requestBody) => fetch(
     console.log(exception)
   });
 
-function Trips({ userID }) {
+function Trips({ jwt }) {
   const pages = [];
   const [active, setActive] = useState(1);
   const [trips, setTrips] = useState([]);
@@ -156,24 +160,11 @@ function Trips({ userID }) {
   };
 
   useEffect(() => {
-    if (active === 1 && userID != null) {
-      const updatedTrips = queryReservations(userID, setTrips)
-      const parsedTrips = Object.values(updatedTrips).map(updatedTrip => {
-        const { start, end, hid, idx, num_people, num_rooms, price, reservation_id, rid } = updatedTrip
-        return {
-          checkInDate: start,
-          checkOutDate: end,
-          hotelID: hid,
-          numOfPeople: num_people,
-          numOfRooms: num_rooms,
-          id: reservation_id,
-          idx: idx,
-          price,
-          roomID: rid
-        };
-      })
+    if (!(active === 1 && jwt != null)) {
+      return
     }
-  }, [active, userID]);
+    queryReservations(jwt, setTrips)
+  }, [active, jwt]);
 
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(
@@ -199,7 +190,7 @@ function Trips({ userID }) {
         {trips &&
           Object.values(trips).map((trip) => (
             <Card
-              key={trip.id}
+              key={trip.reservation_id}
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
             >
               <Card.Header>
@@ -226,9 +217,11 @@ function Trips({ userID }) {
                     }}
                   >
                     <Card.Text>{trip.location}</Card.Text>
-                    <Card.Text>
-                      {trip.checkInDate} - {trip.checkOutDate}
-                    </Card.Text>
+                    <Card.Text>Hotel ID: {trip.hid}</Card.Text>
+                    <Card.Text>Room ID: {trip.rid}</Card.Text>
+                    <Card.Text>Number of people staying: {trip.num_people}</Card.Text>
+                    <Card.Text>Number of rooms booked: {trip.num_rooms}</Card.Text>
+                    <Card.Text>Price: {trip.price}</Card.Text>
                   </div>
                   <div
                     style={{
@@ -239,18 +232,18 @@ function Trips({ userID }) {
                   >
                     <div>
                       <div style={checkInInputContainerStyle}>
-                        <Datetime inputProps={checkInDateTimeInputProps} onChange={(e) => setCheckInDate(e, trip.id)} />
+                        <Datetime inputProps={checkInDateTimeInputProps} onChange={(e) => setCheckInDate(e, trip.reservation_id)} value={new Date(trip.start)} />
                         <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
                       </div>
                       <div style={checkOutInputContainerStyle}>
-                        <Datetime inputProps={checkOutDateTimeInputProps} onChange={(e) => setCheckOutDate(e, trip.id)} />
+                        <Datetime inputProps={checkOutDateTimeInputProps} onChange={(e) => setCheckOutDate(e, trip.reservation_id)} value={new Date(trip.end)} />
                         <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
                       </div>
                     </div>
-                    <Button variant="outline-primary" type="submit" onClick={() => onUpdateClick(trip.id)} >
+                    <Button variant="outline-primary" type="submit" onClick={() => onUpdateClick(trip.reservation_id)} >
                       Update
                     </Button>
-                    <Button variant="outline-primary" type="submit" onClick={() => onCancelClick(trip.id)} >
+                    <Button variant="outline-primary" type="submit" onClick={() => onCancelClick(trip.reservation_id)} >
                       Cancel
                     </Button>
                   </div>
