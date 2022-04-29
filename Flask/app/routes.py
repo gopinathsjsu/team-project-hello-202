@@ -268,6 +268,7 @@ def reservation():
             roomType = data["roomType"]
             room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
 
+            # return_dict = defaultdict(dict)
             for room_id in room_ids[:num_rooms]:
                 new_reservation = Reservation(
                     rid=int(room_id),
@@ -279,8 +280,10 @@ def reservation():
                     num_people=int(num_people),
                     num_rooms=int(num_rooms)
                 )  # Create an instance of the Hotel class
+
                 db.session.add(new_reservation)  # Adds new hotel the database
                 db.session.commit()
+
             return make_response("Booking Successful", 200)
         except:
             return make_response("Booking Failed", 404)
@@ -294,8 +297,13 @@ def reservation():
                 res = Reservation.query.filter(Reservation.uid == uid).all()
             res_dict = defaultdict(dict)
             counter = 1
+
             for r in res:
+                hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
+                room = Room.query.filter(Room.rid == r.rid).first()
                 res_dict[counter] = {
+                    "roomtype": room.type,
+                    "hname": hotel.hname,
                     "idx": counter,
                     "reservation_id": r.reserve_id,
                     "rid": r.rid,
