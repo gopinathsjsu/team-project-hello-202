@@ -5,21 +5,145 @@ import Dashboard from "./dashboard/Dashboard";
 import SignUp from "./auth/SignUp";
 import HotelSearch from "./HotelSearch";
 import HotelDetail from "./HotelDetail";
+import Sidebar from "./Sidebar";
+import Rewards from "./Rewards";
+import Trips from "./Trips";
+import Admin from "./Admin";
+import AdminRoom from "./AdminRoom";
 
 const LandingPage = ({}) => {
-  const [isJWTFound, setIsJWTFound] = useState(false);
+  const [jwt, setJWT] = useState(JSON.parse(localStorage.getItem("jwt")));
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [hotels, setHotels] = useState([]);
+  const [destination, setDestination] = useState();
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+  const [roomCount, setRoomCount] = useState(0);
+  const [roomType, setRoomType] = useState("single");
+  const [peopleCount, setPeopleCount] = useState(0);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}
+          element={
+            <>
+              {jwt ? (
+                <Dashboard
+                  jwt={jwt}
+                  roomType={roomType}
+                  setRoomType={setRoomType}
+                  isSearchFormShown={true}
+                  setAvailableHotels={setHotels}
+                  setDestination={setDestination}
+                  setCheckInDate={setCheckInDate}
+                  setCheckOutDate={setCheckOutDate}
+                  setRoomCount={setRoomCount}
+                  setPeopleCount={setPeopleCount}
+                  destination={destination}
+                  checkInDate={checkInDate}
+                  checkOutDate={checkOutDate}
+                  roomCount={roomCount}
+                  peopleCount={peopleCount}
+                  isAdmin={isAdmin}
+                />
+              ) : (
+                <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
+              )}
+            </>
+          }
         />
-        <Route path="login" element={<Login />} />
+
+        <Route
+          path="dashboard"
+          element={
+            <Dashboard
+              jwt={jwt}
+              roomType={roomType}
+              setRoomType={setRoomType}
+              isSearchFormShown={true}
+              setAvailableHotels={setHotels}
+              setDestination={setDestination}
+              setCheckInDate={setCheckInDate}
+              setCheckOutDate={setCheckOutDate}
+              setRoomCount={setRoomCount}
+              setPeopleCount={setPeopleCount}
+              destination={destination}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+              roomCount={roomCount}
+              peopleCount={peopleCount}
+              isAdmin={isAdmin}
+            />
+          }
+        />
+        <Route path="rewards" element={<Rewards />} />
+        <Route
+          path="logout"
+          element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
+        />
+        <Route
+          path="trips"
+          element={<Dashboard jwt={jwt} content={<Trips jwt={jwt} />} />}
+        />
+        <Route
+          path="login"
+          element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
+        />
         <Route path="signup" element={<SignUp />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="search" element={<HotelSearch />}>
+        <Route path="admin" element={<Admin />} />
+        <Route path="adminroom" element={<AdminRoom />} />
+        <Route
+          path="sidebar"
+          element={
+            <Sidebar
+              setJWT={setJWT}
+              setIsAdmin={setIsAdmin}
+              isAdmin={isAdmin}
+            />
+          }
+        />
+        <Route
+          path="search"
+          element={
+            <Dashboard
+              jwt={jwt}
+              roomType={roomType}
+              setRoomType={setRoomType}
+              isSearchFormShown={true}
+              isAdmin={isAdmin}
+              content={
+                <HotelSearch
+                  availableHotels={hotels}
+                  destination={destination}
+                  checkInDate={checkInDate}
+                  checkOutDate={checkOutDate}
+                  roomCount={roomCount}
+                  peopleCount={peopleCount}
+                  roomType={roomType}
+                  setDestination={setDestination}
+                  setCheckInDate={setCheckInDate}
+                  setCheckOutDate={setCheckOutDate}
+                  setRoomCount={setRoomCount}
+                  setPeopleCount={setPeopleCount}
+                  userID={jwt}
+                />
+              }
+              destination={destination}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+              roomCount={roomCount}
+              peopleCount={peopleCount}
+              setAvailableHotels={setHotels}
+              setDestination={setDestination}
+              setCheckInDate={setCheckInDate}
+              setCheckOutDate={setCheckOutDate}
+              setRoomCount={setRoomCount}
+              setPeopleCount={setPeopleCount}
+            />
+          }
+        >
           <Route
             index
             element={
@@ -32,7 +156,15 @@ const LandingPage = ({}) => {
         </Route>
         <Route
           path="*"
-          element={<>{isJWTFound ? <Dashboard /> : <Login />}</>}
+          element={
+            <>
+              {jwt ? (
+                <Dashboard jwt={jwt} />
+              ) : (
+                <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
+              )}
+            </>
+          }
         />
       </Routes>
     </BrowserRouter>
