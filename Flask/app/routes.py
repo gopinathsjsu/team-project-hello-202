@@ -1,10 +1,10 @@
 """Application routes."""
+import json
+from collections import defaultdict
 from flask import current_app as app
 from flask import make_response, request
-from collections import defaultdict
-from .models import User, db, Hotel, Room, Reservation
 from flask_cors import cross_origin
-import json
+from .models import User, db, Hotel, Room, Reservation
 
 
 @app.route("/login", methods=["POST"])
@@ -206,7 +206,7 @@ def check_availability():
                 exclude_ids.append(r.rid)
 
             res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
-                ((Reservation.rid == None) | (Room.type == f"{roomType}")) &
+                ((Reservation.rid is None) | (Room.type == f"{roomType}")) &
                 Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
             ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
             # that fits the criteria
@@ -288,7 +288,7 @@ def reservation():
         except:
             return make_response("Booking Failed", 404)
 
-    if request.method == "GET":
+    elif request.method == "GET":
         try:
             uid = request.args.get('userID')
             if uid == "all":
@@ -320,7 +320,7 @@ def reservation():
         except:
             return make_response("Oops, an error occurred!", 404)
 
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
@@ -330,7 +330,7 @@ def reservation():
         except:
             return make_response("Oops, an error occurred!", 404)
 
-    if request.method == "PUT":
+    elif request.method == "PUT":
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
