@@ -166,7 +166,7 @@ def room():
         return_dict = {}
         for r in res:
             return_dict[r.rid] = {"hid": r.hid, "type": r.type, "price": r.baseprice}
-        return make_response("Done", 200)
+        return make_response(return_dict, 200)
 
 
 def dynamic_pricing(price, checkInDate):
@@ -268,6 +268,9 @@ def reservation():
             roomType = data["roomType"]
             room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
 
+            if not room_ids:
+                return make_response("No room found for reservation!", 404)
+
             # return_dict = defaultdict(dict)
             for room_id in room_ids[:num_rooms]:
                 new_reservation = Reservation(
@@ -359,3 +362,4 @@ def reservation():
 
         except:
             return make_response("Oops, an error occurred!", 404)
+
