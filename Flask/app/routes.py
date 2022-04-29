@@ -238,7 +238,7 @@ def check_availability():
 
 def get_room_ids(roomType, start, end, hotelID):
     # get all the rooms for a hotelID where reservation within target dates
-    print("inside get ids")
+
     reservation_dates_between = Reservation.query.filter(
         (Reservation.start.between(f'{start}', f'{end}') |
          Reservation.end.between(f'{start}', f'{end}')) & (Reservation.hid == hotelID)
