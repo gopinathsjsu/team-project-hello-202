@@ -38,7 +38,7 @@ Every Standup includes discussing the work done, the challenges and whether ther
   4. Create Header & Footer
   5. Create Sidebar
 
-## TODO:
+## TODO Week 2:
 
 - Backend
   1. Port the db onto aws services.
