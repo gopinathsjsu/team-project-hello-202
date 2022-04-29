@@ -152,11 +152,11 @@ function HotelSearch(props) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    setAvailableHotels(props.availableHotels.slice(indOfFirstEpi, indOfLastEpi))
+    setAvailableHotels(Object.values(props.availableHotels).slice(indOfFirstEpi, indOfLastEpi))
   };
 
   useEffect(() => {
-    if (active === 1 && props.availableHotels.length === 0) {
+    if (active === 1 && Object.values(props.availableHotels).length === 0) {
       fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
         headers: {
           'Content-Type': 'application/json'
@@ -286,7 +286,11 @@ function HotelSearch(props) {
                             marginTop: 30,
                             height: 60,
                           }}
-                          onClick={() =>
+                          onClick={() => {
+                            const roomTypeParsed = (types.name).includes('Single') ? 'single' :
+                              ((types.name).includes('Double') ? 'double' :
+                                'suite'
+                              );
                             bookRoomQuery(
                               userID,
                               hotelID,
@@ -296,10 +300,11 @@ function HotelSearch(props) {
                               destination,
                               roomCount,
                               peopleCount,
-                              types.name,
+                              roomTypeParsed,
                               navigate,
                               setismodelshown
-                            )
+                            );
+                          }
                           }
                         >
                           Book

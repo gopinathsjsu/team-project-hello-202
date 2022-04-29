@@ -68,17 +68,18 @@ const queryReservations = async (jwt, setTrips) => await fetch('http://Hmanage-e
         setTrips(parsedTrips)
         return responseData
       });
+    } else {
+      console.log('Error occurred:');
+      console.log(res);
+      return { errorMessages: { REQUEST_ERROR: res.statusText } };
     }
-    console.log('Error occurred:');
-    console.log(res);
-    return { errorMessages: { REQUEST_ERROR: res.statusText } };
   })
   .catch((exception) => {
     console.log('Error occurred:');
     console.log(exception);
   });
 
-const cancelTripQuery = (reservationID) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation', {
+const cancelTripQuery = (reservationID, trips, setTrips) => fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation', {
   headers: {
     'Content-Type': 'application/json'
   },
@@ -89,27 +90,35 @@ const cancelTripQuery = (reservationID) => fetch('http://Hmanage-env.eba-ibcrgcp
 })
   .then((res) => {
     if (res.ok) {
-      return res.json().then((responseData) => {
-        return responseData
-      });
+      delete trips[reservationID]
+      setTrips(trips)
+    } else {
+      console.log('Error occurred:');
+      console.log(res);
     }
-    console.log('Error occurred:');
-    console.log(res);
-    return { errorMessages: { REQUEST_ERROR: res.statusText } };
   })
   .catch((exception) => {
     console.log('Error occurred:');
     console.log(exception);
   });
 
-const updateTripQuery = (requestBody) => fetch(
+const updateTripQuery = async (trip) => await fetch(
   "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
   {
     headers: {
       "Content-Type": "application/json",
     },
     method: "PUT",
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify({
+      checkOutDate: trip.end,
+      hotelID: trip.hid,
+      numPeople: trip.num_people,
+      numRooms: trip.num_rooms,
+      price: trip.price,
+      reservationID: trip.reservation_id,
+      roomID: trip.rid,
+      checkInDate: trip.start
+    }),
   }
 )
   .then((res) => {
@@ -135,7 +144,7 @@ function Trips({ jwt }) {
   }
 
   const onCancelClick = (tripID) => {
-    cancelTripQuery(tripID)
+    cancelTripQuery(tripID, trips, setTrips)
   }
 
   const setCheckOutDate = (momentValue, tripID) => {
@@ -187,71 +196,81 @@ function Trips({ jwt }) {
   return (
     <div style={rootStyle}>
       <div style={{ margin: "auto" }}>
-        {trips &&
-          Object.values(trips).map((trip) => (
-            <Card
-              key={trip.reservation_id}
-              style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
-            >
-              <Card.Header>
-                <span style={{ fontWeight: "bold" }}> {trip.name}</span>
-              </Card.Header>
-              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                  style={hotelImageStyle}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100vw",
-                  }}
-                >
+        {
+          Object.values(trips).length > 0 ?
+            Object.values(trips).map((trip) => (
+              <Card
+                key={trip.reservation_id}
+                style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
+              >
+                <Card.Header>
+                  <span style={{ fontWeight: "bold" }}>{trip.hname}</span>
+                </Card.Header>
+                <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                    style={hotelImageStyle}
+                  />
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "row",
-                      padding: "0px 0px 0px 10px",
-                      justifyContent: "space-around",
+                      flexDirection: "column",
+                      width: "100vw",
                     }}
                   >
-                    <Card.Text>{trip.location}</Card.Text>
-                    <Card.Text>Hotel ID: {trip.hid}</Card.Text>
-                    <Card.Text>Room ID: {trip.rid}</Card.Text>
-                    <Card.Text>Number of people staying: {trip.num_people}</Card.Text>
-                    <Card.Text>Number of rooms booked: {trip.num_rooms}</Card.Text>
-                    <Card.Text>Price: {trip.price}</Card.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <div>
-                      <div style={checkInInputContainerStyle}>
-                        <Datetime inputProps={checkInDateTimeInputProps} onChange={(e) => setCheckInDate(e, trip.reservation_id)} value={new Date(trip.start)} />
-                        <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
-                      </div>
-                      <div style={checkOutInputContainerStyle}>
-                        <Datetime inputProps={checkOutDateTimeInputProps} onChange={(e) => setCheckOutDate(e, trip.reservation_id)} value={new Date(trip.end)} />
-                        <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
-                      </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        padding: "0px 0px 0px 10px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Card.Text>Room Type: {trip.roomtype}</Card.Text>
                     </div>
-                    <Button variant="outline-primary" type="submit" onClick={() => onUpdateClick(trip.reservation_id)} >
-                      Update
-                    </Button>
-                    <Button variant="outline-primary" type="submit" onClick={() => onCancelClick(trip.reservation_id)} >
-                      Cancel
-                    </Button>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        padding: "0px 0px 0px 10px",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Card.Text>{trip.location}</Card.Text>
+                      <Card.Text>Number of people staying: {trip.num_people}</Card.Text>
+                      <Card.Text>Number of rooms booked: {trip.num_rooms}</Card.Text>
+                      <Card.Text>Price: {trip.price}</Card.Text>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <div>
+                        <div style={checkInInputContainerStyle}>
+                          <Datetime inputProps={checkInDateTimeInputProps} onChange={(e) => setCheckInDate(e, trip.reservation_id)} value={new Date(trip.start)} />
+                          <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+                        </div>
+                        <div style={checkOutInputContainerStyle}>
+                          <Datetime inputProps={checkOutDateTimeInputProps} onChange={(e) => setCheckOutDate(e, trip.reservation_id)} value={new Date(trip.end)} />
+                          <CalendarIcon style={calendarIconStyle} role="button" tabIndex="-1" />
+                        </div>
+                      </div>
+                      <Button variant="outline-primary" type="submit" onClick={() => onUpdateClick(trip.reservation_id)} >
+                        Update
+                      </Button>
+                      <Button variant="outline-primary" type="submit" onClick={() => onCancelClick(trip.reservation_id)} >
+                        Cancel
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-              <Card.Footer></Card.Footer>
-            </Card>
-          ))}
+                </Card.Body>
+                <Card.Footer></Card.Footer>
+              </Card>
+            )) : <></>
+        }
       </div>
       <Pagination style={{ margin: "auto" }}>
         <Pagination.First
