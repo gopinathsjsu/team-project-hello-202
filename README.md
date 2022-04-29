@@ -53,3 +53,6 @@ Every Standup includes discussing the work done, the challenges and whether ther
   2. Create Hotel Detail Page and related components
   3. Create Bookings/BookingHistory Page and related components
   4. Complete Routing
+
+## TODO Week 3:
+  1. notes for week 3
