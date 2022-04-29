@@ -166,7 +166,7 @@ def room():
         return_dict = {}
         for r in res:
             return_dict[r.rid] = {"hid": r.hid, "type": r.type, "price": r.baseprice}
-        return make_response("Done", 200)
+        return make_response(return_dict, 200)
 
 
 def dynamic_pricing(price, checkInDate):
@@ -238,6 +238,7 @@ def check_availability():
 
 def get_room_ids(roomType, start, end, hotelID):
     # get all the rooms for a hotelID where reservation within target dates
+    print("inside get ids")
     reservation_dates_between = Reservation.query.filter(
         (Reservation.start.between(f'{start}', f'{end}') |
          Reservation.end.between(f'{start}', f'{end}')) & (Reservation.hid == hotelID)
@@ -247,6 +248,7 @@ def get_room_ids(roomType, start, end, hotelID):
         exclude_ids.append(r.rid)
     res = Room.query.filter(Room.hid == hotelID, Room.rid.not_in(exclude_ids), Room.type == f"{roomType}").all()
     rids = []
+    print(res)
     for r in res:
         rids.append(r.rid)
     return rids
@@ -266,8 +268,10 @@ def reservation():
             num_people = data["numPeople"]
             num_rooms = data["numRooms"]
             roomType = data["roomType"]
-            room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
 
+            room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
+            if not room_ids:
+                return make_response("No room found for reservation!", 404)
             # return_dict = defaultdict(dict)
             for room_id in room_ids[:num_rooms]:
                 new_reservation = Reservation(
@@ -359,3 +363,5 @@ def reservation():
 
         except:
             return make_response("Oops, an error occurred!", 404)
+
+
