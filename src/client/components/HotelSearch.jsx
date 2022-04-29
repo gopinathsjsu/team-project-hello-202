@@ -70,16 +70,23 @@ const bookRoomQuery = (
       console.log("Error occurred:");
       console.log(exception);
     });
-  ;
 };
 
 function HotelSearch(props) {
-  const { destination, checkInDate, checkOutDate, roomCount, peopleCount, roomType, userID } =
-    props;
+  const {
+    destination,
+    checkInDate,
+    checkOutDate,
+    roomCount,
+    peopleCount,
+    roomType,
+    userID,
+  } = props;
 
   const [active, setActive] = useState(1);
   const [availableHotels, setAvailableHotels] = useState(props.availableHotels);
   const [ismodalshown, setismodelshown] = useState(false);
+  const [isbookmodalshown, setisbookmodalshown] = useState(false);
   const [hotelIDPicked, setHotelIDPicked] = useState(null);
 
   const [typeOfRooms, setTypeOfRooms] = useState({
@@ -152,36 +159,41 @@ function HotelSearch(props) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    setAvailableHotels(Object.values(props.availableHotels).slice(indOfFirstEpi, indOfLastEpi))
+    setAvailableHotels(
+      Object.values(props.availableHotels).slice(indOfFirstEpi, indOfLastEpi)
+    );
   };
 
   useEffect(() => {
     if (active === 1 && Object.values(props.availableHotels).length === 0) {
-      fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          checkInDate: checkInDate == null ? null : checkInDate.toDate(),
-          checkOutDate: checkInDate == null ? null : checkOutDate.toDate(),
-          destination,
-          roomCount,
-          roomType
-        })
-      })
+      fetch(
+        "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            checkInDate: checkInDate == null ? null : checkInDate.toDate(),
+            checkOutDate: checkInDate == null ? null : checkOutDate.toDate(),
+            destination,
+            roomCount,
+            roomType,
+          }),
+        }
+      )
         .then((res) => {
           if (res.ok) {
             res.json().then((responseData) => {
-              setAvailableHotels(responseData)
+              setAvailableHotels(responseData);
             });
           }
-          console.log('Error occurred:');
+          console.log("Error occurred:");
           console.log(res);
           return { errorMessages: { REQUEST_ERROR: res.statusText } };
         })
         .catch((exception) => {
-          console.log('Error occurred:');
+          console.log("Error occurred:");
           console.log(exception);
         });
     }
@@ -199,7 +211,7 @@ function HotelSearch(props) {
     );
   }
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const modal = (
     userID,
     hotelID,
@@ -287,10 +299,11 @@ function HotelSearch(props) {
                             height: 60,
                           }}
                           onClick={() => {
-                            const roomTypeParsed = (types.name).includes('Single') ? 'single' :
-                              ((types.name).includes('Double') ? 'double' :
-                                'suite'
-                              );
+                            const roomTypeParsed = types.name.includes("Single")
+                              ? "single"
+                              : types.name.includes("Double")
+                              ? "double"
+                              : "suite";
                             bookRoomQuery(
                               userID,
                               hotelID,
@@ -304,8 +317,7 @@ function HotelSearch(props) {
                               navigate,
                               setismodelshown
                             );
-                          }
-                          }
+                          }}
                         >
                           Book
                         </Button>
@@ -369,7 +381,10 @@ function HotelSearch(props) {
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
             >
               <Card.Header>
-                <span style={{ fontWeight: "bold" }}> {availableHotel.name}</span>
+                <span style={{ fontWeight: "bold" }}>
+                  {" "}
+                  {availableHotel.name}
+                </span>
               </Card.Header>
               <Card.Body style={{ display: "flex", flexDirection: "row" }}>
                 <Image
@@ -403,7 +418,10 @@ function HotelSearch(props) {
                     <Button
                       variant="outline-primary"
                       type="submit"
-                      onClick={() => { setHotelIDPicked(availableHotel.id); setismodelshown(true); }}
+                      onClick={() => {
+                        setHotelIDPicked(availableHotel.id);
+                        setismodelshown(true);
+                      }}
                     >
                       Room Selection
                     </Button>

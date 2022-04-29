@@ -27,8 +27,8 @@ function AdminRoom() {
     setBasePrice(e.target.value);
   };
 
-  const createRoom = () => {
-    fetch(
+  const createRoom = async () => {
+    await fetch(
       "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/room",
       {
         headers: {
@@ -38,11 +38,10 @@ function AdminRoom() {
         body: JSON.stringify({
           hname: hotelname,
           type: roomtype,
-          baseprice,
+          baseprice: parseInt(baseprice, 10),
         }),
       }
     )
-      .then((res) => res.json())
       .then((data) => {
         console.log("successful");
         navigate("/dashboard");
