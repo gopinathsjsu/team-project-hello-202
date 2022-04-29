@@ -39,7 +39,7 @@ Every Standup includes discussing the work done, the challenges and whether ther
   5. Create Sidebar
 
 ## TODO Week 1:
-  -- week 1 notes
+  1. notes for week 1
 
 ## TODO Week 2:
 
@@ -56,3 +56,6 @@ Every Standup includes discussing the work done, the challenges and whether ther
 
 ## TODO Week 3:
   1. notes for week 3
+
+## TODO Week 4:
+  1. notes for week 4
