@@ -8,13 +8,14 @@ const listIconStyle = {
   padding: "10px 0px 10px 5px",
 };
 
-function Sidebar({ showSidebar, setJWT, setIsAdmin }) {
+function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
   const onLinkSelect = (selectedKey) => {
     if (selectedKey === "logout") {
       setIsAdmin(false);
       setJWT(null);
     }
   };
+  console.log(isAdmin);
 
   return (
     <>
@@ -28,43 +29,49 @@ function Sidebar({ showSidebar, setJWT, setIsAdmin }) {
           style={listIconStyle}
           onClick={showSidebar}
         />
-
         <div className="sidebar-sticky"></div>
 
-        <Nav.Item>
-          <Nav.Link href="/admin">Create Hotel</Nav.Link>
-        </Nav.Item>
+        {isAdmin ? (
+          <Nav.Item>
+            <Nav.Link href="/admin">Create Hotel</Nav.Link>
+          </Nav.Item>
+        ) : (
+          <></>
+        )}
+
+        {isAdmin ? (
+          <Nav.Item>
+            <Nav.Link href="/adminroom">Create room</Nav.Link>
+          </Nav.Item>
+        ) : (
+          <></>
+        )}
 
         <Nav.Item>
           <Nav.Link href="/dashboard" eventKey="dashboard">
             Dashboard
           </Nav.Link>
         </Nav.Item>
-
         <Nav.Item>
           <Nav.Link eventKey="trips" href="/trips">
             My Trips
           </Nav.Link>
         </Nav.Item>
-
         <Nav.Item>
           <Nav.Link eventKey="rewards" href="/rewards">
             Rewards
           </Nav.Link>
         </Nav.Item>
-
         <Nav.Item>
           <Nav.Link eventKey="signin" href="/login">
             Sign-In
           </Nav.Link>
         </Nav.Item>
-
         <Nav.Item>
           <Nav.Link eventKey="register" href="/signup">
             Register
           </Nav.Link>
         </Nav.Item>
-
         <Nav.Item>
           <Nav.Link eventKey="logout" href="/logout">
             Logout

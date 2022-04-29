@@ -69,6 +69,7 @@ function Dashboard({
   checkOutDate,
   roomCount,
   peopleCount,
+  isAdmin,
 }) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
@@ -125,10 +126,11 @@ function Dashboard({
 
   return (
     <div style={rootStyle}>
-      {sidebar && <Sidebar showSidebar={showSidebar} />}
+      {sidebar && <Sidebar showSidebar={showSidebar} isAdmin={isAdmin} />}
       <Header
         left={[
           <ListIcon style={listIconStyle} eventKey="3" onClick={showSidebar} />,
+          <> {isAdmin ? <h4>Admin</h4> : <span></span>}</>,
         ]}
         right={[
           <div>

@@ -11,7 +11,7 @@ import Trips from "./Trips";
 import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
 
-const LandingPage = ({ }) => {
+const LandingPage = ({}) => {
   const [jwt, setJWT] = useState(JSON.parse(localStorage.getItem("jwt")));
   const [isAdmin, setIsAdmin] = useState(false);
   const [hotels, setHotels] = useState([]);
@@ -46,6 +46,7 @@ const LandingPage = ({ }) => {
                   checkOutDate={checkOutDate}
                   roomCount={roomCount}
                   peopleCount={peopleCount}
+                  isAdmin={isAdmin}
                 />
               ) : (
                 <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
@@ -73,6 +74,7 @@ const LandingPage = ({ }) => {
               checkOutDate={checkOutDate}
               roomCount={roomCount}
               peopleCount={peopleCount}
+              isAdmin={isAdmin}
             />
           }
         />
@@ -81,7 +83,10 @@ const LandingPage = ({ }) => {
           path="logout"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
         />
-        <Route path="trips" element={<Dashboard jwt={jwt} content={<Trips jwt={jwt} />} />} />
+        <Route
+          path="trips"
+          element={<Dashboard jwt={jwt} content={<Trips jwt={jwt} />} />}
+        />
         <Route
           path="login"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
@@ -89,7 +94,16 @@ const LandingPage = ({ }) => {
         <Route path="signup" element={<SignUp />} />
         <Route path="admin" element={<Admin />} />
         <Route path="adminroom" element={<AdminRoom />} />
-        <Route path="sidebar" element={<Sidebar setJWT={setJWT} setIsAdmin={setIsAdmin} />} />
+        <Route
+          path="sidebar"
+          element={
+            <Sidebar
+              setJWT={setJWT}
+              setIsAdmin={setIsAdmin}
+              isAdmin={isAdmin}
+            />
+          }
+        />
         <Route
           path="search"
           element={
@@ -98,6 +112,7 @@ const LandingPage = ({ }) => {
               roomType={roomType}
               setRoomType={setRoomType}
               isSearchFormShown={true}
+              isAdmin={isAdmin}
               content={
                 <HotelSearch
                   availableHotels={hotels}
@@ -141,7 +156,15 @@ const LandingPage = ({ }) => {
         </Route>
         <Route
           path="*"
-          element={<>{jwt ? <Dashboard jwt={jwt} /> : <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}</>}
+          element={
+            <>
+              {jwt ? (
+                <Dashboard jwt={jwt} />
+              ) : (
+                <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
+              )}
+            </>
+          }
         />
       </Routes>
     </BrowserRouter>

@@ -48,14 +48,13 @@ function admin() {
         method: "POST",
         body: JSON.stringify({
           hname: hotelname,
-          location,
-          total_single,
-          total_double,
-          total_suite,
+          location: location,
+          total_single: total_single,
+          total_double: total_double,
+          total_suite: total_suite,
         }),
       }
     )
-      .then((res) => res.json())
       .then((data) => {
         console.log("successful");
         navigate("/dashboard");
