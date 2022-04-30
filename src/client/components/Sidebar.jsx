@@ -11,6 +11,7 @@ const listIconStyle = {
 function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
   const onLinkSelect = (selectedKey) => {
     if (selectedKey === "logout") {
+      localStorage.removeItem("jwt");
       setIsAdmin(false);
       setJWT(null);
     }
@@ -73,7 +74,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="logout" href="/logout">
+          <Nav.Link eventKey="logout" href="/login">
             Logout
           </Nav.Link>
         </Nav.Item>
