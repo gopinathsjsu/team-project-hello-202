@@ -67,15 +67,17 @@ def user():
         try:
             res = User.query.all()
             user_list = []
+            uid = []
             for r in res:
                 user_list.append(r.name)
+                print(f"{r.name}: {r.uid}")
             return make_response(f"Done. Users are {user_list}", 200)
 
         except:
             return make_response("Oops! An error occurred", 404)
 
 
-@app.route("/hotel", methods=["GET", "POST"])
+@app.route("/hotel", methods=["GET", "POST", "DELETE"])
 @cross_origin()
 def hotel():
     if request.method == "POST":
@@ -115,12 +117,24 @@ def hotel():
                 hotel_collection[hotel.hname] = {
                     "id": hotel.hid,
                     "location": hotel.location,
-                    "single rooms": hotel.total_single
+                    "single rooms": hotel.total_single,
+                    "double": hotel.total_double,
+                    "suite": hotel.total_suite
                 }
 
             return make_response(hotel_collection, 200)
         except:
             return make_response("NOT WORKING", 404)
+
+    if request.method == "DELETE":
+        try:
+            data = request.get_json()
+            hotel_id = data["hotelID"]
+            Hotel.query.filter(Hotel.hid == hotel_id).delete()
+            db.session.commit()
+            return make_response("Deleted Successfully!", 200)
+        except:
+            return make_response("Oops, an error occurred!", 404)
 
 
 @app.route("/room", methods=["GET", "POST"])
@@ -129,25 +143,26 @@ def room():
     if request.method == "POST":
         try:
             data = request.get_json()
-            hotel = Hotel.query.filter(Hotel.hname == data['hname'])
-            hid = hotel.hname
-
+            hotel = Hotel.query.filter(Hotel.hname == data['hname']).first()
+            hid = hotel.hid
             type = data["type"]
             baseprice = data["baseprice"]  # has to be specified by the admin
+
             # checking if the type of that room in the particular hotel is more
             # than the total_<type> field in hotel table. If so, return error that maximum have been added
             rooms_added_already = Room.query.filter(Room.hid == hid,
                                                     Room.type == type).all()
-            # hotelroom_type = f"total_{type}"
-            maxm_limit = Hotel.query.filter(Hotel.hid == hid).first()
-            if type == "single":
-                maxm_limit = maxm_limit.total_single
-            if type == "double":
-                maxm_limit = maxm_limit.total_double
-            if type == "suite":
-                maxm_limit = maxm_limit.total_suite
 
-            if rooms_added_already is not None or len(rooms_added_already) >= maxm_limit:
+            # hotelroom_type = f"total_{type}"
+            # HOTEL = Hotel.query.filter(Hotel.hid == hid).first()
+            if type == "single":
+                maxm_limit = hotel.total_single
+            if type == "double":
+                maxm_limit = hotel.total_double
+            if type == "suite":
+                maxm_limit = hotel.total_suite
+
+            if rooms_added_already is not None and len(rooms_added_already) >= maxm_limit:
                 return make_response(f"Maximum limit reached for this room type in hotel {hid}", 405)
             # check if not empty
             if hid and type and baseprice:
@@ -162,7 +177,8 @@ def room():
         except:
             return make_response("An error occurred while trying to add room!", 404)
     if request.method == "GET":
-        res = Room.query.all()
+        hid = request.args.get('hid')
+        res = Room.query.filter(Room.hid == hid).all()
         return_dict = {}
         for r in res:
             return_dict[r.rid] = {"hid": r.hid, "type": r.type, "price": r.baseprice}
@@ -206,11 +222,11 @@ def check_availability():
                 exclude_ids.append(r.rid)
 
             res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
-                ((Reservation.rid == None) | (Room.type == f"{roomType}")) &
+                (Room.type == f"{roomType}") &
                 Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
             ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
             # that fits the criteria
-
+            # print(res)
             count_rooms_in_hotel = defaultdict(int)  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
             return_dict = defaultdict(dict)  # ADD HOTELS WHICH HAVE THRESHOLD ROOM VALUE
             if len(res) < num_rooms:  # if not enough rooms available
@@ -219,19 +235,19 @@ def check_availability():
                 counter = 1
                 for r in res:
                     count_rooms_in_hotel[r.hid] += 1
-                    if count_rooms_in_hotel[r.hid] >= num_rooms:  # if enough rooms available in a hotel
-                        hotel = Hotel.query.filter(Hotel.hid == r.hid).first()
-                        return_dict[r.hid] = {"idx": counter, "id": r.hid, "name": hotel.hname,
-                                              "address": hotel.location,
-                                              "rate": dynamic_pricing(r.baseprice, booking_start)}
+                for hotel_id in count_rooms_in_hotel:
+                    if count_rooms_in_hotel[hotel_id] >= num_rooms:  # if enough rooms available in a hotel
+                        hotel = Hotel.query.filter(Hotel.hid == hotel_id).first()
+                        room = Room.query.filter(Room.hid == hotel_id, Room.type == roomType).first()
+                        # in the dictionary below, rate gives the rate of one room of desired type
+                        return_dict[hotel_id] = {"idx": counter, "id": hotel_id, "name": hotel.hname,
+                                                 "address": hotel.location,
+                                                 "rate": dynamic_pricing(room.baseprice, booking_start)}
                         counter += 1
-                # if not enough rooms available
-                if len(return_dict) == 0:
-                    return make_response(f"Not enough rooms available", 404)
 
                 return make_response(return_dict, 200)
 
-        return make_response("Details not correct!", 404)
+        return make_response("Request details not correct!", 404)
     except:
         return make_response("Failed request!", 404)
 
@@ -248,7 +264,7 @@ def get_room_ids(roomType, start, end, hotelID):
         exclude_ids.append(r.rid)
     res = Room.query.filter(Room.hid == hotelID, Room.rid.not_in(exclude_ids), Room.type == f"{roomType}").all()
     rids = []
-    print(res)
+
     for r in res:
         rids.append(r.rid)
     return rids
@@ -270,8 +286,8 @@ def reservation():
             roomType = data["roomType"]
 
             room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
-            if not room_ids:
-                return make_response("No room found for reservation!", 404)
+            if not room_ids or len(room_ids) < num_rooms:
+                return make_response("Not enough rooms for reservation!", 404)
             # return_dict = defaultdict(dict)
             for room_id in room_ids[:num_rooms]:
                 new_reservation = Reservation(
@@ -363,5 +379,3 @@ def reservation():
 
         except:
             return make_response("Oops, an error occurred!", 404)
-
-
