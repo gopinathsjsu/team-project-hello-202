@@ -2,7 +2,7 @@
 from flask import current_app as app
 from flask import make_response, request
 from collections import defaultdict
-from .models import User, db, Hotel, Room, Reservation
+from .models import User, db, Hotel, Room, Reservation, AI
 from flask_cors import cross_origin
 import json
 
@@ -70,7 +70,6 @@ def user():
             uid = []
             for r in res:
                 user_list.append(r.name)
-                print(f"{r.name}: {r.uid}")
             return make_response(f"Done. Users are {user_list}", 200)
 
         except:
@@ -226,7 +225,7 @@ def check_availability():
                 Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
             ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
             # that fits the criteria
-            # print(res)
+
             count_rooms_in_hotel = defaultdict(int)  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
             return_dict = defaultdict(dict)  # ADD HOTELS WHICH HAVE THRESHOLD ROOM VALUE
             if len(res) < num_rooms:  # if not enough rooms available
