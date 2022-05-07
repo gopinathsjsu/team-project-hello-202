@@ -60,6 +60,3 @@ class Reservation(db.Model):
 
     rewards_earned = db.Column(db.Integer, nullable=False)
     rewards_used = db.Column(db.Integer, nullable=False)
-
-
-

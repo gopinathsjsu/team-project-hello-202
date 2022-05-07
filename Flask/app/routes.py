@@ -2,7 +2,7 @@
 from flask import current_app as app
 from flask import make_response, request
 from collections import defaultdict
-from .models import User, db, Hotel, Room, Reservation#, AI
+from .models import User, db, Hotel, Room, Reservation, AI
 from flask_cors import cross_origin
 import json
 
@@ -290,7 +290,15 @@ def reservation():
             # return_dict = defaultdict(dict)
 
             # get rewards and add it individually for each room booking
+
             rewards_used = User.query.filter(User.uid == uid).first().rewards
+            rewards_left = 0
+
+            if price * num_rooms < rewards_used:
+                rewards_left = rewards_used - price * num_rooms
+                rewards_used = price * num_rooms
+            User.query.filter(User.uid == uid).update(
+                {"rewards": rewards_left})
             individual_reward = rewards_used // num_rooms
             for room_id in room_ids[:num_rooms]:
                 rewards_earned = price * 0.03  # 3% is the points earned for each room's price
@@ -409,5 +417,3 @@ def rewards():
             return make_response(res_dict, 200)
         except:
             return make_response("Oops! An error occurred", 404)
-
-
