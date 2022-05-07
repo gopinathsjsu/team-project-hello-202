@@ -2,7 +2,7 @@
 from flask import current_app as app
 from flask import make_response, request
 from collections import defaultdict
-from .models import User, db, Hotel, Room, Reservation, AI
+from .models import User, db, Hotel, Room, Reservation#, AI
 from flask_cors import cross_origin
 import json
 
@@ -288,7 +288,12 @@ def reservation():
             if not room_ids or len(room_ids) < num_rooms:
                 return make_response("Not enough rooms for reservation!", 404)
             # return_dict = defaultdict(dict)
+
+            # get rewards and add it individually for each room booking
+            rewards_used = User.query.filter(User.uid == uid).first().rewards
+            individual_reward = rewards_used // num_rooms
             for room_id in room_ids[:num_rooms]:
+                rewards_earned = price * 0.03  # 3% is the points earned for each room's price
                 new_reservation = Reservation(
                     rid=int(room_id),
                     uid=int(uid),
@@ -297,9 +302,13 @@ def reservation():
                     end=booking_end,
                     price=float(price),
                     num_people=int(num_people),
-                    num_rooms=int(num_rooms)
+                    num_rooms=int(num_rooms),
+                    rewards_earned=int(rewards_earned),
+                    rewards_used=int(individual_reward)
                 )  # Create an instance of the Hotel class
-
+                rewards = User.query.filter(User.uid == uid).first().rewards
+                User.query.filter(User.uid == uid).update(
+                    {"rewards": rewards + rewards_earned})
                 db.session.add(new_reservation)  # Adds new hotel the database
                 db.session.commit()
 
@@ -331,7 +340,9 @@ def reservation():
                     "end": r.end,
                     "price": r.price,
                     "num_rooms": r.num_rooms,
-                    "num_people": r.num_people
+                    "num_people": r.num_people,
+                    "rewards_earned": r.rewards_earned,
+                    "rewards_used": r.rewards_used
                 }
                 counter += 1
 
@@ -343,6 +354,13 @@ def reservation():
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
+            res = Reservation.query.filter(Reservation.reserve_id == reservation_id).first()
+            rewards_used = res.rewards_used  # rewards used for the reservation
+            rewards_earned = res.rewards_earned  # rewards earned for the reservation
+            rewards = User.query.filter(User.uid == res.uid).first().rewards  # get user rewards
+            new_reward = max(0, rewards + rewards_used - rewards_earned)  # calculate new rewards
+            User.query.filter(User.uid == res.uid).update({"rewards": new_reward})  # update rewards
+            # print("here")
             Reservation.query.filter(Reservation.reserve_id == reservation_id).delete()
             db.session.commit()
             return make_response("Deleted Successfully!", 200)
@@ -378,3 +396,18 @@ def reservation():
 
         except:
             return make_response("Oops, an error occurred!", 404)
+
+
+@app.route("/rewards", methods=["GET"])
+@cross_origin()
+def rewards():
+    if request.method == "GET":
+        try:
+            uid = request.args.get("userID")
+            res = User.query.filter(User.uid == uid).first()
+            res_dict = {"rewards": res.rewards}
+            return make_response(res_dict, 200)
+        except:
+            return make_response("Oops! An error occurred", 404)
+
+
