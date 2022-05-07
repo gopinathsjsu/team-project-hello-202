@@ -275,8 +275,15 @@ function HotelSearch(props) {
                               <Popover.Body>
                                 Your total for <strong>{types.name}</strong>{" "}
                                 will be
-                                <strong> ${types.rate}</strong>. Hope you enjoy
-                                your stay at our hotel!
+                                <strong> ${types.rate}</strong>. Your rewards
+                                are{" "}
+                                <strong>
+                                  {localStorage.get("userRewards")}
+                                </strong>
+                                . If you'd like to use it, the price will be{" "}
+                                <strong>
+                                  {types.rate - localStorage.get("userRewards")}
+                                </strong>
                               </Popover.Body>
                             </Popover>
                           }
@@ -364,7 +371,6 @@ function HotelSearch(props) {
                       </div>
                     </div>
                   </Card.Body>
-                  <Card.Footer></Card.Footer>
                 </Card>
               ))}
           </div>
