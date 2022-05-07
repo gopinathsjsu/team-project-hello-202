@@ -338,7 +338,19 @@ function HotelSearch(props) {
                                 <input
                                   type="checkbox"
                                   class="custom-control-input"
-                                  id="defaultInline1"
+                                  id={types.id + amenitype.id}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      types.rate = types.rate + amenitype.rate;
+                                    } else {
+                                      types.rate = types.rate - amenitype.rate;
+                                    }
+                                    const newTypeOfRooms = {
+                                      ...typeOfRooms,
+                                    };
+                                    newTypeOfRooms[types.id] = types;
+                                    setTypeOfRooms(newTypeOfRooms);
+                                  }}
                                 ></input>
                                 <label
                                   class="custom-control-label"
