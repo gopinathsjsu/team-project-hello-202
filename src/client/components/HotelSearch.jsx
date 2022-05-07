@@ -39,8 +39,7 @@ const bookRoomQuery = (
   roomCount,
   peopleCount,
   roomType,
-  navigate,
-  setismodelshown
+  navigate
 ) => {
   fetch(
     "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
@@ -64,7 +63,6 @@ const bookRoomQuery = (
   )
     .then((data) => {
       navigate("/search");
-      setismodelshown(false);
     })
     .catch((exception) => {
       console.log("Error occurred:");
@@ -87,6 +85,8 @@ function HotelSearch(props) {
   const [availableHotels, setAvailableHotels] = useState(props.availableHotels);
   const [ismodalshown, setismodelshown] = useState(false);
   const [isbookmodalshown, setisbookmodalshown] = useState(false);
+  const handlebookClose = () => setisbookmodalshown(false);
+  const handlebookShow = () => setisbookmodalshown(true);
   const [hotelIDPicked, setHotelIDPicked] = useState(null);
 
   const [typeOfRooms, setTypeOfRooms] = useState({
@@ -299,6 +299,7 @@ function HotelSearch(props) {
                             height: 60,
                           }}
                           onClick={() => {
+                            handlebookShow();
                             const roomTypeParsed = types.name.includes("Single")
                               ? "single"
                               : types.name.includes("Double")
@@ -314,13 +315,13 @@ function HotelSearch(props) {
                               roomCount,
                               peopleCount,
                               roomTypeParsed,
-                              navigate,
-                              setismodelshown
+                              navigate
                             );
                           }}
                         >
                           Book
                         </Button>
+
                         <div
                           style={{
                             alignItems: "start",
@@ -373,6 +374,18 @@ function HotelSearch(props) {
         checkInDate,
         checkOutDate
       )}
+
+      <Modal show={isbookmodalshown} onHide={handlebookClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Booking Successful!!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Your room has been booked!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handlebookClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <div style={{ margin: "auto" }}>
         {Object.values(availableHotels) &&
           Object.values(availableHotels).map((availableHotel) => (
