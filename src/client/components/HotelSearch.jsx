@@ -62,6 +62,12 @@ const bookRoomQuery = (
     }
   )
     .then((data) => {
+      console.log(data);
+      fetch(
+        `http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/rewards?userID=${userID}`
+      )
+        .then((res) => res.json())
+        .then((respo) => localStorage.setItem("userRewards", respo["rewards"]));
       navigate("/search");
     })
     .catch((exception) => {
@@ -278,11 +284,12 @@ function HotelSearch(props) {
                                 <strong> ${types.rate}</strong>. Your rewards
                                 are{" "}
                                 <strong>
-                                  {localStorage.get("userRewards")}
+                                  {localStorage.getItem("userRewards")}
                                 </strong>
                                 . If you'd like to use it, the price will be{" "}
                                 <strong>
-                                  {types.rate - localStorage.get("userRewards")}
+                                  {types.rate -
+                                    localStorage.getItem("userRewards")}
                                 </strong>
                               </Popover.Body>
                             </Popover>
@@ -352,6 +359,7 @@ function HotelSearch(props) {
                                     } else {
                                       types.rate = types.rate - amenitype.rate;
                                     }
+
                                     const newTypeOfRooms = {
                                       ...typeOfRooms,
                                     };

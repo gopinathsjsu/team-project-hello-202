@@ -105,8 +105,17 @@ const cancelTripQuery = (reservationID, trips, setTrips) =>
   )
     .then((res) => {
       if (res.ok) {
-        delete trips[reservationID];
-        setTrips(trips);
+        fetch(
+          `http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/rewards?userID=${localStorage.getItem(
+            "jwt"
+          )}`
+        )
+          .then((res) => res.json())
+          .then((respo) => {
+            localStorage.setItem("userRewards", respo["rewards"]);
+            delete trips[reservationID];
+            setTrips(trips);
+          });
       } else {
         console.log("Error occurred:");
         console.log(res);
