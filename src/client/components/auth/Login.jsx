@@ -38,7 +38,7 @@ function Login({ setJWT, setIsAdmin }) {
       .then((res) => res.json())
       .then((data) => {
         setJWT(data.userID);
-        localStorage.setItem('jwt', data.userID);
+        localStorage.setItem("jwt", data.userID);
         setIsAdmin(data.isAdmin);
         navigate("/dashboard");
       })
