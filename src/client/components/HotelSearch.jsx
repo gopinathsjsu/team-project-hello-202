@@ -76,6 +76,52 @@ const bookRoomQuery = (
     });
 };
 
+const bookRoomWithRewardsQuery = (
+  userID,
+  hotelID,
+  rate,
+  checkInDate,
+  checkOutDate,
+  destination,
+  roomCount,
+  peopleCount,
+  roomType,
+  navigate
+) => {
+  fetch(
+    "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        userID,
+        hotelID,
+        numRooms: roomCount,
+        numPeople: peopleCount,
+        price: rate - localStorage.getItem("userRewards"),
+        checkInDate,
+        checkOutDate,
+        destination,
+        roomType,
+      }),
+    }
+  )
+    .then((data) => {
+      console.log(data);
+      fetch(
+        `http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/rewards?userID=${userID}`
+      )
+        .then((res) => res.json())
+        .then((respo) => localStorage.setItem("userRewards", respo["rewards"]));
+      navigate("/search");
+    })
+    .catch((exception) => {
+      console.log("Error occurred:");
+      console.log(exception);
+    });
+};
 function HotelSearch(props) {
   const {
     destination,
@@ -334,6 +380,37 @@ function HotelSearch(props) {
                           }}
                         >
                           Book
+                        </Button>
+
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          style={{
+                            marginTop: 30,
+                            height: 60,
+                          }}
+                          onClick={() => {
+                            handlebookShow();
+                            const roomTypeParsed = types.name.includes("Single")
+                              ? "single"
+                              : types.name.includes("Double")
+                              ? "double"
+                              : "suite";
+                            bookRoomWithRewardsQuery(
+                              userID,
+                              hotelID,
+                              types.rate,
+                              checkInDate,
+                              checkOutDate,
+                              destination,
+                              roomCount,
+                              peopleCount,
+                              roomTypeParsed,
+                              navigate
+                            );
+                          }}
+                        >
+                          Book with rewards
                         </Button>
 
                         <div
