@@ -40,27 +40,27 @@ Team Members:
   3. Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
 
 - Frontend
-  1. Create Routing
-  2. Create SignIn and SignUp pages
-  3. Create Dashboard related components
-  4. Create Header & Footer
-  5. Create Sidebar
-  6. Create Routing on Sidebar
-  7. Add Links to Sidebar
-  8. Create Hotel Search
-  9. Create Hotel add for Admin
-  10. Create Room add for Admin
-  11. Create My Trips page
-  12. Add Card View for users Trips
-  13. Add Pagination on My Trips
-  14. Create Booking Modal
-  15. Add different rooms on booking
-  16. Add Card View for different rooms
-  17. Add Amenities on Room Book
-  18. Add Pagination on Hotel search
-  19. Add Dynamic price addition on checking amenities
-  20. Create Rewards on Room book
-  21. Add Dynamic Price Deduction on room book using rewards
+  - Create Routing
+  - Create SignIn and SignUp pages
+  - Create Dashboard related components
+  - Create Header & Footer
+  - Create Sidebar
+  - Create Routing on Sidebar
+  - Add Links to Sidebar
+  - Create Hotel Search
+  - Create Hotel add for Admin
+  - Create Room add for Admin
+  - Create My Trips page
+  - Add Card View for users Trips
+  - Add Pagination on My Trips
+  - Create Booking Modal
+  - Add different rooms on booking
+  - Add Card View for different rooms
+  - Add Amenities on Room Book
+  - Add Pagination on Hotel search
+  - Add Dynamic price addition on checking amenities
+  - Create Rewards on Room book
+  - Add Dynamic Price Deduction on room book using rewards
 
 ## TODO Week 1:
   1. notes for week 1
