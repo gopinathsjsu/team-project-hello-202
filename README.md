@@ -35,9 +35,9 @@ Team Members:
 ## TASKS COMPLETED:
 
 - Backend
-  1. Explore SQLAlchemy
-  2. Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
-  3. Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
+  - Explore SQLAlchemy
+  - Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
+  - Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
 
 - Frontend
   - Create Routing
@@ -63,23 +63,23 @@ Team Members:
   - Add Dynamic Price Deduction on room book using rewards
 
 ## TODO Week 1:
-  1. notes for week 1
+  - notes for week 1
 
 ## TODO Week 2:
 
 - Backend
-  1. Port the db onto aws services.
-  2. CRUD operations.
-  3. Load balancing
+  - Port the db onto aws services.
+  - CRUD operations.
+  - Load balancing
 
 - Frontend
-  1. Create Hotel Search Page and related components
-  2. Create Hotel Detail Page and related components
-  3. Create Bookings/BookingHistory Page and related components
-  4. Complete Routing
+  - Create Hotel Search Page and related components
+  - Create Hotel Detail Page and related components
+  - Create Bookings/BookingHistory Page and related components
+  - Complete Routing
 
 ## TODO Week 3:
-  1. notes for week 3
+  - notes for week 3
 
 ## TODO Week 4:
-  1. notes for week 4
+  - notes for week 4
