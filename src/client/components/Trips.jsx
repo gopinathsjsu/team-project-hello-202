@@ -194,7 +194,8 @@ function Trips({ jwt }) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    setAvailableHotels(trips.slice(indOfFirstEpi, indOfLastEpi));
+    // setAvailableHotels(trips.slice(indOfFirstEpi, indOfLastEpi));
+    setTrips(Object.values(trips).slice(indOfFirstEpi, indOfLastEpi));
   };
 
   useEffect(() => {
