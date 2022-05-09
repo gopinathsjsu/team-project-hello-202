@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal } from "react-bootstrap";
-
+import { Modal, Container, CardGroup } from "react-bootstrap";
 import {
   Search as SearchIcon,
   Calendar as CalendarIcon,
@@ -21,6 +20,8 @@ const rootStyle = {
 
 const hotelImageStyle = {
   width: 250,
+  borderRadius: 20,
+  boxShadow: 20,
 };
 
 const dropdownEntrySelectorStyle = {
@@ -251,111 +252,122 @@ function Trips({ jwt }) {
       <div style={{ margin: "auto" }}>
         {Object.values(paginatedTrips).length > 0 ? (
           Object.values(paginatedTrips).map((trip) => (
-            <Card
-              key={trip.reservation_id}
-              style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
-            >
-              <Card.Header>
-                <span style={{ fontWeight: "bold" }}>{trip.hname}</span>
-              </Card.Header>
-              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                  style={hotelImageStyle}
-                />
-                <div
+            <Container fluid className="text-center">
+              <CardGroup className="m-5 d-block">
+                <Card
+                  className="m-5 border-0 shadow"
+                  key={trip.reservation_id}
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100vw",
+                    width: "75vw",
+                    margin: "2rem",
+                    textAlign: "center",
+                    borderRadius: 35,
+                    boxShadow: 30,
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      padding: "0px 0px 0px 10px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Card.Text>Room Type: {trip.roomtype}</Card.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      padding: "0px 0px 0px 10px",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <Card.Text>{trip.location}</Card.Text>
-                    <Card.Text>
-                      Number of people staying: {trip.num_people}
-                    </Card.Text>
-                    <Card.Text>
-                      Number of rooms booked: {trip.num_rooms}
-                    </Card.Text>
-                    <Card.Text>Price: {trip.price}</Card.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <div>
-                      <div style={checkInInputContainerStyle}>
-                        <Datetime
-                          inputProps={checkInDateTimeInputProps}
-                          onChange={(e) =>
-                            setCheckInDate(e, trip.reservation_id)
-                          }
-                          value={new Date(trip.start)}
-                        />
-                        <CalendarIcon
-                          style={calendarIconStyle}
-                          role="button"
-                          tabIndex="-1"
-                        />
-                      </div>
-                      <div style={checkOutInputContainerStyle}>
-                        <Datetime
-                          inputProps={checkOutDateTimeInputProps}
-                          onChange={(e) =>
-                            setCheckOutDate(e, trip.reservation_id)
-                          }
-                          value={new Date(trip.end)}
-                        />
-                        <CalendarIcon
-                          style={calendarIconStyle}
-                          role="button"
-                          tabIndex="-1"
-                        />
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline-primary"
-                      type="submit"
-                      onClick={() => onUpdateClick(trip.reservation_id)}
-                    >
-                      Update
-                    </Button>
-                    <Button
-                      variant="outline-primary"
-                      type="submit"
-                      onClick={() => {
-                        onCancelClick(trip.reservation_id);
-                        handlecancelShow();
+                  <Card.Header>
+                    <span style={{ fontWeight: "bold" }}>{trip.hname}</span>
+                  </Card.Header>
+                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                    <Image
+                      className="m-7 border-0 shadow"
+                      src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                      style={hotelImageStyle}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100vw",
                       }}
                     >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-              <Card.Footer></Card.Footer>
-            </Card>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          padding: "0px 0px 0px 10px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Card.Text>Room Type: {trip.roomtype}</Card.Text>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          padding: "0px 0px 0px 10px",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Card.Text>{trip.location}</Card.Text>
+                        <Card.Text>
+                          Number of people staying: {trip.num_people}
+                        </Card.Text>
+                        <Card.Text>
+                          Number of rooms booked: {trip.num_rooms}
+                        </Card.Text>
+                        <Card.Text>Price: {trip.price}</Card.Text>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <div>
+                          <div style={checkInInputContainerStyle}>
+                            <Datetime
+                              inputProps={checkInDateTimeInputProps}
+                              onChange={(e) =>
+                                setCheckInDate(e, trip.reservation_id)
+                              }
+                              value={new Date(trip.start)}
+                            />
+                            <CalendarIcon
+                              style={calendarIconStyle}
+                              role="button"
+                              tabIndex="-1"
+                            />
+                          </div>
+                          <div style={checkOutInputContainerStyle}>
+                            <Datetime
+                              inputProps={checkOutDateTimeInputProps}
+                              onChange={(e) =>
+                                setCheckOutDate(e, trip.reservation_id)
+                              }
+                              value={new Date(trip.end)}
+                            />
+                            <CalendarIcon
+                              style={calendarIconStyle}
+                              role="button"
+                              tabIndex="-1"
+                            />
+                          </div>
+                        </div>
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          onClick={() => onUpdateClick(trip.reservation_id)}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          onClick={() => {
+                            onCancelClick(trip.reservation_id);
+                            handlecancelShow();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </CardGroup>
+            </Container>
           ))
         ) : (
           <></>
