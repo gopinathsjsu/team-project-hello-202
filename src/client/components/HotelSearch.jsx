@@ -292,7 +292,11 @@ function HotelSearch(props) {
               Object.values(typeOfRooms).map((types) => (
                 <Card
                   key={types.id}
-                  style={{ margin: "2rem", textAlign: "center" }}
+                  style={{
+                    margin: "2rem",
+                    textAlign: "center",
+                    height: 300,
+                  }}
                 >
                   <Card.Header>
                     <span style={{ fontWeight: "bold" }}> {types.name}</span>
@@ -314,7 +318,15 @@ function HotelSearch(props) {
                           justifyContent: "space-evenly",
                         }}
                       >
-                        <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            height: 200,
+                            width: 120,
+                            marginBottom: 30,
+                          }}
+                        >
                           <OverlayTrigger
                             trigger="click"
                             placement="bottom"
