@@ -292,7 +292,11 @@ function HotelSearch(props) {
               Object.values(typeOfRooms).map((types) => (
                 <Card
                   key={types.id}
-                  style={{ margin: "2rem", textAlign: "center" }}
+                  style={{
+                    margin: "2rem",
+                    textAlign: "center",
+                    height: 300,
+                  }}
                 >
                   <Card.Header>
                     <span style={{ fontWeight: "bold" }}> {types.name}</span>
@@ -314,105 +318,118 @@ function HotelSearch(props) {
                           justifyContent: "space-evenly",
                         }}
                       >
-                        <OverlayTrigger
-                          trigger="click"
-                          placement="bottom"
-                          overlay={
-                            <Popover id="popover-basic">
-                              <Popover.Header as="h3">
-                                <div>
-                                  <strong>${types.rate}</strong>
-                                </div>
-                              </Popover.Header>
-                              <Popover.Body>
-                                Your total for <strong>{types.name}</strong>{" "}
-                                will be
-                                <strong> ${types.rate}</strong>. Your rewards
-                                are{" "}
-                                <strong>
-                                  {localStorage.getItem("userRewards")}
-                                </strong>
-                                . If you'd like to use it, the price will be{" "}
-                                <strong>
-                                  {types.rate -
-                                    localStorage.getItem("userRewards")}
-                                </strong>
-                              </Popover.Body>
-                            </Popover>
-                          }
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            height: 200,
+                            width: 120,
+                            marginBottom: 30,
+                          }}
                         >
+                          <OverlayTrigger
+                            trigger="click"
+                            placement="bottom"
+                            overlay={
+                              <Popover id="popover-basic">
+                                <Popover.Header as="h3">
+                                  <div>
+                                    <strong>${types.rate}</strong>
+                                  </div>
+                                </Popover.Header>
+                                <Popover.Body>
+                                  Your total for <strong>{types.name}</strong>{" "}
+                                  will be
+                                  <strong> ${types.rate}</strong>. Your rewards
+                                  are{" "}
+                                  <strong>
+                                    {localStorage.getItem("userRewards")}
+                                  </strong>
+                                  . If you'd like to use it, the price will be{" "}
+                                  <strong>
+                                    {types.rate -
+                                      localStorage.getItem("userRewards")}
+                                  </strong>
+                                </Popover.Body>
+                              </Popover>
+                            }
+                          >
+                            <Button
+                              style={{
+                                marginTop: 30,
+                                height: 60,
+                              }}
+                              variant="success"
+                            >
+                              View Rates
+                            </Button>
+                          </OverlayTrigger>
                           <Button
+                            variant="outline-primary"
+                            type="submit"
                             style={{
                               marginTop: 30,
                               height: 60,
                             }}
-                            variant="success"
+                            onClick={() => {
+                              handlebookShow();
+                              const roomTypeParsed = types.name.includes(
+                                "Single"
+                              )
+                                ? "single"
+                                : types.name.includes("Double")
+                                ? "double"
+                                : "suite";
+                              bookRoomQuery(
+                                userID,
+                                hotelID,
+                                types.rate,
+                                checkInDate,
+                                checkOutDate,
+                                destination,
+                                roomCount,
+                                peopleCount,
+                                roomTypeParsed,
+                                navigate
+                              );
+                            }}
                           >
-                            View Rates
+                            Book
                           </Button>
-                        </OverlayTrigger>
-                        <Button
-                          variant="outline-primary"
-                          type="submit"
-                          style={{
-                            marginTop: 30,
-                            height: 60,
-                          }}
-                          onClick={() => {
-                            handlebookShow();
-                            const roomTypeParsed = types.name.includes("Single")
-                              ? "single"
-                              : types.name.includes("Double")
-                              ? "double"
-                              : "suite";
-                            bookRoomQuery(
-                              userID,
-                              hotelID,
-                              types.rate,
-                              checkInDate,
-                              checkOutDate,
-                              destination,
-                              roomCount,
-                              peopleCount,
-                              roomTypeParsed,
-                              navigate
-                            );
-                          }}
-                        >
-                          Book
-                        </Button>
 
-                        <Button
-                          variant="outline-primary"
-                          type="submit"
-                          style={{
-                            marginTop: 30,
-                            height: 60,
-                          }}
-                          onClick={() => {
-                            handlebookShow();
-                            const roomTypeParsed = types.name.includes("Single")
-                              ? "single"
-                              : types.name.includes("Double")
-                              ? "double"
-                              : "suite";
-                            bookRoomWithRewardsQuery(
-                              userID,
-                              hotelID,
-                              types.rate,
-                              checkInDate,
-                              checkOutDate,
-                              destination,
-                              roomCount,
-                              peopleCount,
-                              roomTypeParsed,
-                              navigate
-                            );
-                          }}
-                        >
-                          Book with rewards
-                        </Button>
-
+                          <Button
+                            variant="outline-primary"
+                            type="submit"
+                            style={{
+                              marginTop: 30,
+                              height: 60,
+                            }}
+                            onClick={() => {
+                              handlebookShow();
+                              const roomTypeParsed = types.name.includes(
+                                "Single"
+                              )
+                                ? "single"
+                                : types.name.includes("Double")
+                                ? "double"
+                                : "suite";
+                              bookRoomWithRewardsQuery(
+                                userID,
+                                hotelID,
+                                types.rate,
+                                checkInDate,
+                                checkOutDate,
+                                destination,
+                                roomCount,
+                                peopleCount,
+                                roomTypeParsed,
+                                navigate
+                              );
+                            }}
+                          >
+                            Book with rewards
+                          </Button>
+                        </div>
                         <div
                           style={{
                             alignItems: "start",
