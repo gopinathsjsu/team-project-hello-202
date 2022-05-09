@@ -20,6 +20,7 @@ Team Members:
 - ***Respect***: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
 -  ***Feedback***: We developed a habit of giving feedback to the team after every commit, so that we can create the best user experience with zero road blocks. Apart from that we as a team have modified our application based on the suggestions by the team.
 - ***Simplicity***: As a team we have focused on simplicity in our project from day one by delivering only the essential and useful, so that we can remove the unnecessary clutter and make things less complicated.
+- ***Courage***: We as a team of Programmers have objectively evaluated our own results without making excuses and were always ready to respond to changes.
   
 <b>How the team kept the core value? <br></b><br>
 - Team meetings in which diagrams were made to convey the structure of the tables in the back-end <br>
@@ -28,8 +29,20 @@ Team Members:
 
 ## TECHSTACK:
 
-- BACKEND: SQLAlchemy, FlaskSqlAlchemy, EC2, RDS
-- FRONTEND: Webpack, NPM, ReactJS, CSS, Babel, 
+- Frontend: ReactJS, Webpack, NPM, CSS, Babel
+- Backend: FlaskSqlAlchemy, EC2, RDS
+- Database: SQLAlchemy
+- REST API: Postman(Testing APIs)
+- Cloud: AWS EC2 Cluster
+
+## Schedule for Scrum Meetings:
+
+- Thursday
+- Sunday
+
+## Project Management Tool:
+
+***SCRUM***
 
 
 ## TASKS COMPLETED:
