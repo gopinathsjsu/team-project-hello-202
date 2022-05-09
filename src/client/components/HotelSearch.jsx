@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { useNavigate } from "react-router-dom";
+import { CardGroup, Container } from "react-bootstrap";
 
 const rootStyle = {
   display: "flex",
@@ -20,10 +21,12 @@ const roomInputContainerStyle = {
 
 const hotelImageStyle = {
   width: 250,
+  borderRadius: 20,
 };
 
 const roomImageStyle = {
   width: 250,
+  borderRadius: 20,
 };
 
 const NUM_CARDS_PER_PAGE = 6;
@@ -290,190 +293,208 @@ function HotelSearch(props) {
           <div style={{ margin: "auto" }}>
             {Object.values(typeOfRooms) &&
               Object.values(typeOfRooms).map((types) => (
-                <Card
-                  key={types.id}
-                  style={{
-                    margin: "2rem",
-                    textAlign: "center",
-                    height: 300,
-                  }}
-                >
-                  <Card.Header>
-                    <span style={{ fontWeight: "bold" }}> {types.name}</span>
-                  </Card.Header>
-                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                    <Image src={types.imgsrc} style={roomImageStyle} />
-                    <div
+                <Container fluid className="text-center">
+                  <CardGroup className="m-7 d-block">
+                    <Card
+                      className="m-5 border-0 shadow"
+                      key={types.id}
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "100vw",
+                        margin: "2rem",
+                        textAlign: "center",
+                        height: 300,
+                        borderRadius: 35,
                       }}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          flexWrap: "wrap",
-                          justifyContent: "space-evenly",
-                        }}
+                      <Card.Header>
+                        <span style={{ fontWeight: "bold" }}>
+                          {" "}
+                          {types.name}
+                        </span>
+                      </Card.Header>
+                      <Card.Body
+                        style={{ display: "flex", flexDirection: "row" }}
                       >
+                        <Image
+                          className="m-4 border-0 shadow"
+                          src={types.imgsrc}
+                          style={roomImageStyle}
+                        />
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "column",
-                            height: 200,
-                            width: 120,
-                            marginBottom: 30,
+                            width: "100vw",
                           }}
                         >
-                          <OverlayTrigger
-                            trigger="click"
-                            placement="bottom"
-                            overlay={
-                              <Popover id="popover-basic">
-                                <Popover.Header as="h3">
-                                  <div>
-                                    <strong>${types.rate}</strong>
-                                  </div>
-                                </Popover.Header>
-                                <Popover.Body>
-                                  Your total for <strong>{types.name}</strong>{" "}
-                                  will be
-                                  <strong> ${types.rate}</strong>. Your rewards
-                                  are{" "}
-                                  <strong>
-                                    {localStorage.getItem("userRewards")}
-                                  </strong>
-                                  . If you'd like to use it, the price will be{" "}
-                                  <strong>
-                                    {types.rate -
-                                      localStorage.getItem("userRewards")}
-                                  </strong>
-                                </Popover.Body>
-                              </Popover>
-                            }
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              flexWrap: "wrap",
+                              justifyContent: "space-evenly",
+                            }}
                           >
-                            <Button
+                            <div
                               style={{
-                                marginTop: 30,
-                                height: 60,
+                                display: "flex",
+                                flexDirection: "column",
+                                height: 200,
+                                width: 120,
+                                marginBottom: 30,
                               }}
-                              variant="success"
                             >
-                              View Rates
-                            </Button>
-                          </OverlayTrigger>
-                          <Button
-                            variant="outline-primary"
-                            type="submit"
-                            style={{
-                              marginTop: 30,
-                              height: 60,
-                            }}
-                            onClick={() => {
-                              handlebookShow();
-                              const roomTypeParsed = types.name.includes(
-                                "Single"
-                              )
-                                ? "single"
-                                : types.name.includes("Double")
-                                ? "double"
-                                : "suite";
-                              bookRoomQuery(
-                                userID,
-                                hotelID,
-                                types.rate,
-                                checkInDate,
-                                checkOutDate,
-                                destination,
-                                roomCount,
-                                peopleCount,
-                                roomTypeParsed,
-                                navigate
-                              );
-                            }}
-                          >
-                            Book
-                          </Button>
-
-                          <Button
-                            variant="outline-primary"
-                            type="submit"
-                            style={{
-                              marginTop: 30,
-                              height: 60,
-                            }}
-                            onClick={() => {
-                              handlebookShow();
-                              const roomTypeParsed = types.name.includes(
-                                "Single"
-                              )
-                                ? "single"
-                                : types.name.includes("Double")
-                                ? "double"
-                                : "suite";
-                              bookRoomWithRewardsQuery(
-                                userID,
-                                hotelID,
-                                types.rate,
-                                checkInDate,
-                                checkOutDate,
-                                destination,
-                                roomCount,
-                                peopleCount,
-                                roomTypeParsed,
-                                navigate
-                              );
-                            }}
-                          >
-                            Book with rewards
-                          </Button>
-                        </div>
-                        <div
-                          style={{
-                            alignItems: "start",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          {amenities &&
-                            amenities.map((amenitype) => (
-                              <div
-                                class="custom-control custom-checkbox custom-control-inline"
-                                key={amenitype.id}
+                              <OverlayTrigger
+                                trigger="click"
+                                placement="bottom"
+                                overlay={
+                                  <Popover id="popover-basic">
+                                    <Popover.Header as="h3">
+                                      <div>
+                                        <strong>${types.rate}</strong>
+                                      </div>
+                                    </Popover.Header>
+                                    <Popover.Body>
+                                      Your total for{" "}
+                                      <strong>{types.name}</strong> will be
+                                      <strong> ${types.rate}</strong>. Your
+                                      rewards are{" "}
+                                      <strong>
+                                        {localStorage.getItem("userRewards")}
+                                      </strong>
+                                      . If you'd like to use it, the price will
+                                      be{" "}
+                                      <strong>
+                                        {types.rate -
+                                          localStorage.getItem("userRewards")}
+                                      </strong>
+                                    </Popover.Body>
+                                  </Popover>
+                                }
                               >
-                                <input
-                                  type="checkbox"
-                                  class="custom-control-input"
-                                  id={types.id + amenitype.id}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      types.rate = types.rate + amenitype.rate;
-                                    } else {
-                                      types.rate = types.rate - amenitype.rate;
-                                    }
-
-                                    const newTypeOfRooms = {
-                                      ...typeOfRooms,
-                                    };
-                                    newTypeOfRooms[types.id] = types;
-                                    setTypeOfRooms(newTypeOfRooms);
+                                <Button
+                                  style={{
+                                    marginTop: 30,
+                                    height: 60,
                                   }}
-                                ></input>
-                                <label
-                                  class="custom-control-label"
-                                  for="defaultInline1"
+                                  variant="success"
                                 >
-                                  <div>{amenitype.name}</div>
-                                </label>
-                              </div>
-                            ))}
+                                  View Rates
+                                </Button>
+                              </OverlayTrigger>
+                              <Button
+                                variant="outline-primary"
+                                type="submit"
+                                style={{
+                                  marginTop: 30,
+                                  height: 60,
+                                }}
+                                onClick={() => {
+                                  handlebookShow();
+                                  const roomTypeParsed = types.name.includes(
+                                    "Single"
+                                  )
+                                    ? "single"
+                                    : types.name.includes("Double")
+                                    ? "double"
+                                    : "suite";
+                                  bookRoomQuery(
+                                    userID,
+                                    hotelID,
+                                    types.rate,
+                                    checkInDate,
+                                    checkOutDate,
+                                    destination,
+                                    roomCount,
+                                    peopleCount,
+                                    roomTypeParsed,
+                                    navigate
+                                  );
+                                }}
+                              >
+                                Book
+                              </Button>
+
+                              <Button
+                                variant="outline-primary"
+                                type="submit"
+                                style={{
+                                  marginTop: 30,
+                                  height: 60,
+                                }}
+                                onClick={() => {
+                                  handlebookShow();
+                                  const roomTypeParsed = types.name.includes(
+                                    "Single"
+                                  )
+                                    ? "single"
+                                    : types.name.includes("Double")
+                                    ? "double"
+                                    : "suite";
+                                  bookRoomWithRewardsQuery(
+                                    userID,
+                                    hotelID,
+                                    types.rate,
+                                    checkInDate,
+                                    checkOutDate,
+                                    destination,
+                                    roomCount,
+                                    peopleCount,
+                                    roomTypeParsed,
+                                    navigate
+                                  );
+                                }}
+                              >
+                                Book with rewards
+                              </Button>
+                            </div>
+                            <div
+                              style={{
+                                alignItems: "start",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              {amenities &&
+                                amenities.map((amenitype) => (
+                                  <div
+                                    class="custom-control custom-checkbox custom-control-inline"
+                                    key={amenitype.id}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      id={types.id + amenitype.id}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          types.rate =
+                                            types.rate + amenitype.rate;
+                                        } else {
+                                          types.rate =
+                                            types.rate - amenitype.rate;
+                                        }
+
+                                        const newTypeOfRooms = {
+                                          ...typeOfRooms,
+                                        };
+                                        newTypeOfRooms[types.id] = types;
+                                        setTypeOfRooms(newTypeOfRooms);
+                                      }}
+                                    ></input>
+                                    <label
+                                      class="custom-control-label"
+                                      for="defaultInline1"
+                                    >
+                                      <div>{amenitype.name}</div>
+                                    </label>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
+                      </Card.Body>
+                    </Card>
+                  </CardGroup>
+                </Container>
               ))}
           </div>
         </Modal.Body>
@@ -509,60 +530,69 @@ function HotelSearch(props) {
       <div style={{ margin: "auto" }}>
         {Object.values(availableHotels) &&
           Object.values(availableHotels).map((availableHotel) => (
-            <Card
-              key={availableHotel.id}
-              style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
-            >
-              <Card.Header>
-                <span style={{ fontWeight: "bold" }}>
-                  {" "}
-                  {availableHotel.name}
-                </span>
-              </Card.Header>
-              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                  style={hotelImageStyle}
-                />
-                <div
+            <Container fluid className="text-center">
+              <CardGroup className="m-5 d-block">
+                <Card
+                  className="m-7 border-0 shadow"
+                  key={availableHotel.id}
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100vw",
+                    width: "75vw",
+                    margin: "2rem",
+                    textAlign: "center",
+                    borderRadius: 35,
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      padding: "0px 0px 0px 10px",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <Card.Text>{availableHotel.address}</Card.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <Button
-                      variant="outline-primary"
-                      type="submit"
-                      onClick={() => {
-                        setHotelIDPicked(availableHotel.id);
-                        setismodelshown(true);
+                  <Card.Header>
+                    <span style={{ fontWeight: "bold" }}>
+                      {" "}
+                      {availableHotel.name}
+                    </span>
+                  </Card.Header>
+                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                    <Image
+                      src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                      style={hotelImageStyle}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100vw",
                       }}
                     >
-                      Room Selection
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-              <Card.Footer></Card.Footer>
-            </Card>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          padding: "0px 0px 0px 10px",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Card.Text>{availableHotel.address}</Card.Text>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <Button
+                          variant="outline-primary"
+                          type="submit"
+                          onClick={() => {
+                            setHotelIDPicked(availableHotel.id);
+                            setismodelshown(true);
+                          }}
+                        >
+                          Room Selection
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </CardGroup>
+            </Container>
           ))}
       </div>
 
