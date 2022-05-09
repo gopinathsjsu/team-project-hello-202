@@ -58,7 +58,7 @@ const checkOutInputContainerStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const queryReservations = async (jwt, setTrips) =>
+const queryReservations = async (jwt, setTrips, setPaginatedTrips) =>
   await fetch(
     "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=" +
       jwt,
@@ -77,6 +77,14 @@ const queryReservations = async (jwt, setTrips) =>
             parsedTrips[value.reservation_id] = value;
           }
           setTrips(parsedTrips);
+          let indOfLastEpi = 0;
+          let indOfFirstEpi = 0;
+          indOfLastEpi = 1 * NUM_CARDS_PER_PAGE;
+          indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
+
+          setPaginatedTrips(
+            Object.values(parsedTrips).slice(indOfFirstEpi, indOfLastEpi)
+          );
           return responseData;
         });
       } else {
@@ -160,6 +168,7 @@ function Trips({ jwt }) {
   const pages = [];
   const [active, setActive] = useState(1);
   const [trips, setTrips] = useState([]);
+  const [paginatedTrips, setPaginatedTrips] = useState({});
 
   const [iscancelmodalshown, setiscancelmodalshown] = useState(false);
   const handlecancelClose = () => setiscancelmodalshown(false);
@@ -194,15 +203,14 @@ function Trips({ jwt }) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    // setAvailableHotels(trips.slice(indOfFirstEpi, indOfLastEpi));
-    setTrips(Object.values(trips).slice(indOfFirstEpi, indOfLastEpi));
+    setPaginatedTrips(Object.values(trips).slice(indOfFirstEpi, indOfLastEpi));
   };
 
   useEffect(() => {
     if (!(active === 1 && jwt != null)) {
       return;
     }
-    queryReservations(jwt, setTrips);
+    queryReservations(jwt, setTrips, setPaginatedTrips);
   }, [active, jwt]);
 
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
@@ -241,8 +249,8 @@ function Trips({ jwt }) {
         </Modal.Footer>
       </Modal>
       <div style={{ margin: "auto" }}>
-        {Object.values(trips).length > 0 ? (
-          Object.values(trips).map((trip) => (
+        {Object.values(paginatedTrips).length > 0 ? (
+          Object.values(paginatedTrips).map((trip) => (
             <Card
               key={trip.reservation_id}
               style={{ width: "75vw", margin: "2rem", textAlign: "center" }}
