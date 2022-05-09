@@ -167,7 +167,8 @@ function Dashboard({
         ]}
       />
       <Image
-        src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        // src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
         style={backgroundImageStyle}
       />
       {isSearchFormShown === true ? (
