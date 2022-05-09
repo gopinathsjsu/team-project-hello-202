@@ -16,12 +16,18 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
       setJWT(null);
     }
   };
-  console.log(isAdmin);
 
   return (
     <>
       <Nav
-        style={{ position: "absolute", zIndex: 2, height: 365, width: 200 }}
+        style={{
+          position: "absolute",
+          zIndex: 2,
+          height: 340,
+          width: 200,
+          background: "rgba(0, 0, 0, 0.5)",
+          color: "rgb(0,0,0)",
+        }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
         onSelect={onLinkSelect}
       >
@@ -29,7 +35,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
           className="listiconstyle"
           style={listIconStyle}
           onClick={showSidebar}
-        />
+        ></ListIcon>
         <div className="sidebar-sticky"></div>
 
         {isAdmin ? (
@@ -58,11 +64,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
             My Trips
           </Nav.Link>
         </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="rewards" href="/rewards">
-            Rewards
-          </Nav.Link>
-        </Nav.Item>
+
         <Nav.Item>
           <Nav.Link eventKey="signin" href="/login">
             Sign-In

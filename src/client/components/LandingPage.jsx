@@ -6,7 +6,6 @@ import SignUp from "./auth/SignUp";
 import HotelSearch from "./HotelSearch";
 import HotelDetail from "./HotelDetail";
 import Sidebar from "./Sidebar";
-import Rewards from "./Rewards";
 import Trips from "./Trips";
 import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
@@ -78,7 +77,7 @@ const LandingPage = ({}) => {
             />
           }
         />
-        <Route path="rewards" element={<Rewards />} />
+
         <Route
           path="logout"
           element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
