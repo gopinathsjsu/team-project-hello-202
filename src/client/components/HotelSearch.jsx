@@ -120,6 +120,7 @@ const bookRoomWithRewardsQuery = (
         .then((respo) => localStorage.setItem("userRewards", respo["rewards"]));
       navigate("/search");
     })
+
     .catch((exception) => {
       console.log("Error occurred:");
       console.log(exception);
@@ -146,17 +147,17 @@ function HotelSearch(props) {
   const [hotelIDPicked, setHotelIDPicked] = useState(null);
 
   const [typeOfRooms, setTypeOfRooms] = useState({
-    "single": {
+    single: {
       name: "Single Room",
       imgsrc:
         "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
     },
-    "double": {
+    double: {
       name: "Double Room",
       imgsrc:
         "https://media.istockphoto.com/photos/hotel-room-bed-picture-id506852656?k=20&m=506852656&s=612x612&w=0&h=e0GIcyFj7L_k5rdOuFKLncfRlWXVqBhd9tEtP1697jo=",
     },
-    "suite": {
+    suite: {
       name: "King's Suite",
       imgsrc:
         "https://media.istockphoto.com/photos/antique-four-poster-picture-id115939001?k=20&m=115939001&s=612x612&w=0&h=fBl5sbFQO9KgaUVqxwlfTfrCBaphoNVLj2cIcJxbym4=",
@@ -220,7 +221,9 @@ function HotelSearch(props) {
       let indOfFirstEpi = 0;
       indOfLastEpi = 1 * NUM_CARDS_PER_PAGE;
       indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
-      setPaginatedHotels(Object.values(availableHotels).slice(indOfFirstEpi, indOfLastEpi));
+      setPaginatedHotels(
+        Object.values(availableHotels).slice(indOfFirstEpi, indOfLastEpi)
+      );
     }
   }, [availableHotels]);
 
@@ -245,7 +248,7 @@ function HotelSearch(props) {
     checkInDate,
     checkOutDate
   ) => {
-    const types = typeOfRooms[roomType]
+    const types = typeOfRooms[roomType];
     return (
       <Modal
         {...props}
@@ -275,14 +278,9 @@ function HotelSearch(props) {
                   }}
                 >
                   <Card.Header>
-                    <span style={{ fontWeight: "bold" }}>
-                      {" "}
-                      {types.name}
-                    </span>
+                    <span style={{ fontWeight: "bold" }}> {types.name}</span>
                   </Card.Header>
-                  <Card.Body
-                    style={{ display: "flex", flexDirection: "row" }}
-                  >
+                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
                     <Image
                       className="m-4 border-0 shadow"
                       src={types.imgsrc}
@@ -319,22 +317,34 @@ function HotelSearch(props) {
                               <Popover id="popover-basic">
                                 <Popover.Header as="h3">
                                   <div>
-                                    <strong>${availableHotels[hotelID] != null ? availableHotels[hotelID].rate : '0'}</strong>
+                                    <strong>
+                                      $
+                                      {availableHotels[hotelID] != null
+                                        ? availableHotels[hotelID].rate
+                                        : "0"}
+                                    </strong>
                                   </div>
                                 </Popover.Header>
                                 <Popover.Body>
-                                  Your total for{" "}
-                                  <strong>{types.name}</strong> will be
-                                  <strong> ${availableHotels[hotelID] != null ? availableHotels[hotelID].rate : '0'}</strong>. Your
-                                  rewards are{" "}
+                                  Your total for <strong>{types.name}</strong>{" "}
+                                  will be
+                                  <strong>
+                                    {" "}
+                                    $
+                                    {availableHotels[hotelID] != null
+                                      ? availableHotels[hotelID].rate
+                                      : "0"}
+                                  </strong>
+                                  . Your rewards are{" "}
                                   <strong>
                                     {localStorage.getItem("userRewards")}
                                   </strong>
-                                  . If you'd like to use it, the price will
-                                  be{" "}
+                                  . If you'd like to use it, the price will be{" "}
                                   <strong>
-                                    {availableHotels[hotelID] != null ? availableHotels[hotelID].rate : 0 -
-                                      localStorage.getItem("userRewards")}
+                                    {availableHotels[hotelID] != null
+                                      ? availableHotels[hotelID].rate -
+                                        localStorage.getItem("userRewards")
+                                      : 0}
                                   </strong>
                                 </Popover.Body>
                               </Popover>
@@ -358,18 +368,17 @@ function HotelSearch(props) {
                               height: 60,
                             }}
                             onClick={() => {
-                              handlebookShow();
                               const roomTypeParsed = types.name.includes(
                                 "Single"
                               )
                                 ? "single"
                                 : types.name.includes("Double")
-                                  ? "double"
-                                  : "suite";
+                                ? "double"
+                                : "suite";
                               bookRoomQuery(
                                 userID,
                                 hotelID,
-                                types.rate,
+                                availableHotels[hotelID].rate,
                                 checkInDate,
                                 checkOutDate,
                                 destination,
@@ -397,12 +406,12 @@ function HotelSearch(props) {
                               )
                                 ? "single"
                                 : types.name.includes("Double")
-                                  ? "double"
-                                  : "suite";
+                                ? "double"
+                                : "suite";
                               bookRoomWithRewardsQuery(
                                 userID,
                                 hotelID,
-                                types.rate,
+                                availableHotels[hotelID].rate,
                                 checkInDate,
                                 checkOutDate,
                                 destination,
@@ -435,11 +444,13 @@ function HotelSearch(props) {
                                   id={types.id + amenitype.id}
                                   onChange={(e) => {
                                     if (e.target.checked) {
-                                      types.rate =
-                                        types.rate + amenitype.rate;
+                                      availableHotels[hotelID].rate =
+                                        availableHotels[hotelID].rate +
+                                        amenitype.rate;
                                     } else {
-                                      types.rate =
-                                        types.rate - amenitype.rate;
+                                      availableHotels[hotelID].rate =
+                                        availableHotels[hotelID].rate -
+                                        amenitype.rate;
                                     }
 
                                     const newTypeOfRooms = {
@@ -484,17 +495,23 @@ function HotelSearch(props) {
         checkOutDate
       )}
 
-      <Modal show={isbookmodalshown} onHide={handlebookClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Booking Successful!!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Your room has been booked!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handlebookClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <div>
+        <Modal
+          show={isbookmodalshown}
+          onHide={handlebookClose}
+          animation={true}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Booking Successful!!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Your room has been booked!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handlebookClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
       <div style={{ margin: "auto" }}>
         {Object.values(paginatedHotels) &&
           Object.values(paginatedHotels).map((availableHotel) => (
