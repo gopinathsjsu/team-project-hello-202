@@ -139,27 +139,27 @@ function HotelSearchForm({ roomType, setRoomType, destination, checkInDate, chec
     if (peopleCount === MIN_PEOPLE_COUNT) {
       return;
     }
-    setPeopleCount(peopleCount - 1)
-    if (peopleCount <= 1) {
+    if (peopleCount - 1 <= 1) {
       setRoomType('single')
-    } else if (peopleCount > 1 && peopleCount <= 4) {
+    } else if (peopleCount - 1 > 1 && peopleCount - 1 <= 4) {
       setRoomType('double')
     } else {
       setRoomType('suite')
     }
+    setPeopleCount(peopleCount - 1)
   };
   const onPeoplePlusClick = () => {
     if (peopleCount === MAX_PEOPLE_COUNT) {
       return;
     }
-    setPeopleCount(peopleCount + 1)
-    if (peopleCount <= 1) {
+    if (peopleCount + 1 <= 1) {
       setRoomType('single')
-    } else if (peopleCount > 1 && peopleCount <= 4) {
+    } else if (peopleCount + 1 > 1 && peopleCount + 1 <= 4) {
       setRoomType('double')
     } else {
       setRoomType('suite')
     }
+    setPeopleCount(peopleCount + 1)
   };
   const onSubmitClick = () => {
     fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
