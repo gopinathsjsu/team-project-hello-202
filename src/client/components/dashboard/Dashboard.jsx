@@ -46,6 +46,7 @@ const signInStyle = {
 const myTripStyle = {
   display: "flex",
   flexDirection: "row",
+  cursor: "pointer",
 };
 
 const myTripTextStyle = {
@@ -159,7 +160,10 @@ function Dashboard({
             </Dropdown>
           </div>,
           <div style={myTripStyle}>
-            <BriefcaseIcon style={briefcaseIconStyle} />
+            <BriefcaseIcon
+              style={briefcaseIconStyle}
+              onClick={onMyTripsClick}
+            />
             <div onClick={onMyTripsClick} style={myTripTextStyle}>
               My Trips
             </div>
