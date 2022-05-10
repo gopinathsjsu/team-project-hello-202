@@ -75,6 +75,25 @@ Team Members:
   - Create Rewards on Room book
   - Add Dynamic Price Deduction on room book using rewards
 
+## Diagrams
+
+### UI Wireframes:
+
+### Architecture Diagram:
+
+### Component Diagram:
+
+### Deployment Diagrams
+
+
+## Design Decisions:
+
+## Feature Set:
+
+### User Features:
+
+### Admin Features:
+
 ## TODO Week 1:
   - notes for week 1
 
