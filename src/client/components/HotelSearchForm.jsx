@@ -123,44 +123,6 @@ function HotelSearchForm({ roomType, setRoomType, destination, checkInDate, chec
     setDestination(e.target.value)
   }
 
-  const onRoomMinusClick = () => {
-    if (roomCount === MIN_ROOM_COUNT) {
-      return;
-    }
-    setRoomCount(roomCount - 1)
-  };
-  const onRoomPlusClick = () => {
-    if (roomCount === MAX_ROOM_COUNT) {
-      return;
-    }
-    setRoomCount(roomCount + 1)
-  };
-  const onPeopleMinusClick = () => {
-    if (peopleCount === MIN_PEOPLE_COUNT) {
-      return;
-    }
-    if (peopleCount - 1 <= 1) {
-      setRoomType('single')
-    } else if (peopleCount - 1 > 1 && peopleCount - 1 <= 4) {
-      setRoomType('double')
-    } else {
-      setRoomType('suite')
-    }
-    setPeopleCount(peopleCount - 1)
-  };
-  const onPeoplePlusClick = () => {
-    if (peopleCount === MAX_PEOPLE_COUNT) {
-      return;
-    }
-    if (peopleCount + 1 <= 1) {
-      setRoomType('single')
-    } else if (peopleCount + 1 > 1 && peopleCount + 1 <= 4) {
-      setRoomType('double')
-    } else {
-      setRoomType('suite')
-    }
-    setPeopleCount(peopleCount + 1)
-  };
   const onSubmitClick = () => {
     fetch('http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability', {
       headers: {
@@ -191,7 +153,46 @@ function HotelSearchForm({ roomType, setRoomType, destination, checkInDate, chec
         console.log(exception);
       });
   }
-
+  const onRoomMinusClick = () => {
+    if (roomCount === MIN_ROOM_COUNT) {
+      return;
+    }
+    setRoomCount(roomCount - 1)
+  };
+  const onRoomPlusClick = () => {
+    if (roomCount === MAX_ROOM_COUNT) {
+      return;
+    }
+    setRoomCount(roomCount + 1)
+  };
+  const onPeopleMinusClick = () => {
+    if (peopleCount === MIN_PEOPLE_COUNT) {
+      return;
+    }
+    if (peopleCount - 1 <= 1) {
+      setRoomType('single')
+    } else if (peopleCount - 1 > 1 && peopleCount - 1 <= 4) {
+      setRoomType('double')
+    } else {
+      setRoomType('suite')
+    }
+    setPeopleCount(peopleCount - 1)
+    onSubmitClick()
+  };
+  const onPeoplePlusClick = () => {
+    if (peopleCount === MAX_PEOPLE_COUNT) {
+      return;
+    }
+    if (peopleCount + 1 <= 1) {
+      setRoomType('single')
+    } else if (peopleCount + 1 > 1 && peopleCount + 1 <= 4) {
+      setRoomType('double')
+    } else {
+      setRoomType('suite')
+    }
+    setPeopleCount(peopleCount + 1)
+    onSubmitClick()
+  };
   const checkInDateTimeInputProps = {
     placeholder: 'Check In'
   };
