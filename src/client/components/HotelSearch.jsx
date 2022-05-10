@@ -127,6 +127,7 @@ const bookRoomWithRewardsQuery = (
 };
 function HotelSearch(props) {
   const {
+    availableHotels,
     destination,
     checkInDate,
     checkOutDate,
@@ -136,8 +137,8 @@ function HotelSearch(props) {
     userID,
   } = props;
 
+  const [paginatedHotels, setPaginatedHotels] = useState({});
   const [active, setActive] = useState(1);
-  const [availableHotels, setAvailableHotels] = useState(props.availableHotels);
   const [ismodalshown, setismodelshown] = useState(false);
   const [isbookmodalshown, setisbookmodalshown] = useState(false);
   const handlebookClose = () => setisbookmodalshown(false);
@@ -214,45 +215,20 @@ function HotelSearch(props) {
     indOfLastEpi = number * NUM_CARDS_PER_PAGE;
     indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
     setActive(number);
-    setAvailableHotels(
-      Object.values(props.availableHotels).slice(indOfFirstEpi, indOfLastEpi)
+    setPaginatedHotels(
+      Object.values(availableHotels).slice(indOfFirstEpi, indOfLastEpi)
     );
   };
 
   useEffect(() => {
-    if (active === 1 && Object.values(props.availableHotels).length === 0) {
-      fetch(
-        "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify({
-            checkInDate: checkInDate == null ? null : checkInDate.toDate(),
-            checkOutDate: checkInDate == null ? null : checkOutDate.toDate(),
-            destination,
-            roomCount,
-            roomType,
-          }),
-        }
-      )
-        .then((res) => {
-          if (res.ok) {
-            res.json().then((responseData) => {
-              setAvailableHotels(responseData);
-            });
-          }
-          console.log("Error occurred:");
-          console.log(res);
-          return { errorMessages: { REQUEST_ERROR: res.statusText } };
-        })
-        .catch((exception) => {
-          console.log("Error occurred:");
-          console.log(exception);
-        });
+    if (Object.values(availableHotels).length > 0) {
+      let indOfLastEpi = 0;
+      let indOfFirstEpi = 0;
+      indOfLastEpi = 1 * NUM_CARDS_PER_PAGE;
+      indOfFirstEpi = indOfLastEpi - NUM_CARDS_PER_PAGE;
+      setPaginatedHotels(Object.values(availableHotels).slice(indOfFirstEpi, indOfLastEpi));
     }
-  }, [active, props.availableHotels]);
+  }, [availableHotels]);
 
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(
@@ -395,8 +371,8 @@ function HotelSearch(props) {
                                   )
                                     ? "single"
                                     : types.name.includes("Double")
-                                    ? "double"
-                                    : "suite";
+                                      ? "double"
+                                      : "suite";
                                   bookRoomQuery(
                                     userID,
                                     hotelID,
@@ -428,8 +404,8 @@ function HotelSearch(props) {
                                   )
                                     ? "single"
                                     : types.name.includes("Double")
-                                    ? "double"
-                                    : "suite";
+                                      ? "double"
+                                      : "suite";
                                   bookRoomWithRewardsQuery(
                                     userID,
                                     hotelID,
@@ -528,8 +504,8 @@ function HotelSearch(props) {
         </Modal.Footer>
       </Modal>
       <div style={{ margin: "auto" }}>
-        {Object.values(availableHotels) &&
-          Object.values(availableHotels).map((availableHotel) => (
+        {Object.values(paginatedHotels) &&
+          Object.values(paginatedHotels).map((availableHotel) => (
             <Container fluid className="text-center">
               <CardGroup className="m-5 d-block">
                 <Card
