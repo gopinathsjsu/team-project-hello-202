@@ -1,3 +1,4 @@
+import jwt from "express-jwt";
 import React from "react";
 import { Nav } from "react-bootstrap";
 import { List as ListIcon } from "react-bootstrap-icons";
@@ -12,6 +13,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
   const onLinkSelect = (selectedKey) => {
     if (selectedKey === "logout") {
       localStorage.removeItem("jwt");
+      localStorage.removeItem("isAdmin");
       setIsAdmin(false);
       setJWT(null);
     }
@@ -65,11 +67,16 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
           </Nav.Link>
         </Nav.Item>
 
-        <Nav.Item>
-          <Nav.Link eventKey="signin" href="/login">
-            Sign-In
-          </Nav.Link>
-        </Nav.Item>
+        {!jwt ? (
+          <Nav.Item>
+            <Nav.Link eventKey="signin" href="/login">
+              Sign-In
+            </Nav.Link>
+          </Nav.Item>
+        ) : (
+          <> </>
+        )}
+
         <Nav.Item>
           <Nav.Link eventKey="register" href="/signup">
             Register
