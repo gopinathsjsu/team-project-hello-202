@@ -12,7 +12,9 @@ import AdminRoom from "./AdminRoom";
 
 const LandingPage = ({}) => {
   const [jwt, setJWT] = useState(JSON.parse(localStorage.getItem("jwt")));
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("isAdmin") == "true"
+  );
   const [hotels, setHotels] = useState([]);
   const [destination, setDestination] = useState();
   const [checkInDate, setCheckInDate] = useState();
@@ -46,6 +48,7 @@ const LandingPage = ({}) => {
                   roomCount={roomCount}
                   peopleCount={peopleCount}
                   isAdmin={isAdmin}
+                  setIsAdmin={setIsAdmin}
                 />
               ) : (
                 <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
@@ -74,21 +77,33 @@ const LandingPage = ({}) => {
               roomCount={roomCount}
               peopleCount={peopleCount}
               isAdmin={isAdmin}
+              setIsAdmin={setIsAdmin}
             />
           }
         />
 
         <Route
           path="logout"
-          element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
+          element={
+            <Login setIsAdmin={setIsAdmin} isAdmin={isAdmin} setJWT={setJWT} />
+          }
         />
         <Route
           path="trips"
-          element={<Dashboard jwt={jwt} content={<Trips jwt={jwt} />} />}
+          element={
+            <Dashboard
+              jwt={jwt}
+              setIsAdmin={setIsAdmin}
+              isAdmin={isAdmin}
+              content={<Trips jwt={jwt} />}
+            />
+          }
         />
         <Route
           path="login"
-          element={<Login setIsAdmin={setIsAdmin} setJWT={setJWT} />}
+          element={
+            <Login setIsAdmin={setIsAdmin} isAdmin={isAdmin} setJWT={setJWT} />
+          }
         />
         <Route path="signup" element={<SignUp />} />
         <Route path="admin" element={<Admin />} />
@@ -99,6 +114,7 @@ const LandingPage = ({}) => {
             <Sidebar
               setJWT={setJWT}
               setIsAdmin={setIsAdmin}
+              z
               isAdmin={isAdmin}
             />
           }
@@ -112,6 +128,7 @@ const LandingPage = ({}) => {
               setRoomType={setRoomType}
               isSearchFormShown={true}
               isAdmin={isAdmin}
+              setIsAdmin={setIsAdmin}
               content={
                 <HotelSearch
                   availableHotels={hotels}
@@ -126,6 +143,8 @@ const LandingPage = ({}) => {
                   setCheckOutDate={setCheckOutDate}
                   setRoomCount={setRoomCount}
                   setPeopleCount={setPeopleCount}
+                  setIsAdmin={setIsAdmin}
+                  isAdmin={isAdmin}
                   userID={jwt}
                 />
               }
@@ -160,7 +179,11 @@ const LandingPage = ({}) => {
               {jwt ? (
                 <Dashboard jwt={jwt} />
               ) : (
-                <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
+                <Login
+                  setIsAdmin={setIsAdmin}
+                  isAdmin={isAdmin}
+                  setJWT={setJWT}
+                />
               )}
             </>
           }

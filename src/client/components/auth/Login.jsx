@@ -40,6 +40,7 @@ function Login({ setJWT, setIsAdmin }) {
         setJWT(data.userID);
         localStorage.setItem("jwt", data.userID);
         setIsAdmin(data.isAdmin);
+        localStorage.setItem("isAdmin", data.isAdmin);
         navigate("/dashboard");
       })
       .catch((exception) => {
