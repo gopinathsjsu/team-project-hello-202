@@ -5,6 +5,14 @@ from collections import defaultdict
 from .models import User, db, Hotel, Room, Reservation, AI
 from flask_cors import cross_origin
 import json
+import datetime
+
+
+# for elastic beanstalk health check
+@app.route("/", methods=["GET"])
+@cross_origin()
+def health_check():
+    return make_response("ok", 200)
 
 
 @app.route("/login", methods=["POST"])
@@ -40,6 +48,7 @@ def user():
             name = data["name"]
             email = data["email"]
             password = data["password"]
+            account_date = data["accountDate"]
             # rewards = data["rewards"]
             # check if not empty
             if name and email and password:  # and uid:
@@ -53,7 +62,8 @@ def user():
                     # uid=uid,
                     name=name,
                     email=email,
-                    password=password
+                    password=password,
+                    accountDate=account_date
                     # rewards=rewards
                 )  # Create an instance of the User class
                 db.session.add(new_user)  # Adds new User record to database
@@ -69,7 +79,7 @@ def user():
             user_list = []
             uid = []
             for r in res:
-                user_list.append(r.name)
+                user_list.append([r.name, r.uid])
             return make_response(f"Done. Users are {user_list}", 200)
 
         except:
@@ -184,15 +194,26 @@ def room():
         return make_response(return_dict, 200)
 
 
-def dynamic_pricing(price, checkInDate):
+def get_price(price, checkInDate, userID):
+    # monday -> 0 to sunday -> 6
+    dp = 0
+    user = User.query.filter(User.uid == userID).first()
+    checkIn = datetime.datetime.strptime(checkInDate, "%Y-%m-%dT%H:%M:%S.%fZ")
+    days = (checkIn -
+            user.accountDate).days
+    dp -= days * 0.01  # loyalty points reduction
+
+    day = checkIn.weekday()
+    if day >= 5:
+        dp += 20
     # decrease price
     if int(checkInDate.split("-")[1]) in [2, 3, 4, 5, 9, 10]:
-        return price - 0.10 * price
+        return dp + (price - 0.10 * price)
     # increase price
     elif int(checkInDate.split("-")[1]) in [6, 7, 12]:
-        return price + 0.20 * price
+        return dp + (price + 0.20 * price)
     else:
-        return price
+        return dp + price
 
 
 @app.route("/availability", methods=["POST"])
@@ -205,6 +226,7 @@ def check_availability():
         booking_start = data['checkInDate']
         booking_end = data['checkOutDate']
         num_rooms = int(data['roomCount'])
+        userID = int(data["userID"])
         if roomType and location and booking_end and booking_start and num_rooms:
             # res = availability_helper(roomType, location, booking_start, booking_end, num_rooms)
 
@@ -220,30 +242,44 @@ def check_availability():
             for r in reservation_dates_between:
                 exclude_ids.append(r.rid)
 
-            res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
-                (Room.type == f"{roomType}") &
-                Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
-            ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
+            if roomType == "all":
+                res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
+                    Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
+                ).all()  # this gives us all the available rooms amongst all the hotels at a particular location
+
+            else:
+                res = db.session.query(Room).join(Reservation, Reservation.rid == Room.rid, isouter=True).filter(
+                    (Room.type == f"{roomType}") &
+                    Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
+                ).all()  # this gives us all the available rooms OF A PARTICULAR TYPE amongst all
+                # the hotels at a particular location
+
             # that fits the criteria
 
-            count_rooms_in_hotel = defaultdict(int)  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
-            return_dict = defaultdict(dict)  # ADD HOTELS WHICH HAVE THRESHOLD ROOM VALUE
+            count_rooms_in_hotel = defaultdict(lambda: defaultdict(int))  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
+            return_dict = defaultdict(lambda: defaultdict(dict))  # ADD HOTELS WHICH HAVE THRESHOLD ROOM VALUE
             if len(res) < num_rooms:  # if not enough rooms available
                 return make_response(f"Only {len(res)} rooms available", 404)  # check what response is required
             else:
                 counter = 1
                 for r in res:
-                    count_rooms_in_hotel[r.hid] += 1
-                for hotel_id in count_rooms_in_hotel:
-                    if count_rooms_in_hotel[hotel_id] >= num_rooms:  # if enough rooms available in a hotel
-                        hotel = Hotel.query.filter(Hotel.hid == hotel_id).first()
-                        room = Room.query.filter(Room.hid == hotel_id, Room.type == roomType).first()
-                        # in the dictionary below, rate gives the rate of one room of desired type
-                        return_dict[hotel_id] = {"idx": counter, "id": hotel_id, "name": hotel.hname,
-                                                 "address": hotel.location,
-                                                 "rate": dynamic_pricing(room.baseprice, booking_start)}
-                        counter += 1
+                    count_rooms_in_hotel[r.hid][r.type] += 1
 
+                if roomType == "all":
+                    roomType = ["single", "double", "suite"]
+                else:
+                    roomType = [roomType]
+                for hotel_id in count_rooms_in_hotel:
+                    for rtype in roomType:
+                        if count_rooms_in_hotel[hotel_id][rtype] >= num_rooms:  # if enough rooms available in a hotel
+                            hotel = Hotel.query.filter(Hotel.hid == hotel_id).first()
+                            room = Room.query.filter(Room.hid == hotel_id, Room.type == rtype).first()
+                            # in the dictionary below, rate gives the rate of one room of desired type
+                            return_dict[hotel_id][rtype] = {"idx": counter, "id": hotel_id, "name": hotel.hname,
+                                                            "address": hotel.location,
+                                                            "type": rtype,
+                                                            "rate": get_price(room.baseprice, booking_start, userID)}
+                            counter += 1
                 return make_response(return_dict, 200)
 
         return make_response("Request details not correct!", 404)
@@ -284,6 +320,9 @@ def reservation():
             num_rooms = data["numRooms"]
             roomType = data["roomType"]
 
+            days = (datetime.datetime.strptime(booking_end, "%Y-%m-%dT%H:%M:%S.%fZ") -
+                    datetime.datetime.strptime(booking_start, "%Y-%m-%dT%H:%M:%S.%fZ")).days
+
             room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
             if not room_ids or len(room_ids) < num_rooms:
                 return make_response("Not enough rooms for reservation!", 404)
@@ -292,23 +331,24 @@ def reservation():
             # get rewards and add it individually for each room booking
 
             rewards_used = User.query.filter(User.uid == uid).first().rewards
+
             rewards_left = 0
 
-            if price * num_rooms < rewards_used:
-                rewards_left = rewards_used - price * num_rooms
-                rewards_used = price * num_rooms
+            if price * num_rooms * days < rewards_used:
+                rewards_left = rewards_used - price * num_rooms * days
+                rewards_used = price * num_rooms * days
             User.query.filter(User.uid == uid).update(
                 {"rewards": rewards_left})
-            individual_reward = rewards_used // num_rooms
+            individual_reward = rewards_used / num_rooms
             for room_id in room_ids[:num_rooms]:
-                rewards_earned = price * 0.03  # 3% is the points earned for each room's price
+                rewards_earned = price * days * 0.03  # 3% is the points earned for each room's price
                 new_reservation = Reservation(
                     rid=int(room_id),
                     uid=int(uid),
                     hid=int(hid),
                     start=booking_start,
                     end=booking_end,
-                    price=float(price),
+                    price=float(price) * days,
                     num_people=int(num_people),
                     num_rooms=int(num_rooms),
                     rewards_earned=int(rewards_earned),
@@ -362,13 +402,14 @@ def reservation():
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
+
             res = Reservation.query.filter(Reservation.reserve_id == reservation_id).first()
             rewards_used = res.rewards_used  # rewards used for the reservation
             rewards_earned = res.rewards_earned  # rewards earned for the reservation
             rewards = User.query.filter(User.uid == res.uid).first().rewards  # get user rewards
             new_reward = max(0, rewards + rewards_used - rewards_earned)  # calculate new rewards
             User.query.filter(User.uid == res.uid).update({"rewards": new_reward})  # update rewards
-            # print("here")
+
             Reservation.query.filter(Reservation.reserve_id == reservation_id).delete()
             db.session.commit()
             return make_response("Deleted Successfully!", 200)
