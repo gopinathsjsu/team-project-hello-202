@@ -233,6 +233,7 @@ function Trips({ jwt }) {
   const checkOutDateTimeInputProps = {
     placeholder: "Check Out",
   };
+
   return (
     <div style={rootStyle}>
       <Modal

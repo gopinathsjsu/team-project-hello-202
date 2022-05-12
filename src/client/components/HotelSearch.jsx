@@ -165,31 +165,31 @@ function HotelSearch(props) {
   const [amenities, setAmenities] = useState([
     {
       id: 1,
-      name: "breakfast",
+      name: "Breakfast",
       rate: 15.0,
     },
 
     {
       id: 2,
-      name: "fitness",
+      name: "Fitness",
       rate: 10.0,
     },
 
     {
       id: 3,
-      name: "pool",
+      name: "Pool",
       rate: 10.0,
     },
 
     {
       id: 4,
-      name: "parking",
+      name: "Parking",
       rate: 12.0,
     },
 
     {
       id: 5,
-      name: "allmeals",
+      name: "All Meals",
       rate: 30.0,
     },
   ]);
@@ -481,6 +481,12 @@ function HotelSearch(props) {
                                               availableHotels[hotelID][key]
                                                 .rate - amenitype.rate;
                                           }
+                                          const newTypeOfRooms = {
+                                            ...typeOfRooms,
+                                          };
+
+                                          newTypeOfRooms[key].id = key;
+                                          setTypeOfRooms(newTypeOfRooms);
                                         }}
                                       ></input>
                                       <label
@@ -701,6 +707,11 @@ function HotelSearch(props) {
                                     class="custom-control-input"
                                     id={typeOfRooms[roomType].id + amenitype.id}
                                     onChange={(e) => {
+                                      console.log(e.target.checked);
+                                      console.log(
+                                        availableHotels[hotelID][roomType].rate
+                                      );
+                                      console.log(amenitype.rate);
                                       if (e.target.checked) {
                                         availableHotels[hotelID][
                                           roomType
@@ -714,6 +725,13 @@ function HotelSearch(props) {
                                           availableHotels[hotelID][roomType]
                                             .rate - amenitype.rate;
                                       }
+
+                                      const newTypeOfRooms = {
+                                        ...typeOfRooms,
+                                      };
+
+                                      newTypeOfRooms[roomType].id = roomType;
+                                      setTypeOfRooms(newTypeOfRooms);
                                     }}
                                   ></input>
                                   <label
