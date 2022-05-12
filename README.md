@@ -37,8 +37,8 @@ Team Members:
 
 ## Schedule for Scrum Meetings:
 
-- Thursday
-- Sunday
+- Monday
+- Friday
 
 ## Project Management Tool:
 
@@ -94,24 +94,34 @@ Team Members:
 
 ### Admin Features:
 
-## TODO Week 1:
-  - notes for week 1
+# Scrum Meeting Notes
 
-## TODO Week 2:
+## Week 1:
+  - February 28
+    - Note 1
+  - March 4
+    - Note 1
 
-- Backend
-  - Port the db onto aws services.
-  - CRUD operations.
-  - Load balancing
+## Week 2:
+  - March 7
+    - Note 1
+  - March 11
+    - Note 1
 
-- Frontend
-  - Create Hotel Search Page and related components
-  - Create Hotel Detail Page and related components
-  - Create Bookings/BookingHistory Page and related components
-  - Complete Routing
+## Week 3:
+  - March 14
+    - Note 1
+  - March 18
+    - Note 1
 
-## TODO Week 3:
-  - notes for week 3
+## Week 4:
+  - March 21
+    - Note 1
+  - March 25
+    - Note 1
 
-## TODO Week 4:
-  - notes for week 4
+## Week 5:
+  - March 28
+    - Note 1
+  - April 1
+    - Note 1
