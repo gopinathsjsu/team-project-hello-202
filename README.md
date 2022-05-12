@@ -139,7 +139,7 @@ Team Members:
   - April 11
     - Removed bugs and discussed how to add dynamic/seasonal pricing
   - April 15
-    - Note 1
+    - Implemented availability api
 
 ## Week 8:
   - April 18
