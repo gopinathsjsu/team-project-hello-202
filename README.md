@@ -118,7 +118,7 @@ Team Members:
 
 ## Week 4:
   - March 21
-    - Note 1
+    - Added user, hotel and room tables
   - March 25
     - Note 1
 
