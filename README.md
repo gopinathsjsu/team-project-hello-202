@@ -4,7 +4,7 @@ Team Members:
 
 - Adam Hashoush
 - Josef Bustamante
-- Karan Tyagi (repo branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
+- Karan Tyagi (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
 - Priyank Bardolia
 
 ## Responsibilities
