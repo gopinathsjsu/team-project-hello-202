@@ -145,11 +145,11 @@ Team Members:
   - April 18
     - Fixed bug in the /availability api logic
   - April 22
-    - Note 1
+    - Rewards api
 
 ## Week 9:
   - April 25
-    - Note 1
+    - Implemented dynamic pricing
   - April 29
     - Note 1
 
