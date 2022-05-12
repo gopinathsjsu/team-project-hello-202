@@ -127,7 +127,7 @@ Team Members:
   - March 28
     - Went through AWS documentation for deploying the basic application created so far
   - April 1
-    - Note 1
+    - Deployed the back-end by dockerizing the flask application and pushing on elastic beanstalk (automatically adds load balancer)
 
 ## Week 6:
   - April 4
