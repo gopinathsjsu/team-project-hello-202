@@ -109,7 +109,7 @@ Team Members:
 - Booked rooms will be displayed on **My trips** pages
 - **User** can go to **different pages** to see their bookings.
 - **User** can Login as an **Admin**
-- **Admin** can be **Create Hotel**
+- **Admin** can **Create Hotel**
 - **Admin** can **Create rooms** for the existing hotels
 
 # Scrum Meeting Notes
