@@ -133,7 +133,7 @@ Team Members:
   - April 4
     - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
   - April 8
-    - Note 1
+    - Added reservation table and /reservation api
 
 ## Week 7:
   - April 11
