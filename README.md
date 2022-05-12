@@ -125,7 +125,7 @@ Team Members:
 
 ## Week 5:
   - March 28
-    - Note 1
+    - Went through AWS documentation for deploying the basic application created so far
   - April 1
     - Note 1
 
