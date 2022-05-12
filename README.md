@@ -98,9 +98,9 @@ Team Members:
 
 ## Week 1:
   - February 28
-    - Note 1
+    - Went through project guidelines to start brainstorming
   - March 4
-    - Note 1
+    - who does what and finding tech stack to use (software, etc.)
 
 ## Week 2:
   - March 7
