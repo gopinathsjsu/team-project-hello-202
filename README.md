@@ -104,13 +104,15 @@ Team Members:
 
 ## Week 2:
   - March 7
-    - Note 1
+    - Finalizing tech stack
+      - Frontend: React
+      - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
   - March 11
-    - Note 1
+    - Created Schema diagram on Figma
 
 ## Week 3:
   - March 14
-    - Note 1
+    - Setting up basic flask-sqlalchemy application
   - March 18
     - Note 1
 
