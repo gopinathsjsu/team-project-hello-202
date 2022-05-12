@@ -15,6 +15,7 @@ Team Members:
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
 
 ### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
+![Burndown Chart](https://user-images.githubusercontent.com/50338345/168176940-f590ee05-6356-4257-a2a9-4c287c37ab67.png)
 
 ## XP Core Values
 
@@ -194,8 +195,7 @@ Team Members:
   - Updated /availability logic, looking for bugs
 
 ## Week 11:
-
-- May 9
-  - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
-- May 11
-  - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”
+  - May 9
+    - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
+  - May 11
+    - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”
