@@ -120,7 +120,8 @@ Team Members:
   - March 21
     - Added user, hotel and room tables
   - March 25
-    - Note 1
+    - Created add User and add Hotel and add Room API
+    - testing on postman
 
 ## Week 5:
   - March 28
