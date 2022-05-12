@@ -10,11 +10,9 @@ Team Members:
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
-### <a href="https://docs.google.com/document/d/1a6bN8Y34nxDBmSwEWEm-3qTafa9f_odVDV1tf4mUmxI/edit?usp=sharing">Project Journal</a>
 ### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Spring Task Sheet</a>
 
 ## XP Core Values
-
 
 - ***Communication***: We sucessfully conducted meetings every week on zoom/ in-person to discuss crucial aspects of the project by collaborating and communicating with each other.
 - ***Respect***: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
@@ -35,22 +33,13 @@ Team Members:
 - REST API: Postman(Testing APIs)
 - Cloud: AWS EC2 Cluster
 
-## Schedule for Scrum Meetings:
-
-- Monday
-- Friday
-
-## Project Management Tool:
-
-***SCRUM***
-
-
 ## TASKS COMPLETED:
 
 - Backend
   - Explore SQLAlchemy
   - Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
   - Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
+  - Added all API methods
 
 - Frontend
   - Create Routing
@@ -95,6 +84,10 @@ Team Members:
 ### Admin Features:
 
 # Scrum Meeting Notes
+
+## Schedule for Scrum Meetings:
+- Monday
+- Friday
 
 ## Week 1:
   - February 28
