@@ -151,7 +151,7 @@ Team Members:
   - April 25
     - Implemented dynamic pricing
   - April 29
-    - Note 1
+    - Added Seasonal Pricing
 
 ## Week 10:
   - May 2
