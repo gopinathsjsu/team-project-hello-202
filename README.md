@@ -131,7 +131,7 @@ Team Members:
 
 ## Week 6:
   - April 4
-    - Note 1
+    - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
   - April 8
     - Note 1
 
