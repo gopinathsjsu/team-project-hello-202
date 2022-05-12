@@ -88,10 +88,9 @@ Team Members:
 ![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png
 )
 
-## Deployment Diagrams
+## Deployment Diagram:
 
 ## Design Decisions:
-
 
 ## Feature Set:
 
