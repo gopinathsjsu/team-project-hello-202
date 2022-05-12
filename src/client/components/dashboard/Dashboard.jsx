@@ -13,6 +13,7 @@ import HotelSearchForm from "../HotelSearchForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "../Sidebar";
+import { Parallax } from "react-parallax";
 
 const rootStyle = {
   display: "flex",
@@ -23,6 +24,8 @@ const backgroundImageStyle = {
   height: "100vh",
   position: "absolute",
   width: "100vw",
+  // backgroundRepeat: "no-repeat",
+  backgroundAttachment: "scroll",
 };
 
 const hotelSearchStyle = {
@@ -175,6 +178,7 @@ function Dashboard({
         src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
         style={backgroundImageStyle}
       />
+
       {isSearchFormShown === true ? (
         <HotelSearchForm
           style={hotelSearchStyle}

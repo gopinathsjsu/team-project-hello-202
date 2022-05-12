@@ -23,7 +23,7 @@ function Login({ setJWT, setIsAdmin }) {
 
   const authenticateUser = () => {
     fetch(
-      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/login",
+      "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/login",
       {
         headers: {
           "Content-Type": "application/json",

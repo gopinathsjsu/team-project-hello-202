@@ -12,6 +12,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Pagination from "react-bootstrap/Pagination";
 import Datetime from "react-datetime";
+import { Navigate } from "react-router-dom";
 
 const rootStyle = {
   display: "flex",
@@ -61,7 +62,7 @@ const MAX_PAGINATION_COUNT = 5;
 
 const queryReservations = async (jwt, setTrips, setPaginatedTrips) =>
   await fetch(
-    "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation?userID=" +
+    "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation?userID=" +
       jwt,
     {
       headers: {
@@ -99,9 +100,9 @@ const queryReservations = async (jwt, setTrips, setPaginatedTrips) =>
       console.log(exception);
     });
 
-const cancelTripQuery = (reservationID, trips, setTrips) =>
+const cancelTripQuery = (reservationID, trips, setTrips, navigate) =>
   fetch(
-    "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
+    "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation",
     {
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +116,7 @@ const cancelTripQuery = (reservationID, trips, setTrips) =>
     .then((res) => {
       if (res.ok) {
         fetch(
-          `http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/rewards?userID=${localStorage.getItem(
+          `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${localStorage.getItem(
             "jwt"
           )}`
         )
@@ -137,7 +138,7 @@ const cancelTripQuery = (reservationID, trips, setTrips) =>
 
 const updateTripQuery = async (trip) =>
   await fetch(
-    "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/reservation",
+    "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation",
     {
       headers: {
         "Content-Type": "application/json",
@@ -232,6 +233,7 @@ function Trips({ jwt }) {
   const checkOutDateTimeInputProps = {
     placeholder: "Check Out",
   };
+
   return (
     <div style={rootStyle}>
       <Modal
