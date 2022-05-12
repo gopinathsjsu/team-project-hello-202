@@ -155,9 +155,9 @@ Team Members:
 
 ## Week 10:
   - May 2
-    - Note 1
+    - Updated the return objects as per front-end requirements
   - May 6
-    - Note 1
+    - Updated /availability logic, looking for bugs
 
 ## Week 11:
   - May 9
