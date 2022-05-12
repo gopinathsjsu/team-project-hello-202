@@ -10,11 +10,9 @@ Team Members:
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
-### <a href="https://docs.google.com/document/d/1a6bN8Y34nxDBmSwEWEm-3qTafa9f_odVDV1tf4mUmxI/edit?usp=sharing">Project Journal</a>
-### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Spring Task Sheet</a>
+### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
 
 ## XP Core Values
-
 
 - ***Communication***: We sucessfully conducted meetings every week on zoom/ in-person to discuss crucial aspects of the project by collaborating and communicating with each other.
 - ***Respect***: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
@@ -30,20 +28,10 @@ Team Members:
 ## TECHSTACK:
 
 - Frontend: ReactJS, Webpack, NPM, CSS, Babel
-- Backend: FlaskSqlAlchemy, EC2, RDS
+- Backend: FlaskSqlAlchemy, RDS
 - Database: SQLAlchemy
 - REST API: Postman(Testing APIs)
-- Cloud: AWS EC2 Cluster
-
-## Schedule for Scrum Meetings:
-
-- Thursday
-- Sunday
-
-## Project Management Tool:
-
-***SCRUM***
-
+- Cloud: AWS Elastic Beanstalk
 
 ## TASKS COMPLETED:
 
@@ -51,6 +39,22 @@ Team Members:
   - Explore SQLAlchemy
   - Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
   - Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
+  - Added Tables:
+    - User
+    - Room
+    - Hotel
+    - Reservation
+  - Added API Calls:
+    - /login
+    - /user
+    - /hotel
+    - /room
+    - /availability
+    - /reservation
+    - /rewards
+  - Implemented Dynamic Pricing
+  - Implemented Seasonal Pricing
+  - Deploying docker image on Elastic Beanstalk (with every feature release)
 
 - Frontend
   - Create Routing
@@ -75,24 +79,96 @@ Team Members:
   - Create Rewards on Room book
   - Add Dynamic Price Deduction on room book using rewards
 
-## TODO Week 1:
-  - notes for week 1
 
-## TODO Week 2:
+## UI Wireframes:
 
-- Backend
-  - Port the db onto aws services.
-  - CRUD operations.
-  - Load balancing
+### <a href="https://www.figma.com/file/K7rA2OWtDBw8fHhUVRApMr/Simple-Hotel-Website-(Community)?node-id=0%3A1">Figma Link</a>
 
-- Frontend
-  - Create Hotel Search Page and related components
-  - Create Hotel Detail Page and related components
-  - Create Bookings/BookingHistory Page and related components
-  - Complete Routing
 
-## TODO Week 3:
-  - notes for week 3
+![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png
+)
 
-## TODO Week 4:
-  - notes for week 4
+## Deployment Diagram:
+
+## Design Decisions:
+
+## Feature Set:
+The application can:
+  - Allow user to create account and make hotel reservation
+  - Perform Dynamic/Seasonal Pricing to allow the user 
+  -  
+
+# Scrum Meeting Notes
+
+## Schedule for Scrum Meetings:
+- Monday
+- Friday
+
+## Week 1:
+  - February 28
+    - Went through project guidelines to start brainstorming
+  - March 4
+    - who does what and finding tech stack to use (software, etc.)
+
+## Week 2:
+  - March 7
+    - Finalizing tech stack
+      - Frontend: React
+      - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
+  - March 11
+    - Created Schema diagram on Figma
+
+## Week 3:
+  - March 14
+    - Setting up basic flask-sqlalchemy application
+  - March 18
+    - API design - functions/calls we want to have
+
+## Week 4:
+  - March 21
+    - Added user, hotel and room tables
+  - March 25
+    - Created add User and add Hotel and add Room API
+    - testing on postman
+
+## Week 5:
+  - March 28
+    - Went through AWS documentation for deploying the basic application created so far
+  - April 1
+    - Deployed the back-end by dockerizing the flask application and pushing on elastic beanstalk (automatically adds load balancer)
+
+## Week 6:
+  - April 4
+    - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
+  - April 8
+    - Added reservation table and /reservation api
+
+## Week 7:
+  - April 11
+    - Removed bugs and discussed how to add dynamic/seasonal pricing
+  - April 15
+    - Implemented availability api
+
+## Week 8:
+  - April 18
+    - Fixed bug in the /availability api logic
+  - April 22
+    - Rewards api
+
+## Week 9:
+  - April 25
+    - Implemented dynamic pricing
+  - April 29
+    - Added Seasonal Pricing
+
+## Week 10:
+  - May 2
+    - Updated the return objects as per front-end requirements
+  - May 6
+    - Updated /availability logic, looking for bugs
+
+## Week 11:
+  - May 9
+    - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
+  - May 11
+    - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”

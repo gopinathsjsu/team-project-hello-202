@@ -13,6 +13,7 @@ import HotelSearchForm from "../HotelSearchForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Sidebar from "../Sidebar";
+import { Parallax } from "react-parallax";
 
 const rootStyle = {
   display: "flex",
@@ -23,6 +24,8 @@ const backgroundImageStyle = {
   height: "100vh",
   position: "absolute",
   width: "100vw",
+  // backgroundRepeat: "no-repeat",
+  backgroundAttachment: "scroll",
 };
 
 const hotelSearchStyle = {
@@ -46,6 +49,7 @@ const signInStyle = {
 const myTripStyle = {
   display: "flex",
   flexDirection: "row",
+  cursor: "pointer",
 };
 
 const myTripTextStyle = {
@@ -159,7 +163,10 @@ function Dashboard({
             </Dropdown>
           </div>,
           <div style={myTripStyle}>
-            <BriefcaseIcon style={briefcaseIconStyle} />
+            <BriefcaseIcon
+              style={briefcaseIconStyle}
+              onClick={onMyTripsClick}
+            />
             <div onClick={onMyTripsClick} style={myTripTextStyle}>
               My Trips
             </div>
@@ -167,9 +174,11 @@ function Dashboard({
         ]}
       />
       <Image
-        src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        // src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
         style={backgroundImageStyle}
       />
+
       {isSearchFormShown === true ? (
         <HotelSearchForm
           style={hotelSearchStyle}

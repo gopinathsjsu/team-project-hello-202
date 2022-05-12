@@ -29,7 +29,7 @@ function AdminRoom() {
 
   const createRoom = async () => {
     await fetch(
-      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/room",
+      "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/room",
       {
         headers: {
           "Content-Type": "application/json",
