@@ -114,7 +114,7 @@ Team Members:
   - March 14
     - Setting up basic flask-sqlalchemy application
   - March 18
-    - Note 1
+    - API design - functions/calls we want to have
 
 ## Week 4:
   - March 21
