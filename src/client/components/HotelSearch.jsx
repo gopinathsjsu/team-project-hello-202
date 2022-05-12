@@ -267,12 +267,14 @@ function HotelSearch(props) {
             {roomType === "all" ? (
               Object.values(typeOfRooms) &&
               Object.entries(typeOfRooms).map(([key, value]) => {
+                console.log(availableHotels);
+                console.log(hotelID);
                 return (
                   <Container fluid className="text-center">
                     <CardGroup className="m-7 d-block">
                       <Card
                         className="m-5 border-0 shadow"
-                        key={availableHotels[hotelID] != null ? availableHotels[hotelID][key].id : value.name}
+                        key={availableHotels[hotelID] && availableHotels[hotelID][key] ? availableHotels[hotelID][key].id : value.name}
                         style={{
                           margin: "2rem",
                           textAlign: "center",
@@ -327,7 +329,7 @@ function HotelSearch(props) {
                                         <div>
                                           <strong>
                                             $
-                                            {availableHotels[hotelID] != null
+                                            {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                               ? availableHotels[hotelID][key].rate
                                               : "0"}
                                           </strong>
@@ -339,7 +341,7 @@ function HotelSearch(props) {
                                         <strong>
                                           {" "}
                                           $
-                                          {availableHotels[hotelID] != null
+                                          {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key].rate
                                             : "0"}
                                         </strong>
@@ -350,7 +352,7 @@ function HotelSearch(props) {
                                         . If you'd like to use it, the price will
                                         be{" "}
                                         <strong>
-                                          {availableHotels[hotelID] != null
+                                          {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key].rate -
                                             localStorage.getItem("userRewards")
                                             : 0}
@@ -387,7 +389,7 @@ function HotelSearch(props) {
                                     bookRoomQuery(
                                       userID,
                                       hotelID,
-                                      availableHotels[hotelID].rate,
+                                      availableHotels[hotelID][key].rate,
                                       checkInDate,
                                       checkOutDate,
                                       destination,
@@ -420,7 +422,7 @@ function HotelSearch(props) {
                                     bookRoomWithRewardsQuery(
                                       userID,
                                       hotelID,
-                                      availableHotels[hotelID].rate,
+                                      availableHotels[hotelID][key].rate,
                                       checkInDate,
                                       checkOutDate,
                                       destination,
@@ -441,7 +443,7 @@ function HotelSearch(props) {
                                   flexDirection: "column",
                                 }}
                               >
-                                {availableHotels[hotelID] && amenities &&
+                                {availableHotels[hotelID] && availableHotels[hotelID][key] && amenities &&
                                   amenities.map((amenitype) => (
                                     <div
                                       class="custom-control custom-checkbox custom-control-inline"
@@ -540,7 +542,7 @@ function HotelSearch(props) {
                                     <div>
                                       <strong>
                                         $
-                                        {availableHotels[hotelID] != null
+                                        {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                           ? availableHotels[hotelID].rate
                                           : "0"}
                                       </strong>
@@ -555,7 +557,7 @@ function HotelSearch(props) {
                                     <strong>
                                       {" "}
                                       $
-                                      {availableHotels[hotelID] != null
+                                      {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                         ? availableHotels[hotelID].rate
                                         : "0"}
                                     </strong>
@@ -565,7 +567,7 @@ function HotelSearch(props) {
                                     </strong>
                                     . If you'd like to use it, the price will be{" "}
                                     <strong>
-                                      {availableHotels[hotelID] != null
+                                      {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
                                         ? availableHotels[hotelID].rate -
                                         localStorage.getItem("userRewards")
                                         : 0}
@@ -601,10 +603,13 @@ function HotelSearch(props) {
                                   )
                                     ? "double"
                                     : "suite";
+                                console.log(availableHotels);
+                                console.log(hotelID);
+                                console.log(roomType);
                                 bookRoomQuery(
                                   userID,
                                   hotelID,
-                                  availableHotels[hotelID].rate,
+                                  availableHotels[hotelID][roomType].rate,
                                   checkInDate,
                                   checkOutDate,
                                   destination,
@@ -639,7 +644,7 @@ function HotelSearch(props) {
                                 bookRoomWithRewardsQuery(
                                   userID,
                                   hotelID,
-                                  availableHotels[hotelID].rate,
+                                  availableHotels[hotelID][roomType].rate,
                                   checkInDate,
                                   checkOutDate,
                                   destination,
@@ -669,15 +674,15 @@ function HotelSearch(props) {
                                   <input
                                     type="checkbox"
                                     class="custom-control-input"
-                                    id={typeOfRooms[roomType].id + amenitype.id}
+                                    id={typeOfRooms[key].id + amenitype.id}
                                     onChange={(e) => {
                                       if (e.target.checked) {
-                                        availableHotels[hotelID].rate =
-                                          availableHotels[hotelID].rate +
+                                        availableHotels[hotelID][key].rate =
+                                          availableHotels[hotelID][key].rate +
                                           amenitype.rate;
                                       } else {
-                                        availableHotels[hotelID].rate =
-                                          availableHotels[hotelID].rate -
+                                        availableHotels[hotelID][key].rate =
+                                          availableHotels[hotelID][key].rate -
                                           amenitype.rate;
                                       }
                                     }}
@@ -737,71 +742,76 @@ function HotelSearch(props) {
       </div>
       <div style={{ margin: "auto" }}>
         {Object.values(paginatedHotels) &&
-          Object.values(paginatedHotels).map((availableHotel) => (
-            <Container fluid className="text-center">
-              <CardGroup className="m-5 d-block">
-                <Card
-                  className="m-7 border-0 shadow"
-                  key={availableHotel.id}
-                  style={{
-                    width: "75vw",
-                    margin: "2rem",
-                    textAlign: "center",
-                    borderRadius: 35,
-                  }}
-                >
-                  <Card.Header>
-                    <span style={{ fontWeight: "bold" }}>
-                      {" "}
-                      {availableHotel.name}
-                    </span>
-                  </Card.Header>
-                  <Card.Body style={{ display: "flex", flexDirection: "row" }}>
-                    <Image
-                      src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
-                      style={hotelImageStyle}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "100vw",
-                      }}
-                    >
+          Object.values(paginatedHotels).map((availableHotel) => {
+            const firstValue = availableHotel[Object.keys(availableHotel)[0]]
+            return (
+              <Container fluid className="text-center">
+                <CardGroup className="m-5 d-block">
+                  <Card
+                    className="m-7 border-0 shadow"
+                    key={firstValue.id}
+                    style={{
+                      width: "75vw",
+                      margin: "2rem",
+                      textAlign: "center",
+                      borderRadius: 35,
+                    }}
+                  >
+                    <Card.Header>
+                      <span style={{ fontWeight: "bold" }}>
+                        {" "}
+                        {firstValue.name}
+                      </span>
+                    </Card.Header>
+                    <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                      <Image
+                        src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                        style={hotelImageStyle}
+                      />
                       <div
                         style={{
                           display: "flex",
-                          flexDirection: "row",
-                          padding: "0px 0px 0px 10px",
-                          justifyContent: "space-around",
+                          flexDirection: "column",
+                          width: "100vw",
                         }}
                       >
-                        <Card.Text>{availableHotel.address}</Card.Text>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "space-evenly",
-                        }}
-                      >
-                        <Button
-                          variant="outline-primary"
-                          type="submit"
-                          onClick={() => {
-                            setHotelIDPicked(availableHotel['single'].id);
-                            setismodelshown(true);
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            padding: "0px 0px 0px 10px",
+                            justifyContent: "space-around",
                           }}
                         >
-                          Room Selection
-                        </Button>
+                          <Card.Text>{firstValue.address}</Card.Text>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-evenly",
+                          }}
+                        >
+                          <Button
+                            variant="outline-primary"
+                            type="submit"
+                            onClick={() => {
+                              console.log(firstValue);
+                              console.log(roomType);
+                              setHotelIDPicked(roomType == 'all' ? firstValue.id : availableHotel[roomType].id);
+                              setismodelshown(true);
+                            }}
+                          >
+                            Room Selection
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </CardGroup>
-            </Container>
-          ))}
+                    </Card.Body>
+                  </Card>
+                </CardGroup>
+              </Container>
+            );
+          })}
       </div>
 
       <Pagination style={{ margin: "auto" }}>
