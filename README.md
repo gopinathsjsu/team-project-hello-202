@@ -125,3 +125,9 @@ Team Members:
     - Note 1
   - April 1
     - Note 1
+
+## Week 6:
+  - April 4
+    - Note 1
+  - April 8
+    - Note 1
