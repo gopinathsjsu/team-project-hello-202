@@ -137,7 +137,7 @@ Team Members:
 
 ## Week 7:
   - April 11
-    - Note 1
+    - Removed bugs and discussed how to add dynamic/seasonal pricing
   - April 15
     - Note 1
 
