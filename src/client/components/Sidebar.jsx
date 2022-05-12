@@ -25,7 +25,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
         style={{
           position: "absolute",
           zIndex: 2,
-          height: 340,
+          height: 300,
           width: 200,
           background: "rgba(0, 0, 0, 0.5)",
           color: "rgb(0,0,0)",
@@ -42,7 +42,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
 
         {isAdmin ? (
           <Nav.Item>
-            <Nav.Link href="/admin">Create Hotel</Nav.Link>
+            <Nav.Link href="/adminroom">Create Hotel</Nav.Link>
           </Nav.Item>
         ) : (
           <></>
@@ -50,7 +50,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
 
         {isAdmin ? (
           <Nav.Item>
-            <Nav.Link href="/adminroom">Create room</Nav.Link>
+            <Nav.Link href="/admin">Create Room</Nav.Link>
           </Nav.Item>
         ) : (
           <></>
