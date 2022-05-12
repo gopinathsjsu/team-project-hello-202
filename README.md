@@ -143,7 +143,7 @@ Team Members:
 
 ## Week 8:
   - April 18
-    - Note 1
+    - Fixed bug in the /availability api logic
   - April 22
     - Note 1
 
