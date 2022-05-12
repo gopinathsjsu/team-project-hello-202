@@ -94,9 +94,9 @@ Team Members:
 
 ## Feature Set:
 The application can:
-  - Allow user to create account and make hotel reservation
-  - Perform Dynamic/Seasonal Pricing to allow the user 
-  -  
+  - Allow user to create account and make, update, cancel hotel reservations
+  - The app performs Dynamic/Seasonal Pricing  
+  - User has the ability to use rewards at the time of booking. Also, new rewards will be added per booking.
 
 # Scrum Meeting Notes
 
