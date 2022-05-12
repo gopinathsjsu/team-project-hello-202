@@ -65,7 +65,6 @@ const bookRoomQuery = (
     }
   )
     .then((data) => {
-      console.log(data);
       fetch(
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
@@ -112,7 +111,6 @@ const bookRoomWithRewardsQuery = (
     }
   )
     .then((data) => {
-      console.log(data);
       fetch(
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
@@ -248,6 +246,7 @@ function HotelSearch(props) {
     checkInDate,
     checkOutDate
   ) => {
+    console.log(availableHotels[hotelID], "hotel ID");
     return (
       <Modal
         {...props}
