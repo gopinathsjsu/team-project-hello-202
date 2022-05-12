@@ -93,7 +93,10 @@ Team Members:
 ## Design Decisions:
 
 ## Feature Set:
-
+The application can:
+  - Allow user to create account and make hotel reservation
+  - Perform Dynamic/Seasonal Pricing to allow the user 
+  -  
 
 # Scrum Meeting Notes
 
