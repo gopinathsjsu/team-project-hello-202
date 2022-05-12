@@ -29,6 +29,7 @@ function Sidebar({ showSidebar, setJWT, isAdmin, setIsAdmin }) {
           width: 200,
           background: "rgba(0, 0, 0, 0.5)",
           color: "rgb(0,0,0)",
+          zIndex: 3,
         }}
         className="col-md-12 d-none d-md-block bg-light sidebar"
         onSelect={onLinkSelect}

@@ -30,7 +30,7 @@ const LandingPage = ({}) => {
           path="/"
           element={
             <>
-              {jwt ? (
+              {
                 <Dashboard
                   jwt={jwt}
                   roomType={roomType}
@@ -50,9 +50,7 @@ const LandingPage = ({}) => {
                   isAdmin={isAdmin}
                   setIsAdmin={setIsAdmin}
                 />
-              ) : (
-                <Login setIsAdmin={setIsAdmin} setJWT={setJWT} />
-              )}
+              }
             </>
           }
         />
