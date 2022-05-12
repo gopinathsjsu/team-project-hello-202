@@ -11,6 +11,7 @@ Team Members:
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
 ### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
+![Burndown Chart](https://user-images.githubusercontent.com/50338345/168176940-f590ee05-6356-4257-a2a9-4c287c37ab67.png)
 
 ## XP Core Values
 
