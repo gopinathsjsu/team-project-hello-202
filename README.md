@@ -107,10 +107,10 @@ Team Members:
 - **Loyalty points** for user will be incrementally aded since the day user had created an account
 - Hotel rates are based on **Dynamic/Seasonal Pricing**
 - Booked rooms will be displayed on **My trips** pages
-- User can go to **different pages** to see their bookings.
-- User can Login as an Admin
-- Admin can be Create a Hotel
-- Admin can Create rooms for the Hotel Created
+- **User** can go to **different pages** to see their bookings.
+- **User** can Login as an **Admin**
+- **Admin** can be **Create Hotel**
+- **Admin** can **Create rooms** for the existing hotels
 
 # Scrum Meeting Notes
 
