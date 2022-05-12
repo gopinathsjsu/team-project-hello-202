@@ -1,27 +1,32 @@
 # Hello 202
-Team Members: 
+
+Team Members:
+
 - Adam Hashoush
 - Josef Bustamante
-- Karan Tyagi
+- Karan Tyagi (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
 - Priyank Bardolia
 
 ## Responsibilities
+
 <b>Front End</b>: Josef Bustamante and Priyank Bardolia <br>
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
+
 ### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
 ![Burndown Chart](https://user-images.githubusercontent.com/50338345/168176940-f590ee05-6356-4257-a2a9-4c287c37ab67.png)
 
 ## XP Core Values
 
-- ***Communication***: We sucessfully conducted meetings every week on zoom/ in-person to discuss crucial aspects of the project by collaborating and communicating with each other.
-- ***Respect***: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
--  ***Feedback***: We developed a habit of giving feedback to the team after every commit, so that we can create the best user experience with zero road blocks. Apart from that we as a team have modified our application based on the suggestions by the team.
-- ***Simplicity***: As a team we have focused on simplicity in our project from day one by delivering only the essential and useful, so that we can remove the unnecessary clutter and make things less complicated.
-- ***Courage***: We as a team of Programmers have objectively evaluated our own results without making excuses and were always ready to respond to changes.
-  
+- **_Communication_**: We sucessfully conducted meetings every week on zoom/ in-person to discuss crucial aspects of the project by collaborating and communicating with each other.
+- **_Respect_**: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
+- **_Feedback_**: We developed a habit of giving feedback to the team after every commit, so that we can create the best user experience with zero road blocks. Apart from that we as a team have modified our application based on the suggestions by the team.
+- **_Simplicity_**: As a team we have focused on simplicity in our project from day one by delivering only the essential and useful, so that we can remove the unnecessary clutter and make things less complicated.
+- **_Courage_**: We as a team of Programmers have objectively evaluated our own results without making excuses and were always ready to respond to changes.
+
 <b>How the team kept the core value? <br></b><br>
+
 - Team meetings in which diagrams were made to convey the structure of the tables in the back-end <br>
 - Mock-ups of how the front-end will look like on Figma. <br>
 - Every Standup includes discussing the work done, the challenges and whether there is any deviation in the implementation from the diagrams and mockups.
@@ -37,6 +42,7 @@ Team Members:
 ## TASKS COMPLETED:
 
 - Backend
+
   - Explore SQLAlchemy
   - Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
   - Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
@@ -80,90 +86,113 @@ Team Members:
   - Create Rewards on Room book
   - Add Dynamic Price Deduction on room book using rewards
 
-
 ## UI Wireframes:
 
 ### <a href="https://www.figma.com/file/K7rA2OWtDBw8fHhUVRApMr/Simple-Hotel-Website-(Community)?node-id=0%3A1">Figma Link</a>
 
+![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png)
 
-![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png
-)
-
-## Deployment Diagram:
+## Component Diagram:
+![Component Diagram](https://user-images.githubusercontent.com/38865668/168175663-c9717dee-b0f4-444f-91d7-193368d672ad.png)
 
 ## Design Decisions:
 
 ## Feature Set:
 
+- **User** can Login/Sign-up an account
+- **User** can Make/Update/Cancel reservation.
+- **User** can select location/check-in/checkout date for Hotel search
+- **User** can select the type of room
+- **User** can book a room with/without rewards
+- **User** can select the number of rooms/people.
+- Based on the **number of people** type of room will be displayed
+- **Loyalty points** for user will be incrementally aded since the day user had created an account
+- Hotel rates are based on **Dynamic/Seasonal Pricing**
+- Booked rooms will be displayed on **My trips** pages
+- **User** can go to **different pages** to see their bookings.
+- **User** can Login as an **Admin**
+- **Admin** can **Create Hotel**
+- **Admin** can **Create rooms** for the existing hotels
 
 # Scrum Meeting Notes
 
 ## Schedule for Scrum Meetings:
+
 - Monday
 - Friday
 
 ## Week 1:
-  - February 28
-    - Went through project guidelines to start brainstorming
-  - March 4
-    - who does what and finding tech stack to use (software, etc.)
+
+- February 28
+  - Went through project guidelines to start brainstorming
+- March 4
+  - who does what and finding tech stack to use (software, etc.)
 
 ## Week 2:
-  - March 7
-    - Finalizing tech stack
-      - Frontend: React
-      - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
-  - March 11
-    - Created Schema diagram on Figma
+
+- March 7
+  - Finalizing tech stack
+    - Frontend: React
+    - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
+- March 11
+  - Created Schema diagram on Figma
 
 ## Week 3:
-  - March 14
-    - Setting up basic flask-sqlalchemy application
-  - March 18
-    - API design - functions/calls we want to have
+
+- March 14
+  - Setting up basic flask-sqlalchemy application
+- March 18
+  - API design - functions/calls we want to have
 
 ## Week 4:
-  - March 21
-    - Added user, hotel and room tables
-  - March 25
-    - Created add User and add Hotel and add Room API
-    - testing on postman
+
+- March 21
+  - Added user, hotel and room tables
+- March 25
+  - Created add User and add Hotel and add Room API
+  - testing on postman
 
 ## Week 5:
-  - March 28
-    - Went through AWS documentation for deploying the basic application created so far
-  - April 1
-    - Deployed the back-end by dockerizing the flask application and pushing on elastic beanstalk (automatically adds load balancer)
+
+- March 28
+  - Went through AWS documentation for deploying the basic application created so far
+- April 1
+  - Deployed the back-end by dockerizing the flask application and pushing on elastic beanstalk (automatically adds load balancer)
 
 ## Week 6:
-  - April 4
-    - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
-  - April 8
-    - Added reservation table and /reservation api
+
+- April 4
+  - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
+- April 8
+  - Added reservation table and /reservation api
 
 ## Week 7:
-  - April 11
-    - Removed bugs and discussed how to add dynamic/seasonal pricing
-  - April 15
-    - Implemented availability api
+
+- April 11
+  - Removed bugs and discussed how to add dynamic/seasonal pricing
+- April 15
+  - Implemented availability api
 
 ## Week 8:
-  - April 18
-    - Fixed bug in the /availability api logic
-  - April 22
-    - Rewards api
+
+- April 18
+  - Fixed bug in the /availability api logic
+- April 22
+  - Rewards api
 
 ## Week 9:
-  - April 25
-    - Implemented dynamic pricing
-  - April 29
-    - Added Seasonal Pricing
+
+- April 25
+  - Implemented dynamic pricing
+- April 29
+  - Added Seasonal Pricing
 
 ## Week 10:
-  - May 2
-    - Updated the return objects as per front-end requirements
-  - May 6
-    - Updated /availability logic, looking for bugs
+
+- May 2
+  - Updated the return objects as per front-end requirements
+- May 6
+  - Updated /availability logic, looking for bugs
 
 ## Week 11:
   - May 9

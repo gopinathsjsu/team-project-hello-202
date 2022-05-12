@@ -20,7 +20,7 @@ const LandingPage = ({}) => {
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
   const [roomCount, setRoomCount] = useState(0);
-  const [roomType, setRoomType] = useState("single");
+  const [roomType, setRoomType] = useState("all");
   const [peopleCount, setPeopleCount] = useState(0);
 
   return (
