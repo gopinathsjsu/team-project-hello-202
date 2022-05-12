@@ -12,6 +12,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Pagination from "react-bootstrap/Pagination";
 import Datetime from "react-datetime";
+import { Navigate } from "react-router-dom";
 
 const rootStyle = {
   display: "flex",
@@ -99,7 +100,7 @@ const queryReservations = async (jwt, setTrips, setPaginatedTrips) =>
       console.log(exception);
     });
 
-const cancelTripQuery = (reservationID, trips, setTrips) =>
+const cancelTripQuery = (reservationID, trips, setTrips, navigate) =>
   fetch(
     "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation",
     {

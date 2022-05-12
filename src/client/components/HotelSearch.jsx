@@ -438,6 +438,10 @@ function HotelSearch(props) {
                                       roomCount,
                                       peopleCount,
                                       roomTypeParsed,
+                                      localStorage.setItem(
+                                        "bookSuccessful",
+                                        true
+                                      ),
                                       navigate
                                     );
                                   }}
@@ -749,21 +753,45 @@ function HotelSearch(props) {
       )}
 
       <div>
-        <Modal
-          show={isbookmodalshown}
-          onHide={handlebookClose}
-          animation={true}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Booking Successful!!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Your room has been booked!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handlebookClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {localStorage.getItem("bookSuccessful") ? (
+          <Modal
+            show={isbookmodalshown}
+            onHide={handlebookClose}
+            animation={true}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Booking Successful!!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Your room has been booked!</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  localStorage.removeItem("bookSuccessful");
+                  setisbookmodalshown(false);
+                }}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        ) : (
+          <Modal
+            show={isbookmodalshown}
+            onHide={handlebookClose}
+            animation={true}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Booking Error!!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Your booking Falied.</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handlebookClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </div>
       <div style={{ margin: "auto" }}>
         {Object.values(paginatedHotels) &&
@@ -823,8 +851,6 @@ function HotelSearch(props) {
                             variant="outline-primary"
                             type="submit"
                             onClick={() => {
-                              console.log(firstValue);
-                              console.log(roomType);
                               setHotelIDPicked(
                                 roomType == "all"
                                   ? firstValue.id
