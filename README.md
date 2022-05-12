@@ -28,10 +28,10 @@ Team Members:
 ## TECHSTACK:
 
 - Frontend: ReactJS, Webpack, NPM, CSS, Babel
-- Backend: FlaskSqlAlchemy, EC2, RDS
+- Backend: FlaskSqlAlchemy, RDS
 - Database: SQLAlchemy
 - REST API: Postman(Testing APIs)
-- Cloud: AWS EC2 Cluster
+- Cloud: AWS Elastic Beanstalk
 
 ## TASKS COMPLETED:
 
@@ -39,7 +39,22 @@ Team Members:
   - Explore SQLAlchemy
   - Create all the tables and AddData methods as per the Schema Diagrams discussed during the meetings (initially with an in-memory db)
   - Explore ec2 and Amazon Relational Database Service (RDS) using a basic schema. Need DB to be persistent.
-  - Added all API methods
+  - Added Tables:
+    - User
+    - Room
+    - Hotel
+    - Reservation
+  - Added API Calls:
+    - /login
+    - /user
+    - /hotel
+    - /room
+    - /availability
+    - /reservation
+    - /rewards
+  - Implemented Dynamic Pricing
+  - Implemented Seasonal Pricing
+  - Deploying docker image on Elastic Beanstalk (with every feature release)
 
 - Frontend
   - Create Routing
@@ -64,24 +79,22 @@ Team Members:
   - Create Rewards on Room book
   - Add Dynamic Price Deduction on room book using rewards
 
-## Diagrams
 
-### UI Wireframes:
+## UI Wireframes:
 
-### Architecture Diagram:
+### <a href="https://www.figma.com/file/K7rA2OWtDBw8fHhUVRApMr/Simple-Hotel-Website-(Community)?node-id=0%3A1">Figma Link</a>
 
-### Component Diagram:
 
-### Deployment Diagrams
+![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png
+)
 
+## Deployment Diagrams
 
 ## Design Decisions:
 
+
 ## Feature Set:
 
-### User Features:
-
-### Admin Features:
 
 # Scrum Meeting Notes
 
