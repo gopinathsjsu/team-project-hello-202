@@ -144,7 +144,7 @@ function HotelSearchForm({
 
   const onSubmitClick = () => {
     fetch(
-      "http://Hmanage-env.eba-ibcrgcpt.us-east-2.elasticbeanstalk.com/availability",
+      "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/availability",
       {
         headers: {
           "Content-Type": "application/json",
@@ -156,6 +156,7 @@ function HotelSearchForm({
           destination,
           roomCount,
           roomType,
+          userID: localStorage.getItem("jwt"),
         }),
       }
     )
@@ -163,6 +164,7 @@ function HotelSearchForm({
         if (res.ok) {
           return res.json().then((responseData) => {
             setAvailableHotels(responseData);
+
             navigate("/search");
           });
         }
@@ -191,7 +193,9 @@ function HotelSearchForm({
     if (peopleCount === MIN_PEOPLE_COUNT) {
       return;
     }
-    if (peopleCount - 1 <= 1) {
+    if (peopleCount - 1 === 0) {
+      setRoomType("all");
+    } else if (peopleCount - 1 <= 1) {
       setRoomType("single");
     } else if (peopleCount - 1 > 1 && peopleCount - 1 <= 4) {
       setRoomType("double");
@@ -205,7 +209,9 @@ function HotelSearchForm({
     if (peopleCount === MAX_PEOPLE_COUNT) {
       return;
     }
-    if (peopleCount + 1 <= 1) {
+    if (peopleCount + 1 === 0) {
+      setRoomType("all");
+    } else if (peopleCount + 1 <= 1) {
       setRoomType("single");
     } else if (peopleCount + 1 > 1 && peopleCount + 1 <= 4) {
       setRoomType("double");
