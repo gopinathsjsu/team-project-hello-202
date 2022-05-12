@@ -246,7 +246,6 @@ function HotelSearch(props) {
     checkInDate,
     checkOutDate
   ) => {
-    console.log(availableHotels[hotelID], "hotel ID");
     return (
       <Modal
         {...props}
@@ -266,14 +265,17 @@ function HotelSearch(props) {
             {roomType === "all" ? (
               Object.values(typeOfRooms) &&
               Object.entries(typeOfRooms).map(([key, value]) => {
-                console.log(availableHotels);
-                console.log(hotelID);
                 return (
                   <Container fluid className="text-center">
                     <CardGroup className="m-7 d-block">
                       <Card
                         className="m-5 border-0 shadow"
-                        key={availableHotels[hotelID] && availableHotels[hotelID][key] ? availableHotels[hotelID][key].id : value.name}
+                        key={
+                          availableHotels[hotelID] &&
+                          availableHotels[hotelID][key]
+                            ? availableHotels[hotelID][key].id
+                            : value.name
+                        }
                         style={{
                           margin: "2rem",
                           textAlign: "center",
@@ -328,8 +330,11 @@ function HotelSearch(props) {
                                         <div>
                                           <strong>
                                             $
-                                            {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
-                                              ? availableHotels[hotelID][key].rate
+                                            {availableHotels[hotelID] != null &&
+                                            availableHotels[hotelID][key] !=
+                                              null
+                                              ? availableHotels[hotelID][key]
+                                                  .rate
                                               : "0"}
                                           </strong>
                                         </div>
@@ -340,7 +345,8 @@ function HotelSearch(props) {
                                         <strong>
                                           {" "}
                                           $
-                                          {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
+                                          {availableHotels[hotelID] != null &&
+                                          availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key].rate
                                             : "0"}
                                         </strong>
@@ -348,12 +354,16 @@ function HotelSearch(props) {
                                         <strong>
                                           {localStorage.getItem("userRewards")}
                                         </strong>
-                                        . If you'd like to use it, the price will
-                                        be{" "}
+                                        . If you'd like to use it, the price
+                                        will be{" "}
                                         <strong>
-                                          {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
-                                            ? availableHotels[hotelID][key].rate -
-                                            localStorage.getItem("userRewards")
+                                          {availableHotels[hotelID] != null &&
+                                          availableHotels[hotelID][key] != null
+                                            ? availableHotels[hotelID][key]
+                                                .rate -
+                                              localStorage.getItem(
+                                                "userRewards"
+                                              )
                                             : 0}
                                         </strong>
                                       </Popover.Body>
@@ -383,8 +393,8 @@ function HotelSearch(props) {
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                        ? "double"
-                                        : "suite";
+                                      ? "double"
+                                      : "suite";
                                     bookRoomQuery(
                                       userID,
                                       hotelID,
@@ -416,8 +426,8 @@ function HotelSearch(props) {
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                        ? "double"
-                                        : "suite";
+                                      ? "double"
+                                      : "suite";
                                     bookRoomWithRewardsQuery(
                                       userID,
                                       hotelID,
@@ -442,7 +452,9 @@ function HotelSearch(props) {
                                   flexDirection: "column",
                                 }}
                               >
-                                {availableHotels[hotelID] && availableHotels[hotelID][key] && amenities &&
+                                {availableHotels[hotelID] &&
+                                  availableHotels[hotelID][key] &&
+                                  amenities &&
                                   amenities.map((amenitype) => (
                                     <div
                                       class="custom-control custom-checkbox custom-control-inline"
@@ -451,16 +463,19 @@ function HotelSearch(props) {
                                       <input
                                         type="checkbox"
                                         class="custom-control-input"
-                                        id={availableHotels[hotelID][key].id + amenitype.id}
+                                        id={
+                                          availableHotels[hotelID][key].id +
+                                          amenitype.id
+                                        }
                                         onChange={(e) => {
                                           if (e.target.checked) {
                                             availableHotels[hotelID][key].rate =
-                                              availableHotels[hotelID][key].rate +
-                                              amenitype.rate;
+                                              availableHotels[hotelID][key]
+                                                .rate + amenitype.rate;
                                           } else {
                                             availableHotels[hotelID][key].rate =
-                                              availableHotels[hotelID][key].rate -
-                                              amenitype.rate;
+                                              availableHotels[hotelID][key]
+                                                .rate - amenitype.rate;
                                           }
                                         }}
                                       ></input>
@@ -541,8 +556,11 @@ function HotelSearch(props) {
                                     <div>
                                       <strong>
                                         $
-                                        {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
-                                          ? availableHotels[hotelID].rate
+                                        {availableHotels[hotelID] != null &&
+                                        availableHotels[hotelID][roomType] !=
+                                          null
+                                          ? availableHotels[hotelID][roomType]
+                                              .rate
                                           : "0"}
                                       </strong>
                                     </div>
@@ -556,8 +574,10 @@ function HotelSearch(props) {
                                     <strong>
                                       {" "}
                                       $
-                                      {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
-                                        ? availableHotels[hotelID].rate
+                                      {availableHotels[hotelID] != null &&
+                                      availableHotels[hotelID][roomType] != null
+                                        ? availableHotels[hotelID][roomType]
+                                            .rate
                                         : "0"}
                                     </strong>
                                     . Your rewards are{" "}
@@ -566,9 +586,11 @@ function HotelSearch(props) {
                                     </strong>
                                     . If you'd like to use it, the price will be{" "}
                                     <strong>
-                                      {availableHotels[hotelID] != null && availableHotels[hotelID][key] != null
-                                        ? availableHotels[hotelID].rate -
-                                        localStorage.getItem("userRewards")
+                                      {availableHotels[hotelID] != null &&
+                                      availableHotels[hotelID][roomType] != null
+                                        ? availableHotels[hotelID][roomType]
+                                            .rate -
+                                          localStorage.getItem("userRewards")
                                         : 0}
                                     </strong>
                                   </Popover.Body>
@@ -598,10 +620,10 @@ function HotelSearch(props) {
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                    "Double"
-                                  )
-                                    ? "double"
-                                    : "suite";
+                                      "Double"
+                                    )
+                                  ? "double"
+                                  : "suite";
                                 console.log(availableHotels);
                                 console.log(hotelID);
                                 console.log(roomType);
@@ -636,10 +658,10 @@ function HotelSearch(props) {
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                    "Double"
-                                  )
-                                    ? "double"
-                                    : "suite";
+                                      "Double"
+                                    )
+                                  ? "double"
+                                  : "suite";
                                 bookRoomWithRewardsQuery(
                                   userID,
                                   hotelID,
@@ -673,16 +695,20 @@ function HotelSearch(props) {
                                   <input
                                     type="checkbox"
                                     class="custom-control-input"
-                                    id={typeOfRooms[key].id + amenitype.id}
+                                    id={typeOfRooms[roomType].id + amenitype.id}
                                     onChange={(e) => {
                                       if (e.target.checked) {
-                                        availableHotels[hotelID][key].rate =
-                                          availableHotels[hotelID][key].rate +
-                                          amenitype.rate;
+                                        availableHotels[hotelID][
+                                          roomType
+                                        ].rate =
+                                          availableHotels[hotelID][roomType]
+                                            .rate + amenitype.rate;
                                       } else {
-                                        availableHotels[hotelID][key].rate =
-                                          availableHotels[hotelID][key].rate -
-                                          amenitype.rate;
+                                        availableHotels[hotelID][
+                                          roomType
+                                        ].rate =
+                                          availableHotels[hotelID][roomType]
+                                            .rate - amenitype.rate;
                                       }
                                     }}
                                   ></input>
@@ -742,7 +768,7 @@ function HotelSearch(props) {
       <div style={{ margin: "auto" }}>
         {Object.values(paginatedHotels) &&
           Object.values(paginatedHotels).map((availableHotel) => {
-            const firstValue = availableHotel[Object.keys(availableHotel)[0]]
+            const firstValue = availableHotel[Object.keys(availableHotel)[0]];
             return (
               <Container fluid className="text-center">
                 <CardGroup className="m-5 d-block">
@@ -762,7 +788,9 @@ function HotelSearch(props) {
                         {firstValue.name}
                       </span>
                     </Card.Header>
-                    <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                    <Card.Body
+                      style={{ display: "flex", flexDirection: "row" }}
+                    >
                       <Image
                         src="https://images.unsplash.com/photo-1618773928121-c32242e63f39"
                         style={hotelImageStyle}
@@ -797,7 +825,11 @@ function HotelSearch(props) {
                             onClick={() => {
                               console.log(firstValue);
                               console.log(roomType);
-                              setHotelIDPicked(roomType == 'all' ? firstValue.id : availableHotel[roomType].id);
+                              setHotelIDPicked(
+                                roomType == "all"
+                                  ? firstValue.id
+                                  : availableHotel[roomType].id
+                              );
                               setismodelshown(true);
                             }}
                           >
