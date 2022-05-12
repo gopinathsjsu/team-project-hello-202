@@ -96,7 +96,7 @@ Team Members:
 ![Component Diagram](https://user-images.githubusercontent.com/38865668/168175663-c9717dee-b0f4-444f-91d7-193368d672ad.png)
 
 ## Architecture Diagram:
-![Architecture Diagram](https://user-images.githubusercontent.com/38865668/168180916-d43b0523-8ac4-47f5-b19e-b69b1043b71a.png)
+![Architecture Diagram](https://user-images.githubusercontent.com/38865668/168181403-3e4b5340-83db-4b1b-bfef-807f03a2db52.png)
 
 ## Design Decisions:
 
