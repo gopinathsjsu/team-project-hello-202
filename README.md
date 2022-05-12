@@ -10,7 +10,7 @@ Team Members:
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
-### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Spring Task Sheet</a>
+### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
 
 ## XP Core Values
 
