@@ -161,6 +161,6 @@ Team Members:
 
 ## Week 11:
   - May 9
-    - Note 1
+    - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
   - May 11
-    - Note 1
+    - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”
