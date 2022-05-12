@@ -131,3 +131,33 @@ Team Members:
     - Note 1
   - April 8
     - Note 1
+
+## Week 7:
+  - April 11
+    - Note 1
+  - April 15
+    - Note 1
+
+## Week 8:
+  - April 18
+    - Note 1
+  - April 22
+    - Note 1
+
+## Week 9:
+  - April 25
+    - Note 1
+  - April 29
+    - Note 1
+
+## Week 10:
+  - May 2
+    - Note 1
+  - May 6
+    - Note 1
+
+## Week 11:
+  - May 9
+    - Note 1
+  - May 11
+    - Note 1
