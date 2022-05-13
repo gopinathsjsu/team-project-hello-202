@@ -1,42 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "react-datetime/css/react-datetime.css";
 
-
 const rootStyle = {
-  background: 'black',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  zIndex: 1
+  background: "black",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  zIndex: 2,
 };
 
 const leftSideStyle = {
-  color: 'white',
-  display: 'flex',
-  flexDirection: 'row',
-  padding: '10px 0px 10px 10px'
+  color: "white",
+  display: "flex",
+  flexDirection: "row",
+  padding: "10px 0px 10px 10px",
 };
 
 const rightSideStyle = {
-  color: 'white',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-evenly',
-  padding: '10px 10px 10px 0px',
-  width: '20vw'
+  color: "white",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+  padding: "10px 10px 10px 0px",
+  width: "20vw",
 };
 
 function Header({ left, right }) {
-
   return (
     <div style={rootStyle}>
-      <div style={leftSideStyle}>
-        {left}
-      </div>
-      <div style={rightSideStyle}>
-        {right}
-      </div>
-    </div >
+      <div style={leftSideStyle}>{left}</div>
+      <div style={rightSideStyle}>{right}</div>
+    </div>
   );
 }
 

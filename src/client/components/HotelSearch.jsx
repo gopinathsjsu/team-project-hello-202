@@ -889,33 +889,37 @@ function HotelSearch(props) {
           })}
       </div>
 
-      <Pagination style={{ margin: "auto" }}>
-        <Pagination.First
-          onClick={() => {
-            pagination(1);
-          }}
-        />
-        <Pagination.Prev
-          onClick={() => {
-            if (active > 1) {
-              pagination(active - 1);
-            }
-          }}
-        />
-        {pages}
-        <Pagination.Next
-          onClick={() => {
-            if (active < 5) {
-              pagination(active + 1);
-            }
-          }}
-        />
-        <Pagination.Last
-          onClick={() => {
-            pagination(5);
-          }}
-        />
-      </Pagination>
+      {availableHotels && availableHotels.length > 5 ? (
+        <Pagination style={{ margin: "auto" }}>
+          <Pagination.First
+            onClick={() => {
+              pagination(1);
+            }}
+          />
+          <Pagination.Prev
+            onClick={() => {
+              if (active > 1) {
+                pagination(active - 1);
+              }
+            }}
+          />
+          {pages}
+          <Pagination.Next
+            onClick={() => {
+              if (active < 5) {
+                pagination(active + 1);
+              }
+            }}
+          />
+          <Pagination.Last
+            onClick={() => {
+              pagination(5);
+            }}
+          />
+        </Pagination>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

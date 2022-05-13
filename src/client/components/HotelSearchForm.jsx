@@ -113,7 +113,8 @@ const rootStyle = {
   display: "flex",
   flexDirection: "row",
   margin: "5vh",
-  zIndex: 0,
+  zIndex: 2,
+  marginTop: 90,
 };
 
 const MIN_ROOM_COUNT = 0;
