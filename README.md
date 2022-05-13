@@ -2,15 +2,22 @@
 
 Team Members:
 
-- Adam Hashoush
-- Josef Bustamante
-- Karan Tyagi (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
-- Priyank Bardolia
+- Adam Hashoush (015970357)
+- Josef Bustamante (015530827)
+- Karan Tyagi (015908932) (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
+- Priyank Bardolia 
 
 ## Responsibilities
 
 <b>Front End</b>: Josef Bustamante and Priyank Bardolia <br>
 <b>Back End</b>: Adam Hashoush and Karan Tyagi
+
+### Contributions
+Karan and Adam worked on the backend. After designing the schema of the tables and APIs they each took up parts of
+each to implement. Karan deployed the database on RDS and the flask application on elastic beanstalk while Adam worked
+on documentation, testing and verification. <br>
+
+Josef and Priyank worked on the frontend. Both Josef and Priyank set up the directory structure, npm modules, configurations and UI wireframes. Josef and Priyank did a mix of individual and pair programming to implement the UI component, styling and integration with the backend.
 
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
 
@@ -22,9 +29,6 @@ Team Members:
 
 - **_Communication_**: We sucessfully conducted meetings every week on zoom/ in-person to discuss crucial aspects of the project by collaborating and communicating with each other.
 - **_Respect_**: Since day one, the decisions pertaining to the project were made by keeping in mind every team members opinion. Apart from that we have been empathatic towards each other by helping each other in resolving code blocks and learning together.
-- **_Feedback_**: We developed a habit of giving feedback to the team after every commit, so that we can create the best user experience with zero road blocks. Apart from that we as a team have modified our application based on the suggestions by the team.
-- **_Simplicity_**: As a team we have focused on simplicity in our project from day one by delivering only the essential and useful, so that we can remove the unnecessary clutter and make things less complicated.
-- **_Courage_**: We as a team of Programmers have objectively evaluated our own results without making excuses and were always ready to respond to changes.
 
 <b>How the team kept the core value? <br></b><br>
 
@@ -102,6 +106,12 @@ Team Members:
 ![Architecture Diagram](https://user-images.githubusercontent.com/38865668/168181403-3e4b5340-83db-4b1b-bfef-807f03a2db52.png)
 
 ## Design Decisions:
+When planning the design of this website, we stuck to the core value of simplicity keeping the main task at hand of
+allowing a user to book a hotel room in a flow that made sense to us. For each different aspect of
+booking a hotel room, we made a table: User, Hotel, Room, Reservation. Our APIs are revolved around actions a user could
+take to navigate to a different portion of the website and what the user would expect to receive as a return value.
+We tried to make the website simple for a user to navigate through. We implemented pricing in a way that made
+sense to us: higher prices on Saturdays/Sundays and also in the months of June, July and December.
 
 ## Feature Set:
 
