@@ -63,7 +63,7 @@ const MAX_PAGINATION_COUNT = 5;
 const queryReservations = async (jwt, setTrips, setPaginatedTrips) =>
   await fetch(
     "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation?userID=" +
-      jwt,
+    jwt,
     {
       headers: {
         "Content-Type": "application/json",
@@ -215,6 +215,12 @@ function Trips({ jwt }) {
     queryReservations(jwt, setTrips, setPaginatedTrips);
   }, [active, jwt]);
 
+  useEffect(() => {
+    if (Object.values(trips).length === 0) {
+      setPaginatedTrips([]);
+    }
+  })
+
   for (let number = 1; number <= MAX_PAGINATION_COUNT; number++) {
     pages.push(
       <Pagination.Item
@@ -252,6 +258,23 @@ function Trips({ jwt }) {
         </Modal.Footer>
       </Modal>
       <div style={{ margin: "auto" }}>
+        {trips == null || Object.keys(trips).length === 0 ?
+          <Container fluid className="text-center" style={{ zIndex: 2 }}>
+            <Card
+              className="m-5 border-0 shadow"
+              style={{
+                width: "75vw",
+                margin: "2rem",
+                textAlign: "center",
+                borderRadius: 35,
+                boxShadow: 30,
+              }}
+            >
+              <Card.Body style={{ display: "flex", flexDirection: "row" }}>
+                You have no reservations!
+              </Card.Body>
+            </Card>
+          </Container> : <></>}
         {Object.values(paginatedTrips).length > 0 ? (
           Object.values(paginatedTrips).map((trip) => (
             <Container fluid className="text-center">
@@ -375,7 +398,7 @@ function Trips({ jwt }) {
           <></>
         )}
       </div>
-      <Pagination style={{ margin: "auto" }}>
+      {trips && trips.length > NUM_CARDS_PER_PAGE ? <Pagination style={{ margin: "auto" }}>
         <Pagination.First
           onClick={() => {
             pagination(1);
@@ -401,7 +424,7 @@ function Trips({ jwt }) {
             pagination(5);
           }}
         />
-      </Pagination>
+      </Pagination> : <></>}
     </div>
   );
 }
