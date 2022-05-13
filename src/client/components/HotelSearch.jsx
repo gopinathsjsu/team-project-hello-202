@@ -132,7 +132,6 @@ const bookRoomWithRewardsQuery = async (
       fetch(
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
-        .then((res) => res)
         .then((respo) => {
           localStorage.setItem("userRewards", respo["rewards"] ?? 0)
           localStorage.setItem(
