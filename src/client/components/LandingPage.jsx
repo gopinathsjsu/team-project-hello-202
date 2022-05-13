@@ -10,7 +10,7 @@ import Trips from "./Trips";
 import Admin from "./Admin";
 import AdminRoom from "./AdminRoom";
 
-const LandingPage = ({}) => {
+const LandingPage = ({ }) => {
   const [jwt, setJWT] = useState(JSON.parse(localStorage.getItem("jwt")));
   const [isAdmin, setIsAdmin] = useState(
     localStorage.getItem("isAdmin") == "true"
