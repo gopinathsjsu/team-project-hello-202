@@ -102,7 +102,7 @@ const bookRoomWithRewardsQuery = (
         hotelID,
         numRooms: roomCount,
         numPeople: peopleCount,
-        price: rate - localStorage.getItem("userRewards"),
+        price: rate - localStorage.getItem("userRewards") ?? 0,
         checkInDate,
         checkOutDate,
         destination,
@@ -115,7 +115,9 @@ const bookRoomWithRewardsQuery = (
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
         .then((res) => res.json())
-        .then((respo) => localStorage.setItem("userRewards", respo["rewards"]));
+        .then((respo) =>
+          localStorage.setItem("userRewards", respo["rewards"] ?? 0)
+        );
       navigate("/search");
     })
 
@@ -352,7 +354,9 @@ function HotelSearch(props) {
                                         </strong>
                                         . Your rewards are{" "}
                                         <strong>
-                                          {localStorage.getItem("userRewards")}
+                                          {localStorage.getItem(
+                                            "userRewards"
+                                          ) ?? 0}
                                         </strong>
                                         . If you'd like to use it, the price
                                         will be{" "}
@@ -388,6 +392,7 @@ function HotelSearch(props) {
                                     height: 60,
                                   }}
                                   onClick={() => {
+                                    handlebookShow();
                                     const roomTypeParsed = value.name.includes(
                                       "Single"
                                     )
@@ -405,6 +410,10 @@ function HotelSearch(props) {
                                       roomCount,
                                       peopleCount,
                                       roomTypeParsed,
+                                      localStorage.setItem(
+                                        "bookSuccessful",
+                                        true
+                                      ),
                                       navigate
                                     );
                                   }}
@@ -592,7 +601,7 @@ function HotelSearch(props) {
                                     </strong>
                                     . Your rewards are{" "}
                                     <strong>
-                                      {localStorage.getItem("userRewards")}
+                                      {localStorage.getItem("userRewards") ?? 0}
                                     </strong>
                                     . If you'd like to use it, the price will be{" "}
                                     <strong>
@@ -600,7 +609,9 @@ function HotelSearch(props) {
                                       availableHotels[hotelID][roomType] != null
                                         ? availableHotels[hotelID][roomType]
                                             .rate -
-                                          localStorage.getItem("userRewards")
+                                            localStorage.getItem(
+                                              "userRewards"
+                                            ) ?? 0
                                         : 0}
                                     </strong>
                                   </Popover.Body>
