@@ -7,6 +7,8 @@ Team Members:
 - Karan Tyagi (015908932) (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
 - Priyank Bardolia (015742532)
 
+### <a href="https://github.com/gopinathsjsu/team-project-hello-202">Github Repo</a>
+
 ## Responsibilities
 
 <b>Front End</b>: Josef Bustamante and Priyank Bardolia <br>
