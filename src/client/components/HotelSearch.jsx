@@ -134,7 +134,6 @@ const bookRoomWithRewardsQuery = async (
       )
         .then((res) => res)
         .then((respo) => {
-          console.log(respo);
           localStorage.setItem("userRewards", respo["rewards"] ?? 0)
           localStorage.setItem(
             "bookSuccessful",
@@ -734,11 +733,6 @@ function HotelSearch(props) {
                                     class="custom-control-input"
                                     id={typeOfRooms[roomType].id + amenitype.id}
                                     onChange={(e) => {
-                                      console.log(e.target.checked);
-                                      console.log(
-                                        availableHotels[hotelID][roomType].rate
-                                      );
-                                      console.log(amenitype.rate);
                                       if (e.target.checked) {
                                         availableHotels[hotelID][
                                           roomType
