@@ -15,6 +15,7 @@ Team Members:
 ### <a href="https://github.com/gopinathsjsu/team-project-hello-202/projects/1">Project Board</a>
 
 ### <a href="https://docs.google.com/spreadsheets/d/1wgkN_WqxkeQRdMGvOr733T3c4LXscIJXHMCM-ewpsms/edit?usp=sharing">Google Sprint Task Sheet</a>
+
 ![Burndown Chart](https://user-images.githubusercontent.com/50338345/168176940-f590ee05-6356-4257-a2a9-4c287c37ab67.png)
 
 ## XP Core Values
@@ -93,9 +94,11 @@ Team Members:
 ![Diagram](https://user-images.githubusercontent.com/50338345/168151525-6d633a88-4dd8-4ba4-ae06-71792cb16a53.png)
 
 ## Component Diagram:
+
 ![Component Diagram](https://user-images.githubusercontent.com/38865668/168175663-c9717dee-b0f4-444f-91d7-193368d672ad.png)
 
 ## Architecture Diagram:
+
 ![Architecture Diagram](https://user-images.githubusercontent.com/38865668/168181403-3e4b5340-83db-4b1b-bfef-807f03a2db52.png)
 
 ## Design Decisions:
@@ -135,10 +138,14 @@ Team Members:
 
 - March 7
   - Finalizing tech stack
-    - Frontend: React
-    - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
+  - Frontend: React JS, HTMl, CSS, JS
+  - Backend: Flask SQLAlchemy with DB deployed on AWS RDS
+  - Create package.json
+  - Create index.js
 - March 11
   - Created Schema diagram on Figma
+  - Create Directory Stucture
+  - Install node packages for react-bootstrap
 
 ## Week 3:
 
@@ -151,54 +158,97 @@ Team Members:
 
 - March 21
   - Added user, hotel and room tables
+  - Create Dashboard
+  - Create Header
+  - Create Footer
 - March 25
   - Created add User and add Hotel and add Room API
-  - testing on postman
+  - Testing on Postman
+  - Create Routes
 
 ## Week 5:
 
 - March 28
   - Went through AWS documentation for deploying the basic application created so far
+  - Create Landing Page Component
+  - Create routes on the Landing Page
 - April 1
   - Deployed the back-end by dockerizing the flask application and pushing on elastic beanstalk (automatically adds load balancer)
+  - Create Hotel Search Form/ Hotel Search Page/List view for the card
 
 ## Week 6:
 
 - April 4
   - The deployed backend was integrated with the front end for add User and add Hotel and add Room API
+  - Create Card Component for the List view of cards
+  - Create My Trips Page
+  - Create Input fields for search form
 - April 8
   - Added reservation table and /reservation api
+  - Create List view component for Hotel data
+  - Add styling on my trips page
 
 ## Week 7:
 
 - April 11
   - Removed bugs and discussed how to add dynamic/seasonal pricing
+  - Create input field for Trips Page
+  - Create Login Form
+  - Create Logout functionality
 - April 15
   - Implemented availability api
+  - Create Sign-up Form
+  - Create Hotel creation Page
+  - Create Hotel room add Page
 
 ## Week 8:
 
 - April 18
   - Fixed bug in the /availability api logic
+  - Add Pagination to the Hotel Search/Trips Page
+  - Add Modal on Hotel Search Page
+  - Create Sidebar Component
 - April 22
   - Rewards api
+  - Add Card view on Modal for Room Type
+  - Create Book successful Modal
+  - Create Boooking Error Modal
+  - Fix Bugs regarding Pagination
 
 ## Week 9:
 
 - April 25
   - Implemented dynamic pricing
+  - Local storage Implementation
+  - Add jwt token on Login
+  - Integrate API fetch calls
 - April 29
   - Added Seasonal Pricing
+  - Create Local Storage for rewards
+  - Fix bugs regaring booking success/error
 
 ## Week 10:
 
 - May 2
+
   - Updated the return objects as per front-end requirements
+  - Add Sidebar Links
+  - Add Sidebar Navigation
+
 - May 6
   - Updated /availability logic, looking for bugs
+  - Refactor UI Components
+  - Fix bugs regarding Landing Page
+  - Fix bugs regarding Modal
 
 ## Week 11:
-  - May 9
-    - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
-  - May 11
-    - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”
+
+- May 9
+  - Edge cases, figure out why elastic beanstalk is showing application health as “severe”
+  - Change fetch calls to Deployed API
+  - Fix bugs regarding Sidebar
+  - Testing the Website for bugs
+- May 11
+  - Elastic beanstalk health bug fixes, added “/” api to return 200. Now health is “ok”
+  - Fix bugs reagrding Hotel Page
+  - Testing the website for bugs
