@@ -1,7 +1,8 @@
 """Application routes."""
+import json
+from collections import defaultdict
 from flask import current_app as app
 from flask import make_response, request
-from collections import defaultdict
 from .models import User, db, Hotel, Room, Reservation
 from flask_cors import cross_origin
 import json
@@ -256,7 +257,7 @@ def check_availability():
                     Room.hid.in_(ids) & Room.rid.not_in(exclude_ids)
                 ).all()  # this gives us all the available rooms OF A PARTICULAR TYPE amongst all
                 # the hotels at a particular location
-
+                
             # that fits the criteria
 
             count_rooms_in_hotel = defaultdict(lambda: defaultdict(int))  # TO CHECK IF A HOTEL HAS MINIMUM ROOMS
@@ -330,6 +331,7 @@ def reservation():
             room_ids = get_room_ids(roomType, booking_start, booking_end, hid)
             if not room_ids or len(room_ids) < num_rooms:
                 return make_response("Not enough rooms for reservation!", 404)
+        
             # return_dict = defaultdict(dict)
 
             # get rewards and add it individually for each room booking
@@ -371,7 +373,7 @@ def reservation():
         except:
             return make_response("Booking Failed", 404)
 
-    if request.method == "GET":
+    elif request.method == "GET":
         try:
             uid = request.args.get('userID')
             if uid == "all":
@@ -405,7 +407,7 @@ def reservation():
         except:
             return make_response("Oops, an error occurred!", 404)
 
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
@@ -423,7 +425,7 @@ def reservation():
         except:
             return make_response("Oops, an error occurred!", 404)
 
-    if request.method == "PUT":
+    elif request.method == "PUT":
         try:
             data = request.get_json()
             reservation_id = data["reservationID"]
@@ -452,7 +454,6 @@ def reservation():
 
         except:
             return make_response("Oops, an error occurred!", 404)
-
 
 @app.route("/rewards", methods=["GET"])
 @cross_origin()

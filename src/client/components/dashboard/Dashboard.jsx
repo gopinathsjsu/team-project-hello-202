@@ -5,17 +5,15 @@ import {
   List as ListIcon,
   Person as PersonIcon,
 } from "react-bootstrap-icons";
-import { Button, Dropdown, FormControl } from "react-bootstrap";
-import Datetime from "react-datetime";
+import { Dropdown } from "react-bootstrap";
 import Footer from "./Footer";
-import SignUp from "../auth/SignUp";
 import Header from "./Header";
 import Image from "react-bootstrap/Image";
 import HotelSearchForm from "../HotelSearchForm";
-import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import Sidebar from "../Sidebar";
+import { Parallax } from "react-parallax";
 
 const rootStyle = {
   display: "flex",
@@ -26,6 +24,8 @@ const backgroundImageStyle = {
   height: "100vh",
   position: "absolute",
   width: "100vw",
+  // backgroundRepeat: "no-repeat",
+  backgroundAttachment: "scroll",
 };
 
 const hotelSearchStyle = {
@@ -35,6 +35,7 @@ const hotelSearchStyle = {
 const listIconStyle = {
   height: 25,
   width: 30,
+  cursor: "pointer",
 };
 
 const briefcaseIconStyle = {
@@ -48,11 +49,32 @@ const signInStyle = {
 const myTripStyle = {
   display: "flex",
   flexDirection: "row",
+  cursor: "pointer",
 };
 
-const myTripTextStyle = {};
+const myTripTextStyle = {
+  cursor: "pointer",
+};
 
-function Dashboard({}) {
+function Dashboard({
+  jwt,
+  roomType,
+  setRoomType,
+  isSearchFormShown,
+  content,
+  setAvailableHotels,
+  setDestination,
+  setCheckInDate,
+  setCheckOutDate,
+  setRoomCount,
+  setPeopleCount,
+  destination,
+  checkInDate,
+  checkOutDate,
+  roomCount,
+  peopleCount,
+  isAdmin,
+}) {
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -98,12 +120,22 @@ function Dashboard({}) {
     navigate("/login");
   };
 
-  const onMyTripsClick = () => {};
+  const onMyTripsClick = () => {
+    navigate("/trips");
+  };
+
+  const [sidebar, setSidebar] = useState(false);
+
+  const showSidebar = () => setSidebar(!sidebar);
 
   return (
     <div style={rootStyle}>
+      {sidebar && <Sidebar showSidebar={showSidebar} isAdmin={isAdmin} />}
       <Header
-        left={[<ListIcon style={listIconStyle} />]}
+        left={[
+          <ListIcon style={listIconStyle} eventKey="3" onClick={showSidebar} />,
+          <> {isAdmin ? <h4>Admin</h4> : <span></span>}</>,
+        ]}
         right={[
           <div>
             <Dropdown>
@@ -112,14 +144,18 @@ function Dashboard({}) {
                 id="dropdown-custom-components"
               >
                 <PersonIcon />
-                <>Sign In or Join</>
+                {jwt != null ? <>Join</> : <>Sign In or Join</>}
                 <CaretDownIcon />
               </Dropdown.Toggle>
 
               <Dropdown.Menu as={CustomMenu}>
-                <Dropdown.Item eventKey="1" onClick={onLoginClick}>
-                  Sign In
-                </Dropdown.Item>
+                {jwt != null ? (
+                  <></>
+                ) : (
+                  <Dropdown.Item eventKey="1" onClick={onLoginClick}>
+                    Sign In
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item eventKey="2" onClick={onSignUpClick}>
                   Join
                 </Dropdown.Item>
@@ -127,7 +163,10 @@ function Dashboard({}) {
             </Dropdown>
           </div>,
           <div style={myTripStyle}>
-            <BriefcaseIcon style={briefcaseIconStyle} />
+            <BriefcaseIcon
+              style={briefcaseIconStyle}
+              onClick={onMyTripsClick}
+            />
             <div onClick={onMyTripsClick} style={myTripTextStyle}>
               My Trips
             </div>
@@ -135,11 +174,32 @@ function Dashboard({}) {
         ]}
       />
       <Image
-        src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        // src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a"
+        src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
         style={backgroundImageStyle}
       />
-      <HotelSearchForm style={hotelSearchStyle} />
-      <>Welcome</>
+
+      {isSearchFormShown === true ? (
+        <HotelSearchForm
+          style={hotelSearchStyle}
+          roomType={roomType}
+          setRoomType={setRoomType}
+          setAvailableHotels={setAvailableHotels}
+          setDestination={setDestination}
+          setCheckInDate={setCheckInDate}
+          setCheckOutDate={setCheckOutDate}
+          setRoomCount={setRoomCount}
+          setPeopleCount={setPeopleCount}
+          destination={destination}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          roomCount={roomCount}
+          peopleCount={peopleCount}
+        />
+      ) : (
+        <></>
+      )}
+      {content != null ? content : <>Welcome</>}
       <Footer />
     </div>
   );

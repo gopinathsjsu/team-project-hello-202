@@ -4,6 +4,7 @@ from . import db
 
 # User table
 class User(db.Model):
+    """User Table"""
     __tablename__ = "user"
     uid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=False, nullable=False)
@@ -15,6 +16,7 @@ class User(db.Model):
 
 # Hotel table
 class Hotel(db.Model):
+    """Hotel Table"""
     __tablename__ = "hotel"
     hid = db.Column(db.Integer, primary_key=True)
     hname = db.Column(db.String(64), index=False, nullable=False, unique=True)
@@ -26,6 +28,7 @@ class Hotel(db.Model):
 
 # Room table
 class Room(db.Model):
+    """Room Table"""
     __tablename__ = "room"
     rid = db.Column(db.Integer, primary_key=True)
     hid = db.Column(db.Integer, db.ForeignKey('hotel.hid', ondelete='CASCADE'), nullable=False)
@@ -37,6 +40,7 @@ class Room(db.Model):
 
 # Reservation table
 class Reservation(db.Model):
+    """Reservation Table"""
     __tablename__ = "reservation"
     reserve_id = db.Column(db.Integer, primary_key=True, index=True)
 
@@ -58,6 +62,6 @@ class Reservation(db.Model):
     num_rooms = db.Column(db.Integer, nullable=False)
     # type = db.Column(db.String(30), nullable=False, index=True)
     num_people = db.Column(db.Integer, nullable=False)
-
+    
     rewards_earned = db.Column(db.FLOAT, nullable=False)
     rewards_used = db.Column(db.FLOAT, nullable=False)
