@@ -115,7 +115,9 @@ const bookRoomWithRewardsQuery = (
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
         .then((res) => res.json())
-        .then((respo) => localStorage.setItem("userRewards", respo["rewards"] ?? 0));
+        .then((respo) =>
+          localStorage.setItem("userRewards", respo["rewards"] ?? 0)
+        );
       navigate("/search");
     })
 
@@ -272,7 +274,7 @@ function HotelSearch(props) {
                         className="m-5 border-0 shadow"
                         key={
                           availableHotels[hotelID] &&
-                            availableHotels[hotelID][key]
+                          availableHotels[hotelID][key]
                             ? availableHotels[hotelID][key].id
                             : value.name
                         }
@@ -331,10 +333,10 @@ function HotelSearch(props) {
                                           <strong>
                                             $
                                             {availableHotels[hotelID] != null &&
-                                              availableHotels[hotelID][key] !=
+                                            availableHotels[hotelID][key] !=
                                               null
                                               ? availableHotels[hotelID][key]
-                                                .rate
+                                                  .rate
                                               : "0"}
                                           </strong>
                                         </div>
@@ -346,24 +348,26 @@ function HotelSearch(props) {
                                           {" "}
                                           $
                                           {availableHotels[hotelID] != null &&
-                                            availableHotels[hotelID][key] != null
+                                          availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key].rate
                                             : "0"}
                                         </strong>
                                         . Your rewards are{" "}
                                         <strong>
-                                          {localStorage.getItem("userRewards") ?? 0}
+                                          {localStorage.getItem(
+                                            "userRewards"
+                                          ) ?? 0}
                                         </strong>
                                         . If you'd like to use it, the price
                                         will be{" "}
                                         <strong>
                                           {availableHotels[hotelID] != null &&
-                                            availableHotels[hotelID][key] != null
+                                          availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key]
-                                              .rate -
-                                            localStorage.getItem(
-                                              "userRewards"
-                                            )
+                                                .rate -
+                                              localStorage.getItem(
+                                                "userRewards"
+                                              )
                                             : 0}
                                         </strong>
                                       </Popover.Body>
@@ -388,13 +392,14 @@ function HotelSearch(props) {
                                     height: 60,
                                   }}
                                   onClick={() => {
+                                    handlebookShow();
                                     const roomTypeParsed = value.name.includes(
                                       "Single"
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                        ? "double"
-                                        : "suite";
+                                      ? "double"
+                                      : "suite";
                                     bookRoomQuery(
                                       userID,
                                       hotelID,
@@ -405,6 +410,10 @@ function HotelSearch(props) {
                                       roomCount,
                                       peopleCount,
                                       roomTypeParsed,
+                                      localStorage.setItem(
+                                        "bookSuccessful",
+                                        true
+                                      ),
                                       navigate
                                     );
                                   }}
@@ -426,8 +435,8 @@ function HotelSearch(props) {
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                        ? "double"
-                                        : "suite";
+                                      ? "double"
+                                      : "suite";
                                     bookRoomWithRewardsQuery(
                                       userID,
                                       hotelID,
@@ -567,10 +576,10 @@ function HotelSearch(props) {
                                       <strong>
                                         $
                                         {availableHotels[hotelID] != null &&
-                                          availableHotels[hotelID][roomType] !=
+                                        availableHotels[hotelID][roomType] !=
                                           null
                                           ? availableHotels[hotelID][roomType]
-                                            .rate
+                                              .rate
                                           : "0"}
                                       </strong>
                                     </div>
@@ -585,9 +594,9 @@ function HotelSearch(props) {
                                       {" "}
                                       $
                                       {availableHotels[hotelID] != null &&
-                                        availableHotels[hotelID][roomType] != null
+                                      availableHotels[hotelID][roomType] != null
                                         ? availableHotels[hotelID][roomType]
-                                          .rate
+                                            .rate
                                         : "0"}
                                     </strong>
                                     . Your rewards are{" "}
@@ -597,10 +606,12 @@ function HotelSearch(props) {
                                     . If you'd like to use it, the price will be{" "}
                                     <strong>
                                       {availableHotels[hotelID] != null &&
-                                        availableHotels[hotelID][roomType] != null
+                                      availableHotels[hotelID][roomType] != null
                                         ? availableHotels[hotelID][roomType]
-                                          .rate -
-                                        localStorage.getItem("userRewards") ?? 0
+                                            .rate -
+                                            localStorage.getItem(
+                                              "userRewards"
+                                            ) ?? 0
                                         : 0}
                                     </strong>
                                   </Popover.Body>
@@ -630,10 +641,10 @@ function HotelSearch(props) {
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                    "Double"
-                                  )
-                                    ? "double"
-                                    : "suite";
+                                      "Double"
+                                    )
+                                  ? "double"
+                                  : "suite";
                                 console.log(availableHotels);
                                 console.log(hotelID);
                                 console.log(roomType);
@@ -668,10 +679,10 @@ function HotelSearch(props) {
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                    "Double"
-                                  )
-                                    ? "double"
-                                    : "suite";
+                                      "Double"
+                                    )
+                                  ? "double"
+                                  : "suite";
                                 bookRoomWithRewardsQuery(
                                   userID,
                                   hotelID,
