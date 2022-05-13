@@ -5,7 +5,7 @@ Team Members:
 - Adam Hashoush (015970357)
 - Josef Bustamante (015530827)
 - Karan Tyagi (015908932) (Branch : <a href="https://github.com/gopinathsjsu/team-project-hello-202/tree/karan_develop">karan_develop</a>)
-- Priyank Bardolia 
+- Priyank Bardolia (015742532)
 
 ## Responsibilities
 
