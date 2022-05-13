@@ -32,7 +32,7 @@ const roomImageStyle = {
 const NUM_CARDS_PER_PAGE = 6;
 const MAX_PAGINATION_COUNT = 5;
 
-const bookRoomQuery = (
+const bookRoomQuery = async (
   userID,
   hotelID,
   rate,
@@ -42,9 +42,10 @@ const bookRoomQuery = (
   roomCount,
   peopleCount,
   roomType,
-  navigate
+  navigate,
+  handleBookShow
 ) => {
-  fetch(
+  await fetch(
     "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation",
     {
       headers: {
@@ -64,21 +65,33 @@ const bookRoomQuery = (
       }),
     }
   )
-    .then((data) => {
+    .then((res) => {
+      if (res.status === 404) {
+        handleBookShow();
+        return;
+      }
       fetch(
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
         .then((res) => res.json())
-        .then((respo) => localStorage.setItem("userRewards", respo["rewards"]));
+        .then((respo) => {
+          localStorage.setItem("userRewards", respo["rewards"]);
+          localStorage.setItem(
+            "bookSuccessful",
+            true
+          );
+          handleBookShow();
+        });
       navigate("/search");
     })
     .catch((exception) => {
+      handleBookShow();
       console.log("Error occurred:");
       console.log(exception);
     });
 };
 
-const bookRoomWithRewardsQuery = (
+const bookRoomWithRewardsQuery = async (
   userID,
   hotelID,
   rate,
@@ -88,9 +101,10 @@ const bookRoomWithRewardsQuery = (
   roomCount,
   peopleCount,
   roomType,
-  navigate
+  navigate,
+  handleBookShow
 ) => {
-  fetch(
+  await fetch(
     "http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/reservation",
     {
       headers: {
@@ -111,17 +125,28 @@ const bookRoomWithRewardsQuery = (
     }
   )
     .then((data) => {
+      if (data.status === 404) {
+        handleBookShow();
+        return;
+      }
       fetch(
         `http://awseb-awseb-neb659irixfb-1496663984.us-east-2.elb.amazonaws.com/rewards?userID=${userID}`
       )
-        .then((res) => res.json())
-        .then((respo) =>
+        .then((res) => res)
+        .then((respo) => {
+          console.log(respo);
           localStorage.setItem("userRewards", respo["rewards"] ?? 0)
-        );
+          localStorage.setItem(
+            "bookSuccessful",
+            true
+          )
+          handleBookShow();
+        });
       navigate("/search");
     })
 
     .catch((exception) => {
+      handleBookShow();
       console.log("Error occurred:");
       console.log(exception);
     });
@@ -274,7 +299,7 @@ function HotelSearch(props) {
                         className="m-5 border-0 shadow"
                         key={
                           availableHotels[hotelID] &&
-                          availableHotels[hotelID][key]
+                            availableHotels[hotelID][key]
                             ? availableHotels[hotelID][key].id
                             : value.name
                         }
@@ -333,10 +358,10 @@ function HotelSearch(props) {
                                           <strong>
                                             $
                                             {availableHotels[hotelID] != null &&
-                                            availableHotels[hotelID][key] !=
+                                              availableHotels[hotelID][key] !=
                                               null
                                               ? availableHotels[hotelID][key]
-                                                  .rate
+                                                .rate
                                               : "0"}
                                           </strong>
                                         </div>
@@ -348,7 +373,7 @@ function HotelSearch(props) {
                                           {" "}
                                           $
                                           {availableHotels[hotelID] != null &&
-                                          availableHotels[hotelID][key] != null
+                                            availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key].rate
                                             : "0"}
                                         </strong>
@@ -362,12 +387,12 @@ function HotelSearch(props) {
                                         will be{" "}
                                         <strong>
                                           {availableHotels[hotelID] != null &&
-                                          availableHotels[hotelID][key] != null
+                                            availableHotels[hotelID][key] != null
                                             ? availableHotels[hotelID][key]
-                                                .rate -
-                                              localStorage.getItem(
-                                                "userRewards"
-                                              )
+                                              .rate -
+                                            localStorage.getItem(
+                                              "userRewards"
+                                            )
                                             : 0}
                                         </strong>
                                       </Popover.Body>
@@ -398,8 +423,8 @@ function HotelSearch(props) {
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                      ? "double"
-                                      : "suite";
+                                        ? "double"
+                                        : "suite";
                                     bookRoomQuery(
                                       userID,
                                       hotelID,
@@ -410,11 +435,8 @@ function HotelSearch(props) {
                                       roomCount,
                                       peopleCount,
                                       roomTypeParsed,
-                                      localStorage.setItem(
-                                        "bookSuccessful",
-                                        true
-                                      ),
-                                      navigate
+                                      navigate,
+                                      handlebookShow
                                     );
                                   }}
                                 >
@@ -429,14 +451,13 @@ function HotelSearch(props) {
                                     height: 60,
                                   }}
                                   onClick={() => {
-                                    handlebookShow();
                                     const roomTypeParsed = value.name.includes(
                                       "Single"
                                     )
                                       ? "single"
                                       : value.name.includes("Double")
-                                      ? "double"
-                                      : "suite";
+                                        ? "double"
+                                        : "suite";
                                     bookRoomWithRewardsQuery(
                                       userID,
                                       hotelID,
@@ -447,11 +468,8 @@ function HotelSearch(props) {
                                       roomCount,
                                       peopleCount,
                                       roomTypeParsed,
-                                      localStorage.setItem(
-                                        "bookSuccessful",
-                                        true
-                                      ),
-                                      navigate
+                                      navigate,
+                                      handlebookShow
                                     );
                                   }}
                                 >
@@ -576,10 +594,10 @@ function HotelSearch(props) {
                                       <strong>
                                         $
                                         {availableHotels[hotelID] != null &&
-                                        availableHotels[hotelID][roomType] !=
+                                          availableHotels[hotelID][roomType] !=
                                           null
                                           ? availableHotels[hotelID][roomType]
-                                              .rate
+                                            .rate
                                           : "0"}
                                       </strong>
                                     </div>
@@ -594,9 +612,9 @@ function HotelSearch(props) {
                                       {" "}
                                       $
                                       {availableHotels[hotelID] != null &&
-                                      availableHotels[hotelID][roomType] != null
+                                        availableHotels[hotelID][roomType] != null
                                         ? availableHotels[hotelID][roomType]
-                                            .rate
+                                          .rate
                                         : "0"}
                                     </strong>
                                     . Your rewards are{" "}
@@ -606,12 +624,12 @@ function HotelSearch(props) {
                                     . If you'd like to use it, the price will be{" "}
                                     <strong>
                                       {availableHotels[hotelID] != null &&
-                                      availableHotels[hotelID][roomType] != null
+                                        availableHotels[hotelID][roomType] != null
                                         ? availableHotels[hotelID][roomType]
-                                            .rate -
-                                            localStorage.getItem(
-                                              "userRewards"
-                                            ) ?? 0
+                                          .rate -
+                                        localStorage.getItem(
+                                          "userRewards"
+                                        ) ?? 0
                                         : 0}
                                     </strong>
                                   </Popover.Body>
@@ -641,13 +659,10 @@ function HotelSearch(props) {
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                      "Double"
-                                    )
-                                  ? "double"
-                                  : "suite";
-                                console.log(availableHotels);
-                                console.log(hotelID);
-                                console.log(roomType);
+                                    "Double"
+                                  )
+                                    ? "double"
+                                    : "suite";
                                 bookRoomQuery(
                                   userID,
                                   hotelID,
@@ -658,7 +673,8 @@ function HotelSearch(props) {
                                   roomCount,
                                   peopleCount,
                                   roomTypeParsed,
-                                  navigate
+                                  navigate,
+                                  handlebookShow
                                 );
                               }}
                             >
@@ -673,16 +689,15 @@ function HotelSearch(props) {
                                 height: 60,
                               }}
                               onClick={() => {
-                                handlebookShow();
                                 const roomTypeParsed = typeOfRooms[
                                   roomType
                                 ].name.includes("Single")
                                   ? "single"
                                   : typeOfRooms[roomType].name.includes(
-                                      "Double"
-                                    )
-                                  ? "double"
-                                  : "suite";
+                                    "Double"
+                                  )
+                                    ? "double"
+                                    : "suite";
                                 bookRoomWithRewardsQuery(
                                   userID,
                                   hotelID,
@@ -693,7 +708,8 @@ function HotelSearch(props) {
                                   roomCount,
                                   peopleCount,
                                   roomTypeParsed,
-                                  navigate
+                                  navigate,
+                                  handlebookShow
                                 );
                               }}
                             >
