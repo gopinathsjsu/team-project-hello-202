@@ -10,7 +10,8 @@ class User(db.Model):
     name = db.Column(db.String(64), index=False, nullable=False)
     email = db.Column(db.String(80), index=True, unique=True, nullable=False)
     password = db.Column(db.String(64), index=False, unique=False, nullable=False)
-    rewards = db.Column(db.Float, index=False, unique=False, nullable=False, default=0.0)
+    rewards = db.Column(db.FLOAT, index=False, unique=False, nullable=False, default=0)
+    accountDate = db.Column(db.DateTime, nullable=False, index=True)
 
 
 # Hotel table
@@ -55,8 +56,12 @@ class Reservation(db.Model):
     hid = db.Column(db.Integer, db.ForeignKey('hotel.hid', ondelete='CASCADE'), index=True, nullable=False)
     hotel = db.relationship('Hotel', backref=db.backref('reservation'))
 
-    start = db.Column(db.Date, nullable=False, index=True)
-    end = db.Column(db.Date, nullable=False, index=True)
+    start = db.Column(db.DateTime, nullable=False, index=True)
+    end = db.Column(db.DateTime, nullable=False, index=True)
     price = db.Column(db.FLOAT, nullable=False)
     num_rooms = db.Column(db.Integer, nullable=False)
+    # type = db.Column(db.String(30), nullable=False, index=True)
     num_people = db.Column(db.Integer, nullable=False)
+    
+    rewards_earned = db.Column(db.FLOAT, nullable=False)
+    rewards_used = db.Column(db.FLOAT, nullable=False)

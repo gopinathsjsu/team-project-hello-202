@@ -4,10 +4,25 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 
-db = SQLAlchemy()
+class DbInstance(object):
+    __instance = None
+    __db = None
 
+    @staticmethod
+    def get_instance():
+        if DbInstance.__instance == None:
+            DbInstance()
+        return DbInstance.__instance
 
-# patch_all()
+    def __init__(self):
+        if DbInstance.__instance != None:
+            raise Exception("Db instance exists already!")
+        else:
+            DbInstance.__instance = self
+            DbInstance.__db = SQLAlchemy()
+
+    def get_db(self):
+        return DbInstance.__db
 
 
 def create_app():
@@ -28,3 +43,7 @@ def create_app():
         db.create_all()  # Create database tables for our data models
 
         return app
+
+
+dbinstance = DbInstance.get_instance()
+db = dbinstance.get_db()
